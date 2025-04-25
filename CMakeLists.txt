@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 project (raster)
 
 add_subdirectory(third/sdl)
+add_subdirectory(third/eigen)
 
 include_directories(
     third/SDL/include
