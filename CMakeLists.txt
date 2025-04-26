@@ -13,5 +13,5 @@ include_directories(
     third/SDL/src
 )
 
-add_executable(raster main.cpp)
+add_executable(raster main.cpp sdlApp.h sdlApp.cpp)
 target_link_libraries(raster SDL2-static)

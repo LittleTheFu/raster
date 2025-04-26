@@ -1,0 +1,39 @@
+#ifndef SDLAPP_H
+#define SDLAPP_H
+
+#include <SDL.h>
+#include <memory>
+#include <string>
+#include <iostream>
+
+class SdlApp {
+public:
+    SdlApp(const std::string& title, int width, int height);
+    ~SdlApp();
+
+    bool isRunning() const { return running; }
+    void handleEvents();
+    void render();
+    void updateFPS();
+
+private:
+    struct SDLWindowDeleter {
+        void operator()(SDL_Window* ptr) const { if (ptr) SDL_DestroyWindow(ptr); }
+    };
+
+    struct SDLRendererDeleter {
+        void operator()(SDL_Renderer* ptr) const { if (ptr) SDL_DestroyRenderer(ptr); }
+    };
+
+    std::unique_ptr<SDL_Window, SDLWindowDeleter> window;
+    std::unique_ptr<SDL_Renderer, SDLRendererDeleter> renderer;
+
+    bool running = true;
+    int frameCount = 0;
+    Uint32 lastTime = 0;
+    float currentFPS = 0.0f;
+
+    void setWindowTitleWithFPS();
+};
+
+#endif // SDLAPP_H
