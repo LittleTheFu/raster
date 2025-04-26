@@ -44,15 +44,27 @@ void SdlApp::handleEvents() {
 }
 
 void SdlApp::render() {
+    // 设置背景色为黑色并清空屏幕
     SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(renderer.get());
 
+    // 设置你想要绘制点的颜色
+    SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);  // 红色
+
+    // 指定点的坐标 (例如在 (300, 200) 处画一个点)
+    int x = 0;
+    int y = 0;
+    SDL_RenderDrawPoint(renderer.get(), x, y);  // 在指定坐标画点
+
+    // 示例：绘制一个红色矩形
     SDL_Rect rect = {200, 150, 400, 300};
     SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);
     SDL_RenderFillRect(renderer.get(), &rect);
 
+    // 刷新渲染器，展示绘制的内容
     SDL_RenderPresent(renderer.get());
 }
+
 
 void SdlApp::updateFPS() {
     frameCount++;
