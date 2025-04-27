@@ -11,7 +11,7 @@ set(BUILD_TESTING OFF CACHE BOOL "Disable Eigen tests")
 # 添加 Eigen 子目录
 add_subdirectory(third/eigen)
 
-add_executable(raster main.cpp sdlApp.cpp config.cpp frame.cpp)
+add_executable(raster main.cpp sdlApp.cpp config.cpp frame.cpp camera.cpp triangle.cpp)
 
 target_include_directories(raster PRIVATE
     third/SDL/include
