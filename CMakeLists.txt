@@ -30,6 +30,10 @@ enable_testing()
 # 添加你的可执行文件
 add_executable(my_test test.cpp)
 
+target_include_directories(my_test PRIVATE
+    third/eigen
+)
+
 # 链接 gtest 和 gtest_main（或 gmock，如有需要）
 target_link_libraries(my_test
     gtest
