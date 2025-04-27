@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(third/sdl)
 add_subdirectory(third/eigen)
 
-add_executable(raster main.cpp sdlApp.cpp)
+add_executable(raster main.cpp sdlApp.cpp config.cpp frame.cpp)
 
 target_include_directories(raster PRIVATE
     third/SDL/include
