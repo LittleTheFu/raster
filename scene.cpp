@@ -2,7 +2,7 @@
 #include "triangle.h"
 
 Scene::Scene()
-    : camera(Eigen::Vector3f(0.0f, 0.0f, -5.0f), // position
+    : camera(Eigen::Vector3f(0.0f, 0.0f, -50.0f), // position
              Eigen::Vector3f(0.0f, 0.0f, 1.0f),  // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f))  // up
 {
@@ -20,7 +20,7 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords() const
 
     // 使用整数除法确保 count / 10 取整数部分
     int scaleFactor = count;
-    float scale = 0.0014f * scaleFactor;
+    float scale = 1 + 0.0014f * scaleFactor;
     // float scale = 1;
 
     std::array<Eigen::Vector3f, 3> screenCoords;
