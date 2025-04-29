@@ -13,9 +13,17 @@ Eigen::Matrix4f Camera::getViewMatrix() const {
 
     // 构造视图矩阵
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
-    view(0, 0) = xAxis.x(); view(1, 0) = xAxis.y(); view(2, 0) = xAxis.z(); // Right
-    view(0, 1) = yAxis.x(); view(1, 1) = yAxis.y(); view(2, 1) = yAxis.z(); // Up
-    view(0, 2) = zAxis.x(); view(1, 2) = zAxis.y(); view(2, 2) = zAxis.z(); // Forward
+    view(0, 0) = xAxis.x(); 
+    view(1, 0) = xAxis.y(); 
+    view(2, 0) = xAxis.z(); // Right
+
+    view(0, 1) = yAxis.x(); 
+    view(1, 1) = yAxis.y(); 
+    view(2, 1) = yAxis.z(); // Up
+
+    view(0, 2) = zAxis.x(); 
+    view(1, 2) = zAxis.y(); 
+    view(2, 2) = zAxis.z(); // Forward
 
     // 视点平移
     view(0, 3) = -position.dot(xAxis);

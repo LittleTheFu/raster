@@ -60,15 +60,31 @@ void SdlApp::render()
     // 设置你想要绘制点的颜色
     SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255); // 红色
 
+    // 绘制三角形的三个顶点
+    auto screenCoords = scene.getTriangleScreenCoords();
+    if (screenCoords.size() == 3)
+    {
+        // 绘制三角形的三条边
+        SDL_RenderDrawLine(renderer.get(),
+                           static_cast<int>(screenCoords[0].x()), static_cast<int>(screenCoords[0].y()),
+                           static_cast<int>(screenCoords[1].x()), static_cast<int>(screenCoords[1].y()));
+        SDL_RenderDrawLine(renderer.get(),
+                           static_cast<int>(screenCoords[1].x()), static_cast<int>(screenCoords[1].y()),
+                           static_cast<int>(screenCoords[2].x()), static_cast<int>(screenCoords[2].y()));
+        SDL_RenderDrawLine(renderer.get(),
+                           static_cast<int>(screenCoords[2].x()), static_cast<int>(screenCoords[2].y()),
+                           static_cast<int>(screenCoords[0].x()), static_cast<int>(screenCoords[0].y()));
+    }
+
     // 指定点的坐标 (例如在 (300, 200) 处画一个点)
-    int x = 0;
-    int y = 0;
-    SDL_RenderDrawPoint(renderer.get(), x, y); // 在指定坐标画点
+    // int x = 0;
+    // int y = 0;
+    // SDL_RenderDrawPoint(renderer.get(), x, y); // 在指定坐标画点
 
     // 示例：绘制一个红色矩形
-    SDL_Rect rect = {200, 150, 400, 300};
-    SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);
-    SDL_RenderFillRect(renderer.get(), &rect);
+    // SDL_Rect rect = {200, 150, 400, 300};
+    // SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);
+    // SDL_RenderFillRect(renderer.get(), &rect);
 
     // 刷新渲染器，展示绘制的内容
     SDL_RenderPresent(renderer.get());

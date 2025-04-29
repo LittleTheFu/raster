@@ -6,6 +6,8 @@
 #include <string>
 #include <iostream>
 
+#include "scene.h"
+
 class SdlApp {
 public:
     SdlApp(const std::string& title, int width, int height);
@@ -16,6 +18,9 @@ public:
     void render();
     void updateFPS();
     void setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+
+private:
+    Scene scene;
 
 private:
     struct SDLWindowDeleter {

@@ -20,7 +20,7 @@ public:
 
     // 构造函数
     Camera(const Eigen::Vector3f& pos, const Eigen::Vector3f& target, const Eigen::Vector3f& up,
-           float fov = 45.0f, float aspect = 16.0f/9.0f, float nearClip = 0.1f, float farClip = 100.0f);
+           float fov = 45.0f, float aspect = 8.0f/6.0f, float nearClip = 0.1f, float farClip = 100.0f);
 
     // 生成视图矩阵
     Eigen::Matrix4f getViewMatrix() const;
