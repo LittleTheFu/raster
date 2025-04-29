@@ -16,11 +16,11 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords() const
 {
     static int count = 0;
     count += 1;
-    count %= 7650;
+    count %= 1000000;
 
     // 使用整数除法确保 count / 10 取整数部分
-    int scaleFactor = count;
-    float scale = 1 + 0.0014f * scaleFactor;
+    float scaleFactor = abs(sin(count * 0.0001f));
+    float scale = scaleFactor;
     // float scale = 1;
 
     std::array<Eigen::Vector3f, 3> screenCoords;
