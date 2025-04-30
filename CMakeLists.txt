@@ -21,7 +21,8 @@ add_executable(raster
     scene.cpp 
     pipeline.cpp
     vertex.cpp
-    vertexBuffer.cpp)
+    vertexBuffer.cpp
+    zbuffer.cpp)
 
 target_include_directories(raster PRIVATE
     third/SDL/include

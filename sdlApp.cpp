@@ -1,7 +1,7 @@
 #include "SdlApp.h"
 
 SdlApp::SdlApp(const std::string &title, int width, int height)
-    : scene(width, height)
+    : scene(width, height),zBuffer(width, height)
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
@@ -54,6 +54,9 @@ void SdlApp::handleEvents()
 
 void SdlApp::render()
 {
+    // 更新 Z-buffer
+    zBuffer.clear();
+    
     // 设置背景色为黑色并清空屏幕
     SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(renderer.get());
@@ -114,19 +117,20 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
         // 计算当前扫描线的左右交点
         float leftX = 0.0f, rightX = 0.0f;
         Eigen::Vector3f leftColor, rightColor;
+        float leftZ, rightZ;
 
         // 对于扫描线在顶点与中间点之间
         if (y <= middle.position.y())
         {
             // 计算与 top 和 middle 之间的交点
-            leftX = interpolateX(top, middle, y, leftColor);
-            rightX = interpolateX(top, bottom, y, rightColor);
+            leftX = interpolateX(top, middle, y, leftColor, leftZ);
+            rightX = interpolateX(top, bottom, y, rightColor, rightZ);
         }
         else
         {
             // 计算与 middle 和 bottom 之间的交点
-            leftX = interpolateX(middle, bottom, y, leftColor);
-            rightX = interpolateX(top, bottom, y, rightColor);
+            leftX = interpolateX(middle, bottom, y, leftColor, leftZ);
+            rightX = interpolateX(top, bottom, y, rightColor, rightZ);
         }
 
         // 对交点进行排序，以确保从左到右绘制
@@ -134,6 +138,7 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
         {
             std::swap(leftX, rightX);
             std::swap(leftColor, rightColor);
+            std::swap(leftZ, rightZ);
         }
 
         // 在当前扫描线填充颜色
@@ -142,6 +147,13 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             // 使用左右交点的颜色进行插值
             float alpha = (x - leftX) / (rightX - leftX);
             Eigen::Vector3f interpolatedColor = (1 - alpha) * leftColor + alpha * rightColor;
+            float interpolatedZ = (1 - alpha) * leftZ + alpha * rightZ; // 插值 z 值
+
+            // 更新 Z-buffer，只有在深度值更小的情况下才绘制像素
+            if (!zBuffer.testAndUpdate(x, y, interpolatedZ))
+            {
+                continue; // 如果 Z-buffer 更新失败，则跳过绘制
+            }
 
             // 使用插值后的颜色设置绘制颜色
             SDL_SetRenderDrawColor(renderer.get(),
@@ -155,7 +167,7 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 }
 
 // 计算给定 y 值的交点，同时返回颜色的插值
-float SdlApp::interpolateX(const Vertex &v0, const Vertex &v1, int y, Eigen::Vector3f &color) const
+float SdlApp::interpolateX(const Vertex &v0, const Vertex &v1, int y, Eigen::Vector3f &color, float& z) const
 {
     if (v0.position.y() == v1.position.y())
     {
@@ -169,6 +181,7 @@ float SdlApp::interpolateX(const Vertex &v0, const Vertex &v1, int y, Eigen::Vec
 
     // 计算颜色的插值
     color = (1 - t) * v0.color + t * v1.color;
+    z = (1 - t) * v0.position.z() + t * v1.position.z(); // 计算 z 值的插值
 
     return x;
 }

@@ -10,8 +10,8 @@ Scene::Scene(int width, int height)
     Triangle t0;
 
     // 其他初始化代码
-    t0.setVertex(0, Eigen::Vector4f(-20, 0, 10, 1.0f));
-    t0.setVertex(1, Eigen::Vector4f(10, -10, 10, 1.0f));
+    t0.setVertex(0, Eigen::Vector4f(-30, 0, 10, 1.0f));
+    t0.setVertex(1, Eigen::Vector4f(10, -25, 10, 1.0f));
     t0.setVertex(2, Eigen::Vector4f(20, 20, 10, 1.0f));
 
     vertexBuffer.addVertex(Vertex{t0.vertex(0), Eigen::Vector3f(1.0f, 0.0f, 0.0f)});
@@ -19,7 +19,7 @@ Scene::Scene(int width, int height)
     vertexBuffer.addVertex(Vertex{t0.vertex(2), Eigen::Vector3f(0.0f, 0.0f, 1.0f)});
 
     Triangle t1;
-    t1.setVertex(0, Eigen::Vector4f(0, 0, 0, 1.0f));
+    t1.setVertex(0, Eigen::Vector4f(0, 0, 00, 1.0f));
     t1.setVertex(1, Eigen::Vector4f(-10, -20, 20, 1.0f));
     t1.setVertex(2, Eigen::Vector4f(-30, -10, 20, 2.0f));
 

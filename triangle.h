@@ -4,16 +4,12 @@
 #include <Eigen/Dense>
 #include <array>
 
-class Triangle
-{
+class Triangle {
 public:
     Triangle();
     Triangle(const Eigen::Vector4f& v0, const Eigen::Vector4f& v1, const Eigen::Vector4f& v2);
 
-    // 设置顶点
     void setVertex(int index, const Eigen::Vector4f& vertex);
-
-    // 访问顶点
     const Eigen::Vector4f& vertex(int index) const;
 
     void div_w();
