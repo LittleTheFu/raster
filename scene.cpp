@@ -7,14 +7,25 @@ Scene::Scene()
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
       pipeline(800, 600)                          // 假设屏幕大小为800x600
 {
-    // 其他初始化代码
-    triangle.setVertex(0, Eigen::Vector4f(0, 0, 10, 1.0f));
-    triangle.setVertex(1, Eigen::Vector4f(-10, -20, 10, 1.0f));
-    triangle.setVertex(2, Eigen::Vector4f(30, 10, 10, 1.0f));
+    Triangle t0;
 
-    vertexBuffer.addVertex(Vertex{triangle.vertex(0), Eigen::Vector3f(1.0f, 0.0f, 0.0f)});
-    vertexBuffer.addVertex(Vertex{triangle.vertex(1), Eigen::Vector3f(0.0f, 1.0f, 0.0f)});
-    vertexBuffer.addVertex(Vertex{triangle.vertex(2), Eigen::Vector3f(0.0f, 0.0f, 1.0f)});
+    // 其他初始化代码
+    t0.setVertex(0, Eigen::Vector4f(-20, 0, 10, 1.0f));
+    t0.setVertex(1, Eigen::Vector4f(10, -10, 10, 1.0f));
+    t0.setVertex(2, Eigen::Vector4f(20, 20, 10, 1.0f));
+
+    vertexBuffer.addVertex(Vertex{t0.vertex(0), Eigen::Vector3f(1.0f, 0.0f, 0.0f)});
+    vertexBuffer.addVertex(Vertex{t0.vertex(1), Eigen::Vector3f(0.0f, 1.0f, 0.0f)});
+    vertexBuffer.addVertex(Vertex{t0.vertex(2), Eigen::Vector3f(0.0f, 0.0f, 1.0f)});
+
+    Triangle t1;
+    t1.setVertex(0, Eigen::Vector4f(0, 0, 0, 1.0f));
+    t1.setVertex(1, Eigen::Vector4f(-10, -20, 20, 1.0f));
+    t1.setVertex(2, Eigen::Vector4f(-30, -10, 20, 2.0f));
+
+    vertexBuffer.addVertex(Vertex{t1.vertex(0), Eigen::Vector3f(0.0f, 1.0f, 0.0f)});
+    vertexBuffer.addVertex(Vertex{t1.vertex(1), Eigen::Vector3f(0.0f, 1.0f, 0.0f)});
+    vertexBuffer.addVertex(Vertex{t1.vertex(2), Eigen::Vector3f(0.0f, 1.0f, 0.0f)});
 }
 
 std::vector<Vertex> Scene::getTriangleScreenCoords()

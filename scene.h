@@ -17,7 +17,6 @@ public:
 
 private:
     Camera camera;
-    Triangle triangle;
     Pipeline pipeline;
     VertexBuffer vertexBuffer; // 顶点缓冲区
 };
