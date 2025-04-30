@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(raster)
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(third/lodepng)
 add_subdirectory(third/sdl)
 
 # 禁用 Eigen 自带的测试
@@ -22,14 +23,17 @@ add_executable(raster
     pipeline.cpp
     vertex.cpp
     vertexBuffer.cpp
-    zbuffer.cpp)
+    zbuffer.cpp
+    texture.cpp)
 
 target_include_directories(raster PRIVATE
     third/SDL/include
     third/eigen
+    third/lodepng/include
 )
 
 target_link_libraries(raster SDL2-static)
+target_link_libraries(raster lodepng)
 
 
 # 添加 googletest 本地目录

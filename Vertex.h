@@ -3,7 +3,6 @@
 
 #include <Eigen/Dense>
 
-
 class Vertex {
 public:
     void clampColor(); // 限制颜色范围在0-1之间
@@ -15,6 +14,7 @@ public:
 public:
     Eigen::Vector4f position;
     Eigen::Vector3f color;
+    Eigen::Vector2f texCoord; // 纹理坐标
 };
 
 #endif // _VERTEX_H_
