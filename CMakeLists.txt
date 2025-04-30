@@ -38,6 +38,7 @@ target_include_directories(raster PRIVATE
 
 target_link_libraries(raster SDL2-static)
 target_link_libraries(raster lodepng)
+target_link_libraries(raster assimp)
 
 
 # 添加 googletest 本地目录

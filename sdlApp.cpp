@@ -3,7 +3,7 @@
 SdlApp::SdlApp(const std::string &title, int width, int height)
     : scene(width, height),
       zBuffer(width, height),
-      texture("lena.png")
+      texture("rock.png")
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
@@ -158,6 +158,10 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 
             uint8_t r,g,b;
             texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
+
+            r = interpolatedTexCoord.x() * 255;
+            g = interpolatedTexCoord.y() * 255;
+            b = 0;
 
             // 使用插值后的颜色设置绘制颜色
             SDL_SetRenderDrawColor(renderer.get(), r, g, b, 255); // 设置填充颜色
