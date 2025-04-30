@@ -103,6 +103,16 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 {
     // 对顶点按 y 坐标排序，确保 v0 是顶部，v2 是底部
     std::array<Vertex, 3> vertices = {v0, v1, v2};
+
+    // SDL_RenderDrawPoint(renderer.get(), v0.position.x(), v0.position.y());
+    // SDL_RenderDrawPoint(renderer.get(), v1.position.x(), v1.position.y());
+    // SDL_RenderDrawPoint(renderer.get(), v2.position.x(), v2.position.y());
+
+    SDL_RenderDrawLine(renderer.get(), v0.position.x(), v0.position.y(), v1.position.x(), v1.position.y());
+    SDL_RenderDrawLine(renderer.get(), v1.position.x(), v1.position.y(), v2.position.x(), v2.position.y());
+    SDL_RenderDrawLine(renderer.get(), v2.position.x(), v2.position.y(), v0.position.x(), v0.position.y());
+
+    return ; // 仅绘制顶点
     std::sort(vertices.begin(), vertices.end(), [](const Vertex &a, const Vertex &b)
               {
                   return a.position.y() < b.position.y(); // 从上到下排序

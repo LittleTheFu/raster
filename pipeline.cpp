@@ -49,7 +49,7 @@ Eigen::Vector4f Pipeline::getScreenCoords(const Eigen::Vector4f &vertex)
     Eigen::Vector4f ndc = getMvpMatrix() * vertex; // 计算NDC坐标
     ndc /= ndc.w(); // 齐次除法
 
-    return ndcMatrix_ * ndc;
+    return ndcMatrix_ * ndc; // 返回x, y, z坐标
 }
 
 void Pipeline::calculateNDCMatrix()

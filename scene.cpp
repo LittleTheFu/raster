@@ -37,9 +37,11 @@ Scene::Scene(int width, int height)
 
 std::vector<Vertex> Scene::getTriangleScreenCoords()
 {
-    // static int count = 0;
-    // count += 1;
-    // count %= 1000000;
+    static int count = 0;
+    count += 1;
+    count %= 5000;
+
+    camera.setPosition(Eigen::Vector3f(0.0f, 0.0f, -4.0f - count * 0.01f)); // 相机位置随时间变化
 
     // 使用整数除法确保 count / 10 取整数部分
     // float scaleFactor = abs(sin(count * 0.0001f));
