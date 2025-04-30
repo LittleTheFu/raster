@@ -3,7 +3,7 @@
 SdlApp::SdlApp(const std::string &title, int width, int height)
     : scene(width, height),
       zBuffer(width, height),
-      texture("rock.png")
+      texture("lena.png")
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
@@ -108,11 +108,11 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
     // SDL_RenderDrawPoint(renderer.get(), v1.position.x(), v1.position.y());
     // SDL_RenderDrawPoint(renderer.get(), v2.position.x(), v2.position.y());
 
-    SDL_RenderDrawLine(renderer.get(), v0.position.x(), v0.position.y(), v1.position.x(), v1.position.y());
-    SDL_RenderDrawLine(renderer.get(), v1.position.x(), v1.position.y(), v2.position.x(), v2.position.y());
-    SDL_RenderDrawLine(renderer.get(), v2.position.x(), v2.position.y(), v0.position.x(), v0.position.y());
+    // SDL_RenderDrawLine(renderer.get(), v0.position.x(), v0.position.y(), v1.position.x(), v1.position.y());
+    // SDL_RenderDrawLine(renderer.get(), v1.position.x(), v1.position.y(), v2.position.x(), v2.position.y());
+    // SDL_RenderDrawLine(renderer.get(), v2.position.x(), v2.position.y(), v0.position.x(), v0.position.y());
 
-    return ; // 仅绘制顶点
+    // return ; // 仅绘制顶点
     std::sort(vertices.begin(), vertices.end(), [](const Vertex &a, const Vertex &b)
               {
                   return a.position.y() < b.position.y(); // 从上到下排序
@@ -150,8 +150,13 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             std::swap(leftVertex, rightVertex);
         }
 
+        if(leftVertex.position.x() < 20)
+        {
+            std::cout << "leftVertex.position.x() < 20" << std::endl;
+        }
+
         // 在当前扫描线填充颜色
-        for (int x = static_cast<int>(leftVertex.position.x()); x <= static_cast<int>(rightVertex.position.x()); ++x)
+        for (int x = static_cast<int>(leftVertex.position.x() + 0.5f); x <= static_cast<int>(rightVertex.position.x() + 0.5f); ++x)
         {
             // 使用左右交点的颜色进行插值
             float alpha = (x - leftVertex.position.x()) / (rightVertex.position.x() - leftVertex.position.x());
@@ -169,9 +174,9 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             uint8_t r,g,b;
             texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
 
-            r = interpolatedTexCoord.x() * 255;
-            g = interpolatedTexCoord.y() * 255;
-            b = 0;
+            // r = interpolatedTexCoord.x() * 255;
+            // g = interpolatedTexCoord.y() * 255;
+            // b = 0;
 
             // 使用插值后的颜色设置绘制颜色
             SDL_SetRenderDrawColor(renderer.get(), r, g, b, 255); // 设置填充颜色
@@ -186,14 +191,26 @@ Vertex SdlApp::interpolateVertex(const Vertex &v0, const Vertex &v1, int y) cons
 {
     Vertex result;
 
-    if (v0.position.y() == v1.position.y())
-    {
-        result = v0; // 如果y值相同，直接返回v0
-        return result;
-    }
+    // if (v0.position.y() - v1.position.y() < 0.01f)
+    // {
+    //     result = v0; // 如果y值相同，直接返回v0
+    //     return result;
+    // }
+
+    // if (v1.position.y() - v0.position.y() < 0.01f)
+    // {
+    //     result = v0; // 如果y值相同，直接返回v0
+    //     return result;
+    // }
 
     // 计算插值比例t
     float t = (y - v0.position.y()) / (v1.position.y() - v0.position.y());
+
+    if(t < 0 || t > 1)
+    {
+        result = v0; // 如果t不在[0,1]范围内，直接返回v0
+        return result;
+    }
 
     // 插值位置
     result.position.x() = v0.position.x() + t * (v1.position.x() - v0.position.x());
@@ -206,6 +223,11 @@ Vertex SdlApp::interpolateVertex(const Vertex &v0, const Vertex &v1, int y) cons
 
     // 插值纹理坐标
     result.texCoord = (1 - t) * v0.texCoord + t * v1.texCoord;
+
+    if(result.position.x() < 20)
+    {
+        std::cout << "result.position.x() < 20" << std::endl;
+    }
 
     return result;
 }
