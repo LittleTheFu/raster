@@ -62,18 +62,9 @@ void SdlApp::render()
 
     // 绘制三角形的三个顶点
     auto screenCoords = scene.getTriangleScreenCoords();
-    if (screenCoords.size() == 3)
+    for (const auto& vertex : screenCoords)
     {
-        // 绘制三角形的三条边
-        SDL_RenderDrawLine(renderer.get(),
-                           static_cast<int>(screenCoords[0].x()), static_cast<int>(screenCoords[0].y()),
-                           static_cast<int>(screenCoords[1].x()), static_cast<int>(screenCoords[1].y()));
-        SDL_RenderDrawLine(renderer.get(),
-                           static_cast<int>(screenCoords[1].x()), static_cast<int>(screenCoords[1].y()),
-                           static_cast<int>(screenCoords[2].x()), static_cast<int>(screenCoords[2].y()));
-        SDL_RenderDrawLine(renderer.get(),
-                           static_cast<int>(screenCoords[2].x()), static_cast<int>(screenCoords[2].y()),
-                           static_cast<int>(screenCoords[0].x()), static_cast<int>(screenCoords[0].y()));
+        setPixel(static_cast<int>(vertex.x()), static_cast<int>(vertex.y()), 255, 0, 0, 255);
     }
 
     // 指定点的坐标 (例如在 (300, 200) 处画一个点)

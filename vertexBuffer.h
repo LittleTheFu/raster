@@ -2,13 +2,16 @@
 #define _VERTEX_BUFFER_H_
 
 #include <vector>
+#include "Vertex.h"
 
 class VertexBuffer {
 public:
-    const std::vector<float>& getVertices() const;
+    const std::vector<Vertex>& getVertices() const;
+    
+    void addVertex(const Vertex& vertex);
         
 private:
-    std::vector<float> vertices;
+    std::vector<Vertex> vertices;
 };
 
 #endif

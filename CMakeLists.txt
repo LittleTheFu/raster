@@ -20,6 +20,7 @@ add_executable(raster
     triangle.cpp
     scene.cpp 
     pipeline.cpp
+    vertex.cpp
     vertexBuffer.cpp)
 
 target_include_directories(raster PRIVATE
