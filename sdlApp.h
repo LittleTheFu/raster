@@ -8,6 +8,7 @@
 
 #include "scene.h"
 #include "zbuffer.h"
+#include "texture.h"
 
 class SdlApp {
 public:
@@ -26,6 +27,7 @@ public:
 private:
     Scene scene;
     ZBuffer zBuffer;
+    Texture texture;
 
 private:
     struct SDLWindowDeleter {

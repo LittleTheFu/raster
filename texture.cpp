@@ -20,9 +20,8 @@ void Texture::getColor(float u, float v, uint8_t& r, uint8_t& g, uint8_t& b) con
     uint8_t uPixel = (static_cast<uint8_t>(uu * m_width));
     uint8_t vPixel = (static_cast<uint8_t>(vv * m_height));
 
-    uint8_t index = vPixel * m_width + uPixel;
-
-    r = m_data.at(4 * index + 0) / 255.0f;
-    g = m_data.at(4 * index + 1) / 255.0f;
-    b = m_data.at(4 * index + 2) / 255.0f;
+    size_t index = vPixel * m_width + uPixel;
+    r = m_data.at(4 * index + 0);
+    g = m_data.at(4 * index + 1);
+    b = m_data.at(4 * index + 2);
 }

@@ -1,7 +1,9 @@
 #include "SdlApp.h"
 
 SdlApp::SdlApp(const std::string &title, int width, int height)
-    : scene(width, height),zBuffer(width, height)
+    : scene(width, height),
+      zBuffer(width, height),
+      texture("lena.png")
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
@@ -144,6 +146,8 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             // 使用左右交点的颜色进行插值
             float alpha = (x - leftVertex.position.x()) / (rightVertex.position.x() - leftVertex.position.x());
             Eigen::Vector3f interpolatedColor = (1 - alpha) * leftVertex.color + alpha * rightVertex.color;
+            // 插值纹理坐标
+            Eigen::Vector2f interpolatedTexCoord = (1 - alpha) * leftVertex.texCoord + alpha * rightVertex.texCoord;
             float interpolatedZ = (1 - alpha) * leftVertex.position.z() + alpha * rightVertex.position.z(); // 插值 z 值
 
             // 更新 Z-buffer，只有在深度值更小的情况下才绘制像素
@@ -152,12 +156,11 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
                 continue; // 如果 Z-buffer 更新失败，则跳过绘制
             }
 
+            uint8_t r,g,b;
+            texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
+
             // 使用插值后的颜色设置绘制颜色
-            SDL_SetRenderDrawColor(renderer.get(),
-                                   static_cast<uint8_t>(interpolatedColor.x() * 255.0f),
-                                   static_cast<uint8_t>(interpolatedColor.y() * 255.0f),
-                                   static_cast<uint8_t>(interpolatedColor.z() * 255.0f),
-                                   255); // 设置填充颜色
+            SDL_SetRenderDrawColor(renderer.get(), r, g, b, 255); // 设置填充颜色
             SDL_RenderDrawPoint(renderer.get(), x, y); // 绘制像素
         }
     }
