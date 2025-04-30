@@ -12,7 +12,7 @@
 class Scene
 {
 public:
-    Scene();
+    Scene(int width, int height);
     std::vector<Vertex> getTriangleScreenCoords();
 
 private:

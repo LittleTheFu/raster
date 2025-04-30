@@ -1,11 +1,11 @@
 #include "scene.h"
 #include "triangle.h"
 
-Scene::Scene()
+Scene::Scene(int width, int height)
     : camera(Eigen::Vector3f(0.0f, 0.0f, -50.0f), // position
              Eigen::Vector3f(0.0f, 0.0f, 1.0f),   // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
-      pipeline(800, 600)                          // 假设屏幕大小为800x600
+      pipeline(width, height)                          // 假设屏幕大小为800x600
 {
     Triangle t0;
 

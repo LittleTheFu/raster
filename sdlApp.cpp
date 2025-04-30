@@ -1,6 +1,7 @@
 #include "SdlApp.h"
 
 SdlApp::SdlApp(const std::string &title, int width, int height)
+    : scene(width, height)
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
@@ -68,7 +69,6 @@ void SdlApp::render()
         {
             drawTriangle(*it, *(it + 1), *(it + 2));
         }
-       
     }
 
     // 刷新渲染器，展示绘制的内容
@@ -98,9 +98,10 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 {
     // 对顶点按 y 坐标排序，确保 v0 是顶部，v2 是底部
     std::array<Vertex, 3> vertices = {v0, v1, v2};
-    std::sort(vertices.begin(), vertices.end(), [](const Vertex& a, const Vertex& b) {
-        return a.position.y() < b.position.y();  // 从上到下排序
-    });
+    std::sort(vertices.begin(), vertices.end(), [](const Vertex &a, const Vertex &b)
+              {
+                  return a.position.y() < b.position.y(); // 从上到下排序
+              });
 
     // 获取排序后的顶点
     const Vertex &top = vertices[0];
@@ -143,12 +144,12 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             Eigen::Vector3f interpolatedColor = (1 - alpha) * leftColor + alpha * rightColor;
 
             // 使用插值后的颜色设置绘制颜色
-            SDL_SetRenderDrawColor(renderer.get(), 
+            SDL_SetRenderDrawColor(renderer.get(),
                                    static_cast<uint8_t>(interpolatedColor.x() * 255.0f),
                                    static_cast<uint8_t>(interpolatedColor.y() * 255.0f),
                                    static_cast<uint8_t>(interpolatedColor.z() * 255.0f),
-                                   255);  // 设置填充颜色
-            SDL_RenderDrawPoint(renderer.get(), x, y);  // 绘制像素
+                                   255);               // 设置填充颜色
+            SDL_RenderDrawPoint(renderer.get(), x, y); // 绘制像素
         }
     }
 }
@@ -156,8 +157,9 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 // 计算给定 y 值的交点，同时返回颜色的插值
 float SdlApp::interpolateX(const Vertex &v0, const Vertex &v1, int y, Eigen::Vector3f &color) const
 {
-    if (v0.position.y() == v1.position.y()) {
-        color = v0.color;  // 如果两个点的 y 相同，直接返回 x 和颜色
+    if (v0.position.y() == v1.position.y())
+    {
+        color = v0.color; // 如果两个点的 y 相同，直接返回 x 和颜色
         return v0.position.x();
     }
 
