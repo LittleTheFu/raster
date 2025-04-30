@@ -44,13 +44,12 @@ const Eigen::Matrix4f& Pipeline::getMvpMatrix()
     return mvpMatrix_;
 }
 
-Eigen::Vector3f Pipeline::getScreenCoords(const Eigen::Vector4f &vertex)
+Eigen::Vector4f Pipeline::getScreenCoords(const Eigen::Vector4f &vertex)
 {
     Eigen::Vector4f ndc = getMvpMatrix() * vertex; // 计算NDC坐标
     ndc /= ndc.w(); // 齐次除法
 
-    Eigen::Vector4f screenCoords = ndcMatrix_ * ndc; // 转换到屏幕坐标系
-    return screenCoords.head<3>(); // 返回x, y, z坐标
+    return ndcMatrix_ * ndc;
 }
 
 void Pipeline::calculateNDCMatrix()

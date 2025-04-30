@@ -17,7 +17,9 @@ public:
     void handleEvents();
     void render();
     void updateFPS();
+
     void setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    void drawTriangle(const Vertex& v0, const Vertex& v1, const Vertex& v2);
 
 private:
     Scene scene;

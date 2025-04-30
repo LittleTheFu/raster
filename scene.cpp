@@ -17,7 +17,7 @@ Scene::Scene()
     vertexBuffer.addVertex(Vertex{triangle.vertex(2), Eigen::Vector3f(0.0f, 0.0f, 1.0f)});
 }
 
-std::vector<Eigen::Vector3f> Scene::getTriangleScreenCoords()
+std::vector<Vertex> Scene::getTriangleScreenCoords()
 {
     // static int count = 0;
     // count += 1;
@@ -27,7 +27,7 @@ std::vector<Eigen::Vector3f> Scene::getTriangleScreenCoords()
     // float scaleFactor = abs(sin(count * 0.0001f));
     // float scale = 1 + scaleFactor;
 
-    std::vector<Eigen::Vector3f> screenCoords;
+    std::vector<Vertex> screenCoords;
 
     Eigen::Matrix4f viewMatrix = camera.getViewMatrix().inverse();
     Eigen::Matrix4f projectionMatrix = camera.getProjectionMatrix();
@@ -38,7 +38,8 @@ std::vector<Eigen::Vector3f> Scene::getTriangleScreenCoords()
 
     for(auto vertex : vertexBuffer.getVertices())
     {
-        screenCoords.push_back(pipeline.getScreenCoords(vertex.position));
+        Vertex screenVertex = {pipeline.getScreenCoords(vertex.position), vertex.color};
+        screenCoords.push_back(screenVertex);
     }
 
     return screenCoords;

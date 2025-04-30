@@ -62,29 +62,14 @@ void SdlApp::render()
 
     // 绘制三角形的三个顶点
     auto screenCoords = scene.getTriangleScreenCoords();
-    for (auto it = screenCoords.begin(); it != screenCoords.end(); ++it)
+    for (auto it = screenCoords.begin(); it != screenCoords.end(); it += 3)
     {
-        if(it + 1 != screenCoords.end())
+        if (it + 2 < screenCoords.end())
         {
-            SDL_RenderDrawLine(renderer.get(), static_cast<int>(it->x()), static_cast<int>(it->y()),
-                               static_cast<int>((it + 1)->x()), static_cast<int>((it + 1)->y()));
+            drawTriangle(*it, *(it + 1), *(it + 2));
         }
+       
     }
-    if(screenCoords.size() > 2)
-    {
-        SDL_RenderDrawLine(renderer.get(), static_cast<int>(screenCoords.back().x()), static_cast<int>(screenCoords.back().y()),
-                           static_cast<int>(screenCoords.front().x()), static_cast<int>(screenCoords.front().y()));
-    }
-
-    // 指定点的坐标 (例如在 (300, 200) 处画一个点)
-    // int x = 0;
-    // int y = 0;
-    // SDL_RenderDrawPoint(renderer.get(), x, y); // 在指定坐标画点
-
-    // 示例：绘制一个红色矩形
-    // SDL_Rect rect = {200, 150, 400, 300};
-    // SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255);
-    // SDL_RenderFillRect(renderer.get(), &rect);
 
     // 刷新渲染器，展示绘制的内容
     SDL_RenderPresent(renderer.get());
@@ -107,6 +92,21 @@ void SdlApp::setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     SDL_SetRenderDrawColor(renderer.get(), r, g, b, a);
     SDL_RenderDrawPoint(renderer.get(), x, y);
+}
+
+void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
+{
+    SDL_SetRenderDrawColor(renderer.get(), v0.r(), v0.g(), v0.b(), 255);
+    SDL_RenderDrawLine(renderer.get(), static_cast<int>(v0.position.x()), static_cast<int>(v0.position.y()),
+                       static_cast<int>(v1.position.x()), static_cast<int>(v1.position.y()));
+
+    SDL_SetRenderDrawColor(renderer.get(), v1.r(), v1.g(), v1.b(), 255);
+    SDL_RenderDrawLine(renderer.get(), static_cast<int>(v1.position.x()), static_cast<int>(v1.position.y()),
+                       static_cast<int>(v2.position.x()), static_cast<int>(v2.position.y()));
+
+    SDL_SetRenderDrawColor(renderer.get(), v2.r(), v2.g(), v2.b(), 255);
+    SDL_RenderDrawLine(renderer.get(), static_cast<int>(v2.position.x()), static_cast<int>(v2.position.y()),
+                       static_cast<int>(v0.position.x()), static_cast<int>(v0.position.y()));
 }
 
 void SdlApp::setWindowTitleWithFPS()

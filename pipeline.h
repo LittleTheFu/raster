@@ -12,7 +12,7 @@ public:
     void setViewMatrix(const Eigen::Matrix4f& viewMatrix);
     void setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix);
 
-    Eigen::Vector3f getScreenCoords(const Eigen::Vector4f& vertex);
+    Eigen::Vector4f getScreenCoords(const Eigen::Vector4f& vertex);
 
 private:
     const Eigen::Matrix4f& getMvpMatrix();

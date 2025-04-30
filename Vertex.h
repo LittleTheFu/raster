@@ -7,10 +7,14 @@
 class Vertex {
 public:
     void clampColor(); // 限制颜色范围在0-1之间
-    
+
+    uint8_t r() const;
+    uint8_t g() const;
+    uint8_t b() const;
+
 public:
     Eigen::Vector4f position;
-    Eigen::Vector3f color; // 法线
+    Eigen::Vector3f color;
 };
 
 #endif // _VERTEX_H_

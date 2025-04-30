@@ -5,6 +5,7 @@
 #include "triangle.h"
 #include "pipeline.h"
 #include "vertexBuffer.h"
+#include "Vertex.h"
 #include <Eigen/Dense>
 #include <vector>
 
@@ -12,7 +13,7 @@ class Scene
 {
 public:
     Scene();
-    std::vector<Eigen::Vector3f> getTriangleScreenCoords();
+    std::vector<Vertex> getTriangleScreenCoords();
 
 private:
     Camera camera;
