@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(raster)
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(third/assimp)
 add_subdirectory(third/lodepng)
 add_subdirectory(third/sdl)
 
@@ -23,6 +24,7 @@ add_executable(raster
     pipeline.cpp
     vertex.cpp
     vertexBuffer.cpp
+    mesh.cpp
     zbuffer.cpp
     texture.cpp)
 
@@ -30,6 +32,8 @@ target_include_directories(raster PRIVATE
     third/SDL/include
     third/eigen
     third/lodepng/include
+    ${PROJECT_SOURCE_DIR}/third/assimp/include
+    ${CMAKE_CURRENT_BINARY_DIR}/third/assimp/include
 )
 
 target_link_libraries(raster SDL2-static)
