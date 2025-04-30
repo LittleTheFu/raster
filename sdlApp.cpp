@@ -96,17 +96,79 @@ void SdlApp::setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 
 void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 {
-    SDL_SetRenderDrawColor(renderer.get(), v0.r(), v0.g(), v0.b(), 255);
-    SDL_RenderDrawLine(renderer.get(), static_cast<int>(v0.position.x()), static_cast<int>(v0.position.y()),
-                       static_cast<int>(v1.position.x()), static_cast<int>(v1.position.y()));
+    // 对顶点按 y 坐标排序，确保 v0 是顶部，v2 是底部
+    std::array<Vertex, 3> vertices = {v0, v1, v2};
+    std::sort(vertices.begin(), vertices.end(), [](const Vertex& a, const Vertex& b) {
+        return a.position.y() < b.position.y();  // 从上到下排序
+    });
 
-    SDL_SetRenderDrawColor(renderer.get(), v1.r(), v1.g(), v1.b(), 255);
-    SDL_RenderDrawLine(renderer.get(), static_cast<int>(v1.position.x()), static_cast<int>(v1.position.y()),
-                       static_cast<int>(v2.position.x()), static_cast<int>(v2.position.y()));
+    // 获取排序后的顶点
+    const Vertex &top = vertices[0];
+    const Vertex &middle = vertices[1];
+    const Vertex &bottom = vertices[2];
 
-    SDL_SetRenderDrawColor(renderer.get(), v2.r(), v2.g(), v2.b(), 255);
-    SDL_RenderDrawLine(renderer.get(), static_cast<int>(v2.position.x()), static_cast<int>(v2.position.y()),
-                       static_cast<int>(v0.position.x()), static_cast<int>(v0.position.y()));
+    // 扫描线填充算法
+    for (int y = static_cast<int>(top.position.y()); y <= static_cast<int>(bottom.position.y()); ++y)
+    {
+        // 计算当前扫描线的左右交点
+        float leftX = 0.0f, rightX = 0.0f;
+        Eigen::Vector3f leftColor, rightColor;
+
+        // 对于扫描线在顶点与中间点之间
+        if (y <= middle.position.y())
+        {
+            // 计算与 top 和 middle 之间的交点
+            leftX = interpolateX(top, middle, y, leftColor);
+            rightX = interpolateX(top, bottom, y, rightColor);
+        }
+        else
+        {
+            // 计算与 middle 和 bottom 之间的交点
+            leftX = interpolateX(middle, bottom, y, leftColor);
+            rightX = interpolateX(top, bottom, y, rightColor);
+        }
+
+        // 对交点进行排序，以确保从左到右绘制
+        if (leftX > rightX)
+        {
+            std::swap(leftX, rightX);
+            std::swap(leftColor, rightColor);
+        }
+
+        // 在当前扫描线填充颜色
+        for (int x = static_cast<int>(leftX); x <= static_cast<int>(rightX); ++x)
+        {
+            // 使用左右交点的颜色进行插值
+            float alpha = (x - leftX) / (rightX - leftX);
+            Eigen::Vector3f interpolatedColor = (1 - alpha) * leftColor + alpha * rightColor;
+
+            // 使用插值后的颜色设置绘制颜色
+            SDL_SetRenderDrawColor(renderer.get(), 
+                                   static_cast<uint8_t>(interpolatedColor.x() * 255.0f),
+                                   static_cast<uint8_t>(interpolatedColor.y() * 255.0f),
+                                   static_cast<uint8_t>(interpolatedColor.z() * 255.0f),
+                                   255);  // 设置填充颜色
+            SDL_RenderDrawPoint(renderer.get(), x, y);  // 绘制像素
+        }
+    }
+}
+
+// 计算给定 y 值的交点，同时返回颜色的插值
+float SdlApp::interpolateX(const Vertex &v0, const Vertex &v1, int y, Eigen::Vector3f &color) const
+{
+    if (v0.position.y() == v1.position.y()) {
+        color = v0.color;  // 如果两个点的 y 相同，直接返回 x 和颜色
+        return v0.position.x();
+    }
+
+    // 计算线性插值的比例 t
+    float t = (y - v0.position.y()) / (v1.position.y() - v0.position.y());
+    float x = v0.position.x() + t * (v1.position.x() - v0.position.x());
+
+    // 计算颜色的插值
+    color = (1 - t) * v0.color + t * v1.color;
+
+    return x;
 }
 
 void SdlApp::setWindowTitleWithFPS()
