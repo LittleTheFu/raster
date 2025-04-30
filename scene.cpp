@@ -9,8 +9,8 @@ Scene::Scene()
 {
     // 其他初始化代码
     triangle.setVertex(0, Eigen::Vector4f(0, 0, 10, 1.0f));
-    triangle.setVertex(1, Eigen::Vector4f(-50, 0, 10, 1.0f));
-    triangle.setVertex(2, Eigen::Vector4f(0, 50, 10, 1.0f));
+    triangle.setVertex(1, Eigen::Vector4f(-10, -20, 10, 1.0f));
+    triangle.setVertex(2, Eigen::Vector4f(30, 10, 10, 1.0f));
 }
 
 std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords()
@@ -21,8 +21,7 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords()
 
     // 使用整数除法确保 count / 10 取整数部分
     // float scaleFactor = abs(sin(count * 0.0001f));
-    // float scale = scaleFactor;
-    // float scale = 1;
+    // float scale = 1 + scaleFactor;
 
     std::array<Eigen::Vector3f, 3> screenCoords;
 
@@ -33,15 +32,9 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords()
     pipeline.setViewMatrix(viewMatrix);
     pipeline.setProjectionMatrix(projectionMatrix);
 
-    // screenCoords[0] = ndcToScreen(pipeline.getMvpMatrix() * triangle.vertex(0), 800, 600);
-    // screenCoords[1] = ndcToScreen(pipeline.getMvpMatrix() * triangle.vertex(1), 800, 600);
-    // screenCoords[2] = ndcToScreen(pipeline.getMvpMatrix() * triangle.vertex(2), 800, 600);
-    triangle.div_w();
-
-    Eigen::Matrix4f mvpMatrix = pipeline.getMvpMatrix();
-    screenCoords[0] = (mvpMatrix * triangle.vertex(0)).head<3>();
-    screenCoords[1] = (mvpMatrix * triangle.vertex(1)).head<3>();
-    screenCoords[2] = (mvpMatrix * triangle.vertex(2)).head<3>();
+    screenCoords[0] = pipeline.getScreenCoords(triangle.vertex(0));
+    screenCoords[1] = pipeline.getScreenCoords(triangle.vertex(1));
+    screenCoords[2] = pipeline.getScreenCoords(triangle.vertex(2));
 
     return screenCoords;
 }

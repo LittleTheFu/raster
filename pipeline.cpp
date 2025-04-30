@@ -10,7 +10,8 @@ Pipeline::Pipeline(int width, int height)
     viewMatrix_ = Eigen::Matrix4f::Identity();
     projectionMatrix_ = Eigen::Matrix4f::Identity();
     mvpMatrix_ = Eigen::Matrix4f::Identity();
-    ndcMatrix_ = Eigen::Matrix4f::Identity();
+
+    calculateNDCMatrix(); // 计算NDC矩阵
 
     isDirty_ = true; // 初始时需要更新MVP矩阵
 }
@@ -41,6 +42,15 @@ const Eigen::Matrix4f& Pipeline::getMvpMatrix()
         isDirty_ = false;
     }
     return mvpMatrix_;
+}
+
+Eigen::Vector3f Pipeline::getScreenCoords(const Eigen::Vector4f &vertex)
+{
+    Eigen::Vector4f ndc = getMvpMatrix() * vertex; // 计算NDC坐标
+    ndc /= ndc.w(); // 齐次除法
+
+    Eigen::Vector4f screenCoords = ndcMatrix_ * ndc; // 转换到屏幕坐标系
+    return screenCoords.head<3>(); // 返回x, y, z坐标
 }
 
 void Pipeline::calculateNDCMatrix()

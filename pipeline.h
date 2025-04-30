@@ -12,9 +12,10 @@ public:
     void setViewMatrix(const Eigen::Matrix4f& viewMatrix);
     void setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix);
 
-    const Eigen::Matrix4f& getMvpMatrix();
+    Eigen::Vector3f getScreenCoords(const Eigen::Vector4f& vertex);
 
 private:
+    const Eigen::Matrix4f& getMvpMatrix();
     void calculateNDCMatrix();
 
 private:
