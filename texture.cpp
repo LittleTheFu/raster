@@ -1,5 +1,6 @@
 #include "texture.h"
 #include <iostream>
+#include <cmath>
 
 Texture::Texture(const std::string &fileName) : m_width(0), m_height(0)
 {
@@ -13,10 +14,8 @@ Texture::Texture(const std::string &fileName) : m_width(0), m_height(0)
 
 void Texture::getColor(float u, float v, uint8_t& r, uint8_t& g, uint8_t& b) const
 {
-    //something wrong here, uv passed was out of range
-    //should be fixed later
-    float uu = u - (int)u;
-    float vv = v - (int)v;
+    float uu = std::fmod(u, 1.0f);
+    float vv = std::fmod(v, 1.0f);
 
     uint8_t uPixel = (static_cast<uint8_t>(uu * m_width));
     uint8_t vPixel = (static_cast<uint8_t>(vv * m_height));
