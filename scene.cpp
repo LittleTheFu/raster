@@ -34,8 +34,8 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords() const
     v0 = viewMatrix * v0; // 先变换到视图空间
     v0 = projectionMatrix * v0;
     v0 /= v0.w(); // 齐次除法
-    Eigen::Vector3f ndc0(v0.x(), v0.y(), v0.z());
-    screenCoords[0] = ndcToScreen(ndc0, 800, 600); // 假设屏幕大小为800x600
+    // Eigen::Vector3f ndc0(v0.x(), v0.y(), v0.z());
+    screenCoords[0] = ndcToScreen(v0, 800, 600); // 假设屏幕大小为800x600
 
     Eigen::Vector4f v1 = triangle.vertex(1);
     v1 *= scale;
@@ -43,8 +43,8 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords() const
     v1 = viewMatrix * v1; // 先变换到视图空间
     v1 = projectionMatrix * v1;
     v1 /= v1.w(); // 齐次除法
-    Eigen::Vector3f ndc1(v1.x(), v1.y(), v1.z());
-    screenCoords[1] = ndcToScreen(ndc1, 800, 600); // 假设屏幕大小为800x600
+    // Eigen::Vector3f ndc1(v1.x(), v1.y(), v1.z());
+    screenCoords[1] = ndcToScreen(v1, 800, 600); // 假设屏幕大小为800x600
 
     Eigen::Vector4f v2 = triangle.vertex(2);
     v2 *= scale;
@@ -52,18 +52,30 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords() const
     v2 = viewMatrix * v2; // 先变换到视图空间
     v2 = projectionMatrix * v2;
     v2 /= v2.w(); // 齐次除法
-    Eigen::Vector3f ndc2(v2.x(), v2.y(), v2.z());
-    screenCoords[2] = ndcToScreen(ndc2, 800, 600); // 假设屏幕大小为800x600
+    // Eigen::Vector3f ndc2(v2.x(), v2.y(), v2.z());
+    screenCoords[2] = ndcToScreen(v2, 800, 600); // 假设屏幕大小为800x600
 
     return screenCoords;
 }
 
-Eigen::Vector3f Scene::ndcToScreen(const Eigen::Vector3f &ndc, int screenWidth, int screenHeight) const
+Eigen::Vector3f Scene::ndcToScreen(const Eigen::Vector4f &ndc, int screenWidth, int screenHeight) const
 {
-    // 从 NDC 到屏幕坐标的变换
-    float x_screen = (ndc.x() + 1.0f) * 0.5f * screenWidth;
-    float y_screen = (1.0f - ndc.y()) * 0.5f * screenHeight; // y轴反转
-    float z_screen = ndc.z();                                // z值通常保持不变，或者按需要进行调整
+    // 构造一个 4x4 的矩阵来处理 NDC 到屏幕坐标的转换
+    Eigen::Matrix4f screenMatrix = Eigen::Matrix4f::Identity();
 
-    return Eigen::Vector3f(x_screen, y_screen, z_screen);
+    // 设置齐次坐标的缩放和平移
+    screenMatrix(0, 0) = 0.5f * screenWidth;  // x轴的缩放
+    screenMatrix(1, 1) = 0.5f * screenHeight; // y轴的缩放
+    screenMatrix(0, 3) = 0.5f * screenWidth;  // x轴的平移
+    screenMatrix(1, 3) = 0.5f * screenHeight; // y轴的平移
+
+    // y轴翻转的处理
+    screenMatrix(1, 1) *= -1.0f;
+
+    // 将 NDC 转换为屏幕坐标
+    Eigen::Vector4f screenCoord = screenMatrix * ndc;  // 进行变换
+
+    // 返回最终的屏幕坐标，只返回 x, y, z 作为 3D 坐标
+    return Eigen::Vector3f(screenCoord.x(), screenCoord.y(), screenCoord.z());
 }
+

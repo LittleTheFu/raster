@@ -13,7 +13,7 @@ public:
     std::array<Eigen::Vector3f, 3> getTriangleScreenCoords() const;
 
 private:
-    Eigen::Vector3f ndcToScreen(const Eigen::Vector3f& ndc, int screenWidth = 800, int screenHeight = 600) const;
+    Eigen::Vector3f ndcToScreen(const Eigen::Vector4f& ndc, int screenWidth = 800, int screenHeight = 600) const;
 
 private:
     Camera camera;
