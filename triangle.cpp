@@ -32,3 +32,11 @@ const Eigen::Vector4f& Triangle::vertex(int index) const
     }
     return vertices_[index];
 }
+
+void Triangle::div_w()
+{
+    for (int i = 0; i < 3; ++i)
+    {
+        vertices_[i] /= vertices_[i].w();
+    }
+}

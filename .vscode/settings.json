@@ -6,6 +6,7 @@
         "dense": "cpp",
         "core": "cpp",
         "array": "cpp",
-        "memory": "cpp"
+        "memory": "cpp",
+        "xiosbase": "cpp"
     }
 }

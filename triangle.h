@@ -16,6 +16,8 @@ public:
     // 访问顶点
     const Eigen::Vector4f& vertex(int index) const;
 
+    void div_w();
+
 private:
     std::array<Eigen::Vector4f, 3> vertices_;
 };
