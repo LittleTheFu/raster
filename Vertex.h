@@ -3,8 +3,11 @@
 
 #include <Eigen/Dense>
 
-class Vertex {
+class Vertex
+{
 public:
+    Vertex &operator=(const Vertex &other);
+
     void clampColor(); // 限制颜色范围在0-1之间
 
     uint8_t r() const;

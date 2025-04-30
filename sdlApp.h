@@ -22,9 +22,7 @@ public:
     void setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
     void drawTriangle(const Vertex& v0, const Vertex& v1, const Vertex& v2);
 
-    float interpolateX(const Vertex &v0, const Vertex &v1, int y, Eigen::Vector3f &color, float& z) const;
-
-
+    Vertex interpolateVertex(const Vertex &v0, const Vertex &v1, int y) const;
 private:
     Scene scene;
     ZBuffer zBuffer;

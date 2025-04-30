@@ -56,7 +56,7 @@ void SdlApp::render()
 {
     // 更新 Z-buffer
     zBuffer.clear();
-    
+
     // 设置背景色为黑色并清空屏幕
     SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(renderer.get());
@@ -116,38 +116,35 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
     {
         // 计算当前扫描线的左右交点
         float leftX = 0.0f, rightX = 0.0f;
-        Eigen::Vector3f leftColor, rightColor;
-        float leftZ, rightZ;
+        Vertex leftVertex, rightVertex;
 
         // 对于扫描线在顶点与中间点之间
         if (y <= middle.position.y())
         {
             // 计算与 top 和 middle 之间的交点
-            leftX = interpolateX(top, middle, y, leftColor, leftZ);
-            rightX = interpolateX(top, bottom, y, rightColor, rightZ);
+            leftVertex = interpolateVertex(top, middle, y);
+            rightVertex = interpolateVertex(top, bottom, y);
         }
         else
         {
             // 计算与 middle 和 bottom 之间的交点
-            leftX = interpolateX(middle, bottom, y, leftColor, leftZ);
-            rightX = interpolateX(top, bottom, y, rightColor, rightZ);
+            leftVertex = interpolateVertex(middle, bottom, y);
+            rightVertex = interpolateVertex(top, bottom, y);
         }
 
         // 对交点进行排序，以确保从左到右绘制
-        if (leftX > rightX)
+        if (leftVertex.position.x() > rightVertex.position.x())
         {
-            std::swap(leftX, rightX);
-            std::swap(leftColor, rightColor);
-            std::swap(leftZ, rightZ);
+            std::swap(leftVertex, rightVertex);
         }
 
         // 在当前扫描线填充颜色
-        for (int x = static_cast<int>(leftX); x <= static_cast<int>(rightX); ++x)
+        for (int x = static_cast<int>(leftVertex.position.x()); x <= static_cast<int>(rightVertex.position.x()); ++x)
         {
             // 使用左右交点的颜色进行插值
-            float alpha = (x - leftX) / (rightX - leftX);
-            Eigen::Vector3f interpolatedColor = (1 - alpha) * leftColor + alpha * rightColor;
-            float interpolatedZ = (1 - alpha) * leftZ + alpha * rightZ; // 插值 z 值
+            float alpha = (x - leftVertex.position.x()) / (rightVertex.position.x() - leftVertex.position.x());
+            Eigen::Vector3f interpolatedColor = (1 - alpha) * leftVertex.color + alpha * rightVertex.color;
+            float interpolatedZ = (1 - alpha) * leftVertex.position.z() + alpha * rightVertex.position.z(); // 插值 z 值
 
             // 更新 Z-buffer，只有在深度值更小的情况下才绘制像素
             if (!zBuffer.testAndUpdate(x, y, interpolatedZ))
@@ -160,31 +157,42 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
                                    static_cast<uint8_t>(interpolatedColor.x() * 255.0f),
                                    static_cast<uint8_t>(interpolatedColor.y() * 255.0f),
                                    static_cast<uint8_t>(interpolatedColor.z() * 255.0f),
-                                   255);               // 设置填充颜色
+                                   255); // 设置填充颜色
             SDL_RenderDrawPoint(renderer.get(), x, y); // 绘制像素
         }
     }
 }
 
+
 // 计算给定 y 值的交点，同时返回颜色的插值
-float SdlApp::interpolateX(const Vertex &v0, const Vertex &v1, int y, Eigen::Vector3f &color, float& z) const
+Vertex SdlApp::interpolateVertex(const Vertex &v0, const Vertex &v1, int y) const
 {
+    Vertex result;
+
     if (v0.position.y() == v1.position.y())
     {
-        color = v0.color; // 如果两个点的 y 相同，直接返回 x 和颜色
-        return v0.position.x();
+        result = v0; // 如果y值相同，直接返回v0
+        return result;
     }
 
-    // 计算线性插值的比例 t
+    // 计算插值比例t
     float t = (y - v0.position.y()) / (v1.position.y() - v0.position.y());
-    float x = v0.position.x() + t * (v1.position.x() - v0.position.x());
 
-    // 计算颜色的插值
-    color = (1 - t) * v0.color + t * v1.color;
-    z = (1 - t) * v0.position.z() + t * v1.position.z(); // 计算 z 值的插值
+    // 插值位置
+    result.position.x() = v0.position.x() + t * (v1.position.x() - v0.position.x());
+    result.position.y() = y;  // 固定y
+    result.position.z() = v0.position.z() + t * (v1.position.z() - v0.position.z());
+    result.position.w() = 1.0f;  // 假设使用齐次坐标
 
-    return x;
+    // 插值颜色
+    result.color = (1 - t) * v0.color + t * v1.color;
+
+    // 插值纹理坐标
+    result.texCoord = (1 - t) * v0.texCoord + t * v1.texCoord;
+
+    return result;
 }
+
 
 void SdlApp::setWindowTitleWithFPS()
 {

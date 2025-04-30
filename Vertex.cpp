@@ -1,5 +1,14 @@
 #include "Vertex.h"
 
+
+Vertex& Vertex::operator=(const Vertex& other) {
+    if (this != &other) {
+        position = other.position;
+        color = other.color;
+        texCoord = other.texCoord;
+    }
+    return *this;
+}
 void Vertex::clampColor()
 {
     color = color.cwiseMax(Eigen::Vector3f(0.0f, 0.0f, 0.0f));
