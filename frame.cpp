@@ -3,37 +3,37 @@
 #include <cassert>
 
 Frame::Frame()
-    : origin_(Vec3::Zero()), handedness_(Handedness::RightHanded)
+    : origin_(Eigen::Vector3f::Zero()), handedness_(Handedness::RightHanded)
 {
-    xAxis_ = Vec3::UnitX();
-    yAxis_ = Vec3::UnitY();
-    zAxis_ = Vec3::UnitZ();
+    xAxis_ = Eigen::Vector3f::UnitX();
+    yAxis_ = Eigen::Vector3f::UnitY();
+    zAxis_ = Eigen::Vector3f::UnitZ();
 }
 
-Frame::Frame(const Vec3& xAxis, const Vec3& yAxis, const Vec3& zAxis, const Vec3& origin, Handedness handedness)
+Frame::Frame(const Eigen::Vector3f& xAxis, const Eigen::Vector3f& yAxis, const Eigen::Vector3f& zAxis, const Eigen::Vector3f& origin, Handedness handedness)
     : xAxis_(xAxis), yAxis_(yAxis), zAxis_(zAxis), origin_(origin), handedness_(handedness)
 {
     assert(isOrthonormal() && "Axes must be orthonormal!");
     assert(checkHandedness() && "Axes do not match the specified handedness!");
 }
 
-const Frame::Vec3& Frame::origin() const { return origin_; }
+const Eigen::Vector3f& Frame::origin() const { return origin_; }
 
-const Frame::Vec3& Frame::xAxis() const { return xAxis_; }
+const Eigen::Vector3f& Frame::xAxis() const { return xAxis_; }
 
-const Frame::Vec3& Frame::yAxis() const { return yAxis_; }
+const Eigen::Vector3f& Frame::yAxis() const { return yAxis_; }
 
-const Frame::Vec3& Frame::zAxis() const { return zAxis_; }
+const Eigen::Vector3f& Frame::zAxis() const { return zAxis_; }
 
 Frame::Handedness Frame::handedness() const { return handedness_; }
 
-Frame::Vec3 Frame::localToWorld(const Frame::Vec3& local) const {
+Eigen::Vector3f Frame::localToWorld(const Eigen::Vector3f& local) const {
     return xAxis_ * local.x() + yAxis_ * local.y() + zAxis_ * local.z() + origin_;
 }
 
-Frame::Vec3 Frame::worldToLocal(const Frame::Vec3& world) const {
-    Vec3 p = world - origin_;
-    return Vec3(xAxis_.dot(p), yAxis_.dot(p), zAxis_.dot(p));
+Eigen::Vector3f Frame::worldToLocal(const Eigen::Vector3f& world) const {
+    Eigen::Vector3f p = world - origin_;
+    return Eigen::Vector3f(xAxis_.dot(p), yAxis_.dot(p), zAxis_.dot(p));
 }
 
 bool Frame::isOrthonormal() const {

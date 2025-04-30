@@ -3,19 +3,19 @@
 
 Triangle::Triangle()
 {
-    vertices_[0] = Vec4::Zero();
-    vertices_[1] = Vec4::Zero();
-    vertices_[2] = Vec4::Zero();
+    vertices_[0] = Eigen::Vector4f::Zero();
+    vertices_[1] = Eigen::Vector4f::Zero();
+    vertices_[2] = Eigen::Vector4f::Zero();
 }
 
-Triangle::Triangle(const Vec4& v0, const Vec4& v1, const Vec4& v2)
+Triangle::Triangle(const Eigen::Vector4f& v0, const Eigen::Vector4f& v1, const Eigen::Vector4f& v2)
 {
     vertices_[0] = v0;
     vertices_[1] = v1;
     vertices_[2] = v2;
 }
 
-void Triangle::setVertex(int index, const Vec4& vertex)
+void Triangle::setVertex(int index, const Eigen::Vector4f& vertex)
 {
     if (index < 0 || index >= 3)
     {
@@ -24,7 +24,7 @@ void Triangle::setVertex(int index, const Vec4& vertex)
     vertices_[index] = vertex;
 }
 
-const Triangle::Vec4& Triangle::vertex(int index) const
+const Eigen::Vector4f& Triangle::vertex(int index) const
 {
     if (index < 0 || index >= 3)
     {

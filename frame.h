@@ -6,7 +6,6 @@
 class Frame
 {
 public:
-    using Vec3 = Eigen::Vector3f;
 
     enum class Handedness {
         RightHanded,
@@ -17,30 +16,30 @@ public:
     Frame();
 
     // 带参数构造函数
-    Frame(const Vec3& xAxis, const Vec3& yAxis, const Vec3& zAxis, const Vec3& origin, Handedness handedness = Handedness::RightHanded);
+    Frame(const Eigen::Vector3f& xAxis, const Eigen::Vector3f& yAxis, const Eigen::Vector3f& zAxis, const Eigen::Vector3f& origin, Handedness handedness = Handedness::RightHanded);
 
     // 获取坐标系原点
-    const Vec3& origin() const;
+    const Eigen::Vector3f& origin() const;
 
     // 获取X、Y、Z轴
-    const Vec3& xAxis() const;
-    const Vec3& yAxis() const;
-    const Vec3& zAxis() const;
+    const Eigen::Vector3f& xAxis() const;
+    const Eigen::Vector3f& yAxis() const;
+    const Eigen::Vector3f& zAxis() const;
 
     // 获取左右手系标志
     Handedness handedness() const;
 
     // 局部坐标 -> 世界坐标
-    Vec3 localToWorld(const Vec3& local) const;
+    Eigen::Vector3f localToWorld(const Eigen::Vector3f& local) const;
 
     // 世界坐标 -> 局部坐标
-    Vec3 worldToLocal(const Vec3& world) const;
+    Eigen::Vector3f worldToLocal(const Eigen::Vector3f& world) const;
 
 private:
-    Vec3 xAxis_;
-    Vec3 yAxis_;
-    Vec3 zAxis_;
-    Vec3 origin_;
+    Eigen::Vector3f xAxis_;
+    Eigen::Vector3f yAxis_;
+    Eigen::Vector3f zAxis_;
+    Eigen::Vector3f origin_;
     Handedness handedness_;
 
     // 检查三个轴是否正交且单位长度

@@ -7,19 +7,17 @@
 class Triangle
 {
 public:
-    using Vec4 = Eigen::Vector4f;
-
     Triangle();
-    Triangle(const Vec4& v0, const Vec4& v1, const Vec4& v2);
+    Triangle(const Eigen::Vector4f& v0, const Eigen::Vector4f& v1, const Eigen::Vector4f& v2);
 
     // 设置顶点
-    void setVertex(int index, const Vec4& vertex);
+    void setVertex(int index, const Eigen::Vector4f& vertex);
 
     // 访问顶点
-    const Vec4& vertex(int index) const;
+    const Eigen::Vector4f& vertex(int index) const;
 
 private:
-    std::array<Vec4, 3> vertices_;
+    std::array<Eigen::Vector4f, 3> vertices_;
 };
 
 #endif // _TRIANGLE_H_

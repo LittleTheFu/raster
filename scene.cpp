@@ -28,7 +28,7 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords() const
     Eigen::Matrix4f viewMatrix = camera.getViewMatrix().inverse();
     Eigen::Matrix4f projectionMatrix = camera.getProjectionMatrix();
 
-    Triangle::Vec4 v0 = triangle.vertex(0);
+    Eigen::Vector4f v0 = triangle.vertex(0);
     v0 *= scale; // 缩放
     v0.w() = 1.0f; // 齐次坐标
     v0 = viewMatrix * v0; // 先变换到视图空间
@@ -37,7 +37,7 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords() const
     Eigen::Vector3f ndc0(v0.x(), v0.y(), v0.z());
     screenCoords[0] = ndcToScreen(ndc0, 800, 600); // 假设屏幕大小为800x600
 
-    Triangle::Vec4 v1 = triangle.vertex(1);
+    Eigen::Vector4f v1 = triangle.vertex(1);
     v1 *= scale;
     v1.w() = 1.0f;
     v1 = viewMatrix * v1; // 先变换到视图空间
@@ -46,7 +46,7 @@ std::array<Eigen::Vector3f, 3> Scene::getTriangleScreenCoords() const
     Eigen::Vector3f ndc1(v1.x(), v1.y(), v1.z());
     screenCoords[1] = ndcToScreen(ndc1, 800, 600); // 假设屏幕大小为800x600
 
-    Triangle::Vec4 v2 = triangle.vertex(2);
+    Eigen::Vector4f v2 = triangle.vertex(2);
     v2 *= scale;
     v2.w() = 1.0f;
     v2 = viewMatrix * v2; // 先变换到视图空间
