@@ -18,38 +18,26 @@ Pipeline::Pipeline(int width, int height)
 
 void Pipeline::setModelMatrix(const Eigen::Matrix4f& modelMatrix)
 {
-    isDirty_ = true;
-    modelMatrix_ = modelMatrix;
+    vertexShader_.setModelMatrix(modelMatrix); // 设置模型矩阵
 }
 
 void Pipeline::setViewMatrix(const Eigen::Matrix4f& viewMatrix)
 {
-    isDirty_ = true;
-    viewMatrix_ = viewMatrix;
+    vertexShader_.setViewMatrix(viewMatrix); // 设置视图矩阵
 }
 
 void Pipeline::setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix)
 {
-    isDirty_ = true;
-    projectionMatrix_ = projectionMatrix;
+    vertexShader_.setProjectionMatrix(projectionMatrix);
 }
 
-const Eigen::Matrix4f& Pipeline::getMvpMatrix()
+Vertex Pipeline::getScreenVertex(const Vertex &vertex)
 {
-    if (isDirty_)
-    {
-        mvpMatrix_ = projectionMatrix_ * viewMatrix_ * modelMatrix_;
-        isDirty_ = false;
-    }
-    return mvpMatrix_;
-}
+    Vertex vertexNdc = vertexShader_.apply(vertex); // 应用顶点着色器
+    vertexNdc.position /= vertexNdc.position.w();
+    vertexNdc.position = ndcMatrix_ * vertexNdc.position; // 转换到NDC坐标系
 
-Eigen::Vector4f Pipeline::getScreenCoords(const Eigen::Vector4f &vertex)
-{
-    Eigen::Vector4f ndc = getMvpMatrix() * vertex; // 计算NDC坐标
-    ndc /= ndc.w(); // 齐次除法
-
-    return ndcMatrix_ * ndc; // 返回x, y, z坐标
+    return vertexNdc; // 返回x, y, z坐标
 }
 
 void Pipeline::calculateNDCMatrix()

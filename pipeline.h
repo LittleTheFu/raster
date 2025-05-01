@@ -2,6 +2,7 @@
 #define _PIPELINE_H_
 
 #include <Eigen/Dense>
+#include "vertexShader.h"
 
 class Pipeline
 {
@@ -12,10 +13,9 @@ public:
     void setViewMatrix(const Eigen::Matrix4f& viewMatrix);
     void setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix);
 
-    Eigen::Vector4f getScreenCoords(const Eigen::Vector4f& vertex);
+    Vertex getScreenVertex(const Vertex& vertex);
 
 private:
-    const Eigen::Matrix4f& getMvpMatrix();
     void calculateNDCMatrix();
 
 private:
@@ -30,6 +30,9 @@ private:
     int screenHeight_; // 屏幕高度
 
     bool isDirty_; // 是否需要更新MVP矩阵
+
+private:
+    VertexShader vertexShader_; // 顶点着色器对象
 };
 
 #endif // _PIPELINE_H_

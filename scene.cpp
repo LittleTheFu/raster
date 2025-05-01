@@ -46,12 +46,8 @@ std::vector<Vertex> Scene::getTriangleScreenCoords()
 
     for(auto vertex : vertexBuffer.getVertices())
     {
-        Vertex screenVertex = {pipeline.getScreenCoords(vertex.position),
-                               vertex.color,
-                               vertex.texCoord,
-                               vertex.normal,
-                               vertex.viewDir,
-                               vertex.worldPosition};
+        Vertex screenVertex = pipeline.getScreenVertex(vertex);
+                             
         screenCoords.push_back(screenVertex);
     }
 
