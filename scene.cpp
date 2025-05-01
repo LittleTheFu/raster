@@ -72,8 +72,8 @@ void Scene::run()
     count += 1;
     count %= 1000;
 
-    light.setPosition(Eigen::Vector3f(-100.0f + std::sin(count * 0.05f) * 200.0f,
-                                      -100.0f + std::sin(count * 0.05f) * 200.0f,
+    light.setPosition(Eigen::Vector3f(-100.0f + std::sin(count * 0.5f) * 200.0f,
+                                      -100.0f + std::sin(count * 0.5f) * 200.0f,
                                       -40.0f));
     
     frameBuffer.clear();

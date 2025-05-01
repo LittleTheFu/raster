@@ -13,8 +13,8 @@ public:
     void apply(const Vertex& vertex);
 
 private:
-    Light light_; // 光源对象
-    Texture texture_; // 纹理对象
+    const Light& light_; // 光源对象
+    const Texture& texture_; // 纹理对象
 
     FrameBuffer& frameBuffer_; // 帧缓冲区对象
 };
