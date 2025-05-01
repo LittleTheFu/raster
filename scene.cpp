@@ -20,9 +20,14 @@ Scene::Scene(int width, int height)
 
 std::vector<Vertex> Scene::getTriangleScreenCoords()
 {
-    // static int count = 0;
-    // count += 1;
-    // count %= 1000;
+    static int count = 0;
+    count += 1;
+    count %= 1000;
+
+    // Corrected line (note the added closing parenthesis and proper syntax):
+    light.setPosition(Eigen::Vector3f(-100.0f + std::sin(count * 0.05f) * 200.0f,
+                                      -100.0f + std::sin(count * 0.05f) * 200.0f,
+                                      -40.0f));
 
     // camera.setPosition(Eigen::Vector3f(0.0f, 0.0f, -10.0f - count * 0.01f)); // 相机位置随时间变化
 

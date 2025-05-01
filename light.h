@@ -10,6 +10,9 @@ public:
     // 构造函数
     Light(const Eigen::Vector3f &position);
 
+    // 设置光源位置
+    void setPosition(const Eigen::Vector3f &position);
+
     Eigen::Vector3f ambient() const;
     Eigen::Vector3f diffuse(Eigen::Vector3f vertexPosition, Eigen::Vector3f normal) const;
     Eigen::Vector3f specular(Eigen::Vector3f viewDirection, Eigen::Vector3f vertexPosition, Eigen::Vector3f normal) const;
