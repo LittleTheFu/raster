@@ -179,19 +179,32 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             }
 
             uint8_t r,g,b;
-            // texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
+            texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
 
-            Eigen::Vector3f worldPos = interpolatedWorldPosition.normalized();
-            r = static_cast<uint8_t>(((interpolatedViewDir.x() + 1) * 0.5f) * 255);
-            g = static_cast<uint8_t>(((interpolatedViewDir.y() + 1) * 0.5f) * 255);
-            b = static_cast<uint8_t>(((interpolatedViewDir.z() + 1) * 0.5f) * 255);
+            // Eigen::Vector3f worldPos = interpolatedWorldPosition.normalized();
+            // r = static_cast<uint8_t>(((interpolatedViewDir.x() + 1) * 0.5f) * 255);
+            // g = static_cast<uint8_t>(((interpolatedViewDir.y() + 1) * 0.5f) * 255);
+            // b = static_cast<uint8_t>(((interpolatedViewDir.z() + 1) * 0.5f) * 255);
+
+            // Eigen::Vector3f textureColor{static_cast<float>(r/255.0f), static_cast<float>(g/255.0f), static_cast<float>(b/255.0f)};
+            Eigen::Vector3f ambient = scene.getLight().ambient();
+            Eigen::Vector3f diffuse = scene.getLight().diffuse(interpolatedWorldPosition, interpolatedNormal);
+            Eigen::Vector3f specular = scene.getLight().specular(interpolatedViewDir, interpolatedWorldPosition, interpolatedNormal);
+            Eigen::Vector3f finalColor = ambient + diffuse + specular; // 计算最终颜色
+            // finalColor = finalColor.cwiseMax(0.0f).cwiseMin(1.0f);
+            finalColor = finalColor.cwiseProduct(Eigen::Vector3f{static_cast<float>(r), static_cast<float>(g), static_cast<float>(b)});
+            finalColor = finalColor.cwiseMax(0.0f).cwiseMin(255.0f); // 限制颜色范围在 0-255 之间
+
+            // r *= finalColor.x();
+            // g *= finalColor.y();
+            // b *= finalColor.z();
 
             // r = interpolatedTexCoord.x() * 255;
             // g = interpolatedTexCoord.y() * 255;
             // b = 0;
 
             // 使用插值后的颜色设置绘制颜色
-            SDL_SetRenderDrawColor(renderer.get(), r, g, b, 255); // 设置填充颜色
+            SDL_SetRenderDrawColor(renderer.get(), finalColor.x(),  finalColor.y(), finalColor.z(), 255); // 设置填充颜色
             SDL_RenderDrawPoint(renderer.get(), x, y); // 绘制像素
         }
     }
