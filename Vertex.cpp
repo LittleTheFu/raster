@@ -8,6 +8,7 @@ Vertex& Vertex::operator=(const Vertex& other) {
         texCoord = other.texCoord;
         normal = other.normal;
         viewDir = other.viewDir;
+        worldPosition = other.worldPosition;
     }
     return *this;
 }

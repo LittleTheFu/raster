@@ -6,11 +6,12 @@ Scene::Scene(int width, int height)
              Eigen::Vector3f(0.0f, 0.0f, 1.0f),   // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
       pipeline(width, height),
-      mesh("bunny.obj")
+      mesh("teapot.obj")
 {
     const std::vector<Vertex>& vertices = mesh.getVertices();
     for (auto vertex : vertices)
     {
+        vertex.worldPosition = vertex.position.head<3>(); // 世界坐标
         vertex.viewDir = (camera.position - vertex.position.head<3>()).normalized(); // 计算视线方向
         vertexBuffer.addVertex(vertex);
     }
@@ -59,7 +60,12 @@ std::vector<Vertex> Scene::getTriangleScreenCoords()
 
     for(auto vertex : vertexBuffer.getVertices())
     {
-        Vertex screenVertex = {pipeline.getScreenCoords(vertex.position), vertex.color, vertex.texCoord, vertex.normal};
+        Vertex screenVertex = {pipeline.getScreenCoords(vertex.position),
+                               vertex.color,
+                               vertex.texCoord,
+                               vertex.normal,
+                               vertex.viewDir,
+                               vertex.worldPosition};
         screenCoords.push_back(screenVertex);
     }
 

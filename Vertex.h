@@ -20,6 +20,7 @@ public:
     Eigen::Vector2f texCoord; // 纹理坐标
     Eigen::Vector3f normal; // 法线
     Eigen::Vector3f viewDir; // 视线方向
+    Eigen::Vector3f worldPosition; // 世界坐标
 };
 
 #endif // _VERTEX_H_

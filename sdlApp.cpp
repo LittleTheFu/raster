@@ -161,6 +161,8 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             // 使用左右交点的颜色进行插值
             float alpha = (x - leftVertex.position.x()) / (rightVertex.position.x() - leftVertex.position.x());
             Eigen::Vector3f interpolatedColor = (1 - alpha) * leftVertex.color + alpha * rightVertex.color;
+            // 插值世界坐标
+            Eigen::Vector3f interpolatedWorldPosition = (1 - alpha) * leftVertex.worldPosition + alpha * rightVertex.worldPosition;
             // 插值纹理坐标
             Eigen::Vector2f interpolatedTexCoord = (1 - alpha) * leftVertex.texCoord + alpha * rightVertex.texCoord;
             // 插值法线
@@ -177,9 +179,11 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             uint8_t r,g,b;
             // texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
 
-            r = static_cast<uint8_t>(((interpolatedNormal.x() * 2) - 1) * 255);
-            g = static_cast<uint8_t>(((interpolatedNormal.y() * 2) - 1) * 255);
-            b = static_cast<uint8_t>(((interpolatedNormal.z() * 2) - 1) * 255);
+            Eigen::Vector3f worldPos = interpolatedWorldPosition.normalized();
+            r = static_cast<uint8_t>(((interpolatedNormal.x() + 1) * 0.5f) * 255);
+            g = static_cast<uint8_t>(((interpolatedNormal.y() + 1) * 0.5f) * 255);
+            b = static_cast<uint8_t>(((interpolatedNormal.z() + 1) * 0.5f) * 255);
+
             // r = interpolatedTexCoord.x() * 255;
             // g = interpolatedTexCoord.y() * 255;
             // b = 0;
@@ -217,6 +221,13 @@ Vertex SdlApp::interpolateVertex(const Vertex &v0, const Vertex &v1, int y) cons
         result = v0; // 如果t不在[0,1]范围内，直接返回v0
         return result;
     }
+
+    // 插值世界坐标
+    result.worldPosition = (1 - t) * v0.worldPosition + t * v1.worldPosition;
+
+    // 插值视线方向
+    result.viewDir = (1 - t) * v0.viewDir + t * v1.viewDir;
+    result.viewDir.normalize(); // 确保视线方向归一化
 
     // 插值位置
     result.position.x() = v0.position.x() + t * (v1.position.x() - v0.position.x());
