@@ -36,6 +36,11 @@ const std::vector<Vertex>& Mesh::getVertices() const
     return vertices;
 }
 
+// std::vector<Vertex>& Mesh::getVertices()
+// {
+//     return vertices;
+// }
+
 Vertex Mesh::createTriVertex(const aiMesh *mesh, unsigned int index) const
 {
     float x = mesh->mVertices[index].x;

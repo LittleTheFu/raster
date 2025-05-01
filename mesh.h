@@ -12,6 +12,7 @@ public:
     Mesh(const std::string fileName);
 
     const std::vector<Vertex>& getVertices() const;
+    // std::vector<Vertex>& getVertices();
 
 private:
     Vertex createTriVertex(const aiMesh* mesh, unsigned int index) const;

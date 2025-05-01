@@ -3,7 +3,7 @@
 SdlApp::SdlApp(const std::string &title, int width, int height)
     : scene(width, height),
       zBuffer(width, height),
-      texture("rock.png")
+      texture("lena.png")
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {

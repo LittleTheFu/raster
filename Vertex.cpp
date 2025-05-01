@@ -7,6 +7,7 @@ Vertex& Vertex::operator=(const Vertex& other) {
         color = other.color;
         texCoord = other.texCoord;
         normal = other.normal;
+        viewDir = other.viewDir;
     }
     return *this;
 }
