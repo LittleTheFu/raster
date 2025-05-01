@@ -67,7 +67,7 @@ void SdlApp::render()
     SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255); // 红色
 
     // 绘制三角形的三个顶点
-    auto screenCoords = scene.getTriangleScreenCoords();
+    auto screenCoords = scene.applyVertexShader();
     for (auto it = screenCoords.begin(); it != screenCoords.end(); it += 3)
     {
         if (it + 2 < screenCoords.end())

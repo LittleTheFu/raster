@@ -15,7 +15,7 @@ class Scene
 {
 public:
     Scene(int width, int height);
-    std::vector<Vertex> getTriangleScreenCoords();
+    std::vector<Vertex> applyVertexShader();
     const Light& getLight() const;
 
 private:

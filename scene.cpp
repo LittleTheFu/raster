@@ -18,7 +18,7 @@ Scene::Scene(int width, int height)
     }
 }
 
-std::vector<Vertex> Scene::getTriangleScreenCoords()
+std::vector<Vertex> Scene::applyVertexShader()
 {
     static int count = 0;
     count += 1;
