@@ -150,11 +150,6 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             std::swap(leftVertex, rightVertex);
         }
 
-        if(leftVertex.position.x() < 20)
-        {
-            std::cout << "leftVertex.position.x() < 20" << std::endl;
-        }
-
         // 在当前扫描线填充颜色
         for (int x = static_cast<int>(leftVertex.position.x() + 0.5f); x <= static_cast<int>(rightVertex.position.x() + 0.5f); ++x)
         {
@@ -258,11 +253,6 @@ Vertex SdlApp::interpolateVertex(const Vertex &v0, const Vertex &v1, int y) cons
 
     // 插值法线
     result.normal = (1 - t) * v0.normal + t * v1.normal;
-
-    if(result.position.x() < 20)
-    {
-        std::cout << "result.position.x() < 20" << std::endl;
-    }
 
     return result;
 }
