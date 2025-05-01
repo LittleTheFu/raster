@@ -25,6 +25,7 @@ add_executable(raster
     vertex.cpp
     vertexBuffer.cpp
     mesh.cpp
+    light.cpp
     zbuffer.cpp
     texture.cpp)
 
