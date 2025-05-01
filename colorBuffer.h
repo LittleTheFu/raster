@@ -18,7 +18,7 @@ public:
     void setPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
     // 获取某个像素的颜色 (r, g, b, a)
-    void getPixel(int x, int y, float& r, uint8_t& g, uint8_t& b, uint8_t& a) const;
+    void getPixel(int x, int y, uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& a) const;
 
     // 清空颜色缓冲区，填充为指定颜色
     void clearColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a);

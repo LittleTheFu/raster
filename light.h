@@ -7,6 +7,7 @@
 class Light
 {
 public:
+    Light();
     // 构造函数
     Light(const Eigen::Vector3f &position);
 

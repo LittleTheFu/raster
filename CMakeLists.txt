@@ -18,6 +18,7 @@ add_executable(raster
     sdlApp.cpp
     config.cpp 
     frame.cpp
+    frameBuffer.cpp
     camera.cpp 
     triangle.cpp
     scene.cpp 

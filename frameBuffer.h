@@ -10,16 +10,16 @@ public:
     FrameBuffer(int width, int height);
 
     // 获取颜色缓冲区
-    ColorBuffer& getColorBuffer();
+    const ColorBuffer& getColorBuffer() const;
 
     // 获取深度缓冲区
-    ZBuffer& getZBuffer();
+    const ZBuffer& getZBuffer() const;
 
     // 设置一个像素的颜色和深度
-    void setPixel(int x, int y, float depth, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+    bool testAndUpdate(int x, int y, float depth, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
     // 获取一个像素的颜色
-    void getPixel(int x, int y, float& r, uint8_t& g, uint8_t& b, uint8_t& a) const;
+    void getPixel(int x, int y, uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& a) const;
 
     // 清空帧缓冲区（颜色和深度）
     void clear();

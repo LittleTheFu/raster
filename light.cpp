@@ -1,5 +1,15 @@
 #include "light.h"
 
+Light::Light()
+{
+    position_ = Eigen::Vector3f(0, 0, 0); // 默认光源位置
+    color_ = Eigen::Vector3f(1, 1, 1);     // 默认光源颜色
+
+    ambient_intensity_ = 0.1f; // 环境光强度
+    diffuse_intensity_ = 0.5f; // 漫反射强度
+    specular_intensity_ = 1.0f; // 镜面反射强度
+}
+
 Light::Light(const Eigen::Vector3f &position)
     : position_(position)
 {

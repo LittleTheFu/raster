@@ -54,29 +54,23 @@ void SdlApp::handleEvents()
     }
 }
 
+
 void SdlApp::render()
 {
-    // 更新 Z-buffer
-    zBuffer.clear();
-
-    // 设置背景色为黑色并清空屏幕
-    SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255);
     SDL_RenderClear(renderer.get());
+    scene.run(); // 运行场景
 
-    // 设置你想要绘制点的颜色
-    SDL_SetRenderDrawColor(renderer.get(), 255, 0, 0, 255); // 红色
+    int width = 800;
+    int height = 600;
 
-    // 绘制三角形的三个顶点
-    auto screenCoords = scene.applyVertexShader();
-    for (auto it = screenCoords.begin(); it != screenCoords.end(); it += 3)
+    const FrameBuffer &frameBuffer = scene.getFrameBuffer();
+    for (int i = 0; i < width * height; ++i)
     {
-        if (it + 2 < screenCoords.end())
-        {
-            drawTriangle(*it, *(it + 1), *(it + 2));
-        }
+        uint8_t r, g, b, a;
+        frameBuffer.getPixel(i % width, i / width, r, g, b, a);
+        setPixel(i % width, i / width, r, g, b, a);
     }
 
-    // 刷新渲染器，展示绘制的内容
     SDL_RenderPresent(renderer.get());
 }
 

@@ -28,7 +28,7 @@ void ColorBuffer::setPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_
 }
 
 // 获取某个像素的颜色 (r, g, b, a)
-void ColorBuffer::getPixel(int x, int y, float& r, uint8_t& g, uint8_t& b, uint8_t& a) const {
+void ColorBuffer::getPixel(int x, int y, uint8_t& r, uint8_t& g, uint8_t& b, uint8_t& a) const {
     assert(x >= 0 && x < width_ && y >= 0 && y < height_);
 
     // 计算该像素在缓冲区中的索引
