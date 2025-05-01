@@ -169,6 +169,8 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             Eigen::Vector3f interpolatedNormal = (1 - alpha) * leftVertex.normal + alpha * rightVertex.normal;
             // 插值Z
             float interpolatedZ = (1 - alpha) * leftVertex.position.z() + alpha * rightVertex.position.z(); // 插值 z 值
+            // 插值视线方向
+            Eigen::Vector3f interpolatedViewDir = (1 - alpha) * leftVertex.viewDir + alpha * rightVertex.viewDir;
 
             // 更新 Z-buffer，只有在深度值更小的情况下才绘制像素
             if (!zBuffer.testAndUpdate(x, y, interpolatedZ))
@@ -180,9 +182,9 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             // texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
 
             Eigen::Vector3f worldPos = interpolatedWorldPosition.normalized();
-            r = static_cast<uint8_t>(((interpolatedNormal.x() + 1) * 0.5f) * 255);
-            g = static_cast<uint8_t>(((interpolatedNormal.y() + 1) * 0.5f) * 255);
-            b = static_cast<uint8_t>(((interpolatedNormal.z() + 1) * 0.5f) * 255);
+            r = static_cast<uint8_t>(((interpolatedViewDir.x() + 1) * 0.5f) * 255);
+            g = static_cast<uint8_t>(((interpolatedViewDir.y() + 1) * 0.5f) * 255);
+            b = static_cast<uint8_t>(((interpolatedViewDir.z() + 1) * 0.5f) * 255);
 
             // r = interpolatedTexCoord.x() * 255;
             // g = interpolatedTexCoord.y() * 255;
