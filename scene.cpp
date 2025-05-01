@@ -6,7 +6,7 @@ Scene::Scene(int width, int height)
              Eigen::Vector3f(0.0f, 0.0f, 1.0f),   // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
       pipeline(width, height),
-      mesh("teapot.obj")
+      mesh("bunny.obj")
 {
     const std::vector<Vertex>& vertices = mesh.getVertices();
     for (const auto& vertex : vertices)
@@ -58,7 +58,7 @@ std::vector<Vertex> Scene::getTriangleScreenCoords()
 
     for(auto vertex : vertexBuffer.getVertices())
     {
-        Vertex screenVertex = {pipeline.getScreenCoords(vertex.position), vertex.color, vertex.texCoord};
+        Vertex screenVertex = {pipeline.getScreenCoords(vertex.position), vertex.color, vertex.texCoord, vertex.normal};
         screenCoords.push_back(screenVertex);
     }
 

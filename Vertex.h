@@ -18,6 +18,7 @@ public:
     Eigen::Vector4f position;
     Eigen::Vector3f color;
     Eigen::Vector2f texCoord; // 纹理坐标
+    Eigen::Vector3f normal; // 法线
 };
 
 #endif // _VERTEX_H_

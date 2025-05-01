@@ -42,10 +42,17 @@ Vertex Mesh::createTriVertex(const aiMesh *mesh, unsigned int index) const
     float y = mesh->mVertices[index].y;
     float z = mesh->mVertices[index].z;
 
+    float nx = mesh->mNormals[index].x;
+    float ny = mesh->mNormals[index].y;
+    float nz = mesh->mNormals[index].z;
+
     float u = mesh->mTextureCoords[0][index].x;
     float v = mesh->mTextureCoords[0][index].y;
 
-    Vertex vertex{Eigen::Vector4f(x, y, z, 1.0f), Eigen::Vector3f(1.0f, 1.0f, 1.0f), Eigen::Vector2f(u, v)};
+    Vertex vertex{Eigen::Vector4f(x, y, z, 1.0f),
+                  Eigen::Vector3f(1.0f, 1.0f, 1.0f),
+                  Eigen::Vector2f(u, v),
+                  Eigen::Vector3f(nx, ny, nz)};
 
     return vertex;
 }

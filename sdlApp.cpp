@@ -3,7 +3,7 @@
 SdlApp::SdlApp(const std::string &title, int width, int height)
     : scene(width, height),
       zBuffer(width, height),
-      texture("lena.png")
+      texture("rock.png")
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
@@ -163,6 +163,9 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             Eigen::Vector3f interpolatedColor = (1 - alpha) * leftVertex.color + alpha * rightVertex.color;
             // 插值纹理坐标
             Eigen::Vector2f interpolatedTexCoord = (1 - alpha) * leftVertex.texCoord + alpha * rightVertex.texCoord;
+            // 插值法线
+            Eigen::Vector3f interpolatedNormal = (1 - alpha) * leftVertex.normal + alpha * rightVertex.normal;
+            // 插值Z
             float interpolatedZ = (1 - alpha) * leftVertex.position.z() + alpha * rightVertex.position.z(); // 插值 z 值
 
             // 更新 Z-buffer，只有在深度值更小的情况下才绘制像素
@@ -172,8 +175,11 @@ void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
             }
 
             uint8_t r,g,b;
-            texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
+            // texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
 
+            r = static_cast<uint8_t>(((interpolatedNormal.x() * 2) - 1) * 255);
+            g = static_cast<uint8_t>(((interpolatedNormal.y() * 2) - 1) * 255);
+            b = static_cast<uint8_t>(((interpolatedNormal.z() * 2) - 1) * 255);
             // r = interpolatedTexCoord.x() * 255;
             // g = interpolatedTexCoord.y() * 255;
             // b = 0;
@@ -223,6 +229,9 @@ Vertex SdlApp::interpolateVertex(const Vertex &v0, const Vertex &v1, int y) cons
 
     // 插值纹理坐标
     result.texCoord = (1 - t) * v0.texCoord + t * v1.texCoord;
+
+    // 插值法线
+    result.normal = (1 - t) * v0.normal + t * v1.normal;
 
     if(result.position.x() < 20)
     {
