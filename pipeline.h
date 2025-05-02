@@ -20,7 +20,6 @@ public:
     void drawScreenTriangle(const Vertex& v0, const Vertex& v1, const Vertex& v2);
 
 private:
-    Vertex interpolateVertex(const Vertex &v0, const Vertex &v1, int y) const;
     void calculateNDCMatrix();
 
 private:

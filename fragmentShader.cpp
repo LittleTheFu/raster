@@ -23,12 +23,11 @@ void FragmentShader::apply(const Vertex &vertex)
     uint8_t r, g, b;
     texture_.getColor(u, v, r, g, b);
     
-
     Eigen::Vector3f ambient = light_.ambient();
     Eigen::Vector3f diffuse = light_.diffuse(vertex.worldPosition, vertex.normal);
     Eigen::Vector3f specular = light_.specular(vertex.viewDir, vertex.worldPosition, vertex.normal);
     Eigen::Vector3f finalColor = ambient + diffuse + specular; // 计算最终颜色
-    // finalColor = finalColor.cwiseMax(0.0f).cwiseMin(1.0f);
+
     finalColor = finalColor.cwiseProduct(Eigen::Vector3f{static_cast<float>(r), static_cast<float>(g), static_cast<float>(b)});
     finalColor = finalColor.cwiseMax(0.0f).cwiseMin(255.0f); // 限制颜色范围在 0-255 之间
 

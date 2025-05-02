@@ -21,10 +21,10 @@ void ColorBuffer::setPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b, uint8_
 
     // 计算该像素在缓冲区中的索引
     int index = (y * width_ + x) * 4; // 每个像素有 4 个字节（RGBA）
-    buffer_[index + 0] = r; // 红色
-    buffer_[index + 1] = g; // 绿色
-    buffer_[index + 2] = b; // 蓝色
-    buffer_[index + 3] = a; // 透明度
+    buffer_[index + 0] = a; // 红色
+    buffer_[index + 1] = b; // 绿色
+    buffer_[index + 2] = g; // 蓝色
+    buffer_[index + 3] = r; // 透明度
 }
 
 // 获取某个像素的颜色 (r, g, b, a)

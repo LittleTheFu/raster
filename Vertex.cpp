@@ -1,5 +1,5 @@
 #include "Vertex.h"
-
+#include <cmath>
 
 Vertex& Vertex::operator=(const Vertex& other) {
     if (this != &other) {
@@ -12,6 +12,24 @@ Vertex& Vertex::operator=(const Vertex& other) {
     }
     return *this;
 }
+
+Vertex Vertex::interpolate(const Vertex &other, float t) const
+{
+    Vertex result;
+
+    if (t < 0.0f) return *this;
+    if (t > 1.0f) return other;
+
+    result.position = (1.0f - t) * position + t * other.position;
+    result.color = (1.0f - t) * color + t * other.color;
+    result.texCoord = (1.0f - t) * texCoord + t * other.texCoord;
+    result.normal = (1.0f - t) * normal + t * other.normal;
+    result.viewDir = ((1.0f - t) * viewDir + t * other.viewDir).normalized();
+    result.worldPosition = (1.0f - t) * worldPosition + t * other.worldPosition;
+
+    return result;
+}
+
 void Vertex::clampColor()
 {
     color = color.cwiseMax(Eigen::Vector3f(0.0f, 0.0f, 0.0f));

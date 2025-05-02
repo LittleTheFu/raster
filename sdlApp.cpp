@@ -2,8 +2,9 @@
 
 SdlApp::SdlApp(const std::string &title, int width, int height)
     : scene(width, height),
-      zBuffer(width, height),
-      texture("lena.png")
+      width(width),
+      height(height),
+      zBuffer(width, height)
 {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0)
     {
@@ -29,6 +30,18 @@ SdlApp::SdlApp(const std::string &title, int width, int height)
     if (!renderer)
     {
         std::cerr << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
+        running = false;
+        return;
+    }
+
+    texture.reset(SDL_CreateTexture(renderer.get(),
+                                      SDL_PIXELFORMAT_RGBA8888,
+                                      SDL_TEXTUREACCESS_STREAMING,
+                                      width,
+                                      height));
+    if (!texture)
+    {
+        std::cerr << "SDL_CreateTexture Error: " << SDL_GetError() << std::endl;
         running = false;
         return;
     }
@@ -60,16 +73,30 @@ void SdlApp::render()
     SDL_RenderClear(renderer.get());
     scene.run(); // 运行场景
 
-    int width = 800;
-    int height = 600;
-
-    const FrameBuffer &frameBuffer = scene.getFrameBuffer();
-    for (int i = 0; i < width * height; ++i)
-    {
-        uint8_t r, g, b, a;
-        frameBuffer.getPixel(i % width, i / width, r, g, b, a);
-        setPixel(i % width, i / width, r, g, b, a);
+    void* texturePixels;
+    int texturePitch;
+    if (SDL_LockTexture(texture.get(), nullptr, &texturePixels, &texturePitch) < 0) {
+        SDL_Log("SDL_LockTexture failed: %s", SDL_GetError());
+        return;
     }
+
+    const uint8_t* colorBufferData = scene.getFrameBuffer().getColorBuffer().getBuffer().data();
+
+    int colorBufferWidth = width;
+    int colorBufferHeight = height;
+    int colorBufferRowBytes = colorBufferWidth * 4;
+    int textureRowBytes = texturePitch;
+    uint8_t* destRow = static_cast<uint8_t*>(texturePixels);
+    const uint8_t* srcRow = colorBufferData;
+
+    for (int y = 0; y < colorBufferHeight; ++y) {
+        std::memcpy(destRow, srcRow, colorBufferRowBytes);
+        destRow += textureRowBytes;
+        srcRow += colorBufferRowBytes;
+    }
+
+    SDL_UnlockTexture(texture.get());
+    SDL_RenderCopy(renderer.get(), texture.get(), nullptr, nullptr);
 
     SDL_RenderPresent(renderer.get());
 }
@@ -91,164 +118,6 @@ void SdlApp::setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
     SDL_SetRenderDrawColor(renderer.get(), r, g, b, a);
     SDL_RenderDrawPoint(renderer.get(), x, y);
-}
-
-void SdlApp::drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
-{
-    // 对顶点按 y 坐标排序，确保 v0 是顶部，v2 是底部
-    std::array<Vertex, 3> vertices = {v0, v1, v2};
-
-    // SDL_RenderDrawPoint(renderer.get(), v0.position.x(), v0.position.y());
-    // SDL_RenderDrawPoint(renderer.get(), v1.position.x(), v1.position.y());
-    // SDL_RenderDrawPoint(renderer.get(), v2.position.x(), v2.position.y());
-
-    // SDL_RenderDrawLine(renderer.get(), v0.position.x(), v0.position.y(), v1.position.x(), v1.position.y());
-    // SDL_RenderDrawLine(renderer.get(), v1.position.x(), v1.position.y(), v2.position.x(), v2.position.y());
-    // SDL_RenderDrawLine(renderer.get(), v2.position.x(), v2.position.y(), v0.position.x(), v0.position.y());
-
-    // return ; // 仅绘制顶点
-    std::sort(vertices.begin(), vertices.end(), [](const Vertex &a, const Vertex &b)
-              {
-                  return a.position.y() < b.position.y(); // 从上到下排序
-              });
-
-    // 获取排序后的顶点
-    const Vertex &top = vertices[0];
-    const Vertex &middle = vertices[1];
-    const Vertex &bottom = vertices[2];
-
-    // 扫描线填充算法
-    for (int y = static_cast<int>(top.position.y()); y <= static_cast<int>(bottom.position.y()); ++y)
-    {
-        // 计算当前扫描线的左右交点
-        float leftX = 0.0f, rightX = 0.0f;
-        Vertex leftVertex, rightVertex;
-
-        // 对于扫描线在顶点与中间点之间
-        if (y <= middle.position.y())
-        {
-            // 计算与 top 和 middle 之间的交点
-            leftVertex = interpolateVertex(top, middle, y);
-            rightVertex = interpolateVertex(top, bottom, y);
-        }
-        else
-        {
-            // 计算与 middle 和 bottom 之间的交点
-            leftVertex = interpolateVertex(middle, bottom, y);
-            rightVertex = interpolateVertex(top, bottom, y);
-        }
-
-        // 对交点进行排序，以确保从左到右绘制
-        if (leftVertex.position.x() > rightVertex.position.x())
-        {
-            std::swap(leftVertex, rightVertex);
-        }
-
-        // 在当前扫描线填充颜色
-        for (int x = static_cast<int>(leftVertex.position.x() + 0.5f); x <= static_cast<int>(rightVertex.position.x() + 0.5f); ++x)
-        {
-            // 使用左右交点的颜色进行插值
-            float alpha = (x - leftVertex.position.x()) / (rightVertex.position.x() - leftVertex.position.x());
-            Eigen::Vector3f interpolatedColor = (1 - alpha) * leftVertex.color + alpha * rightVertex.color;
-            // 插值世界坐标
-            Eigen::Vector3f interpolatedWorldPosition = (1 - alpha) * leftVertex.worldPosition + alpha * rightVertex.worldPosition;
-            // 插值纹理坐标
-            Eigen::Vector2f interpolatedTexCoord = (1 - alpha) * leftVertex.texCoord + alpha * rightVertex.texCoord;
-            // 插值法线
-            Eigen::Vector3f interpolatedNormal = (1 - alpha) * leftVertex.normal + alpha * rightVertex.normal;
-            // 插值Z
-            float interpolatedZ = (1 - alpha) * leftVertex.position.z() + alpha * rightVertex.position.z(); // 插值 z 值
-            // 插值视线方向
-            Eigen::Vector3f interpolatedViewDir = (1 - alpha) * leftVertex.viewDir + alpha * rightVertex.viewDir;
-
-            // 更新 Z-buffer，只有在深度值更小的情况下才绘制像素
-            if (!zBuffer.testAndUpdate(x, y, interpolatedZ))
-            {
-                continue; // 如果 Z-buffer 更新失败，则跳过绘制
-            }
-
-            uint8_t r,g,b;
-            texture.getColor(interpolatedTexCoord.x(), interpolatedTexCoord.y(), r, g, b);
-
-            // Eigen::Vector3f worldPos = interpolatedWorldPosition.normalized();
-            // r = static_cast<uint8_t>(((interpolatedViewDir.x() + 1) * 0.5f) * 255);
-            // g = static_cast<uint8_t>(((interpolatedViewDir.y() + 1) * 0.5f) * 255);
-            // b = static_cast<uint8_t>(((interpolatedViewDir.z() + 1) * 0.5f) * 255);
-
-            // Eigen::Vector3f textureColor{static_cast<float>(r/255.0f), static_cast<float>(g/255.0f), static_cast<float>(b/255.0f)};
-            Eigen::Vector3f ambient = scene.getLight().ambient();
-            Eigen::Vector3f diffuse = scene.getLight().diffuse(interpolatedWorldPosition, interpolatedNormal);
-            Eigen::Vector3f specular = scene.getLight().specular(interpolatedViewDir, interpolatedWorldPosition, interpolatedNormal);
-            Eigen::Vector3f finalColor = ambient + diffuse + specular; // 计算最终颜色
-            // finalColor = finalColor.cwiseMax(0.0f).cwiseMin(1.0f);
-            finalColor = finalColor.cwiseProduct(Eigen::Vector3f{static_cast<float>(r), static_cast<float>(g), static_cast<float>(b)});
-            finalColor = finalColor.cwiseMax(0.0f).cwiseMin(255.0f); // 限制颜色范围在 0-255 之间
-
-            // r *= finalColor.x();
-            // g *= finalColor.y();
-            // b *= finalColor.z();
-
-            // r = interpolatedTexCoord.x() * 255;
-            // g = interpolatedTexCoord.y() * 255;
-            // b = 0;
-
-            // 使用插值后的颜色设置绘制颜色
-            SDL_SetRenderDrawColor(renderer.get(), finalColor.x(),  finalColor.y(), finalColor.z(), 255); // 设置填充颜色
-            SDL_RenderDrawPoint(renderer.get(), x, y); // 绘制像素
-        }
-    }
-}
-
-
-// 计算给定 y 值的交点，同时返回颜色的插值
-Vertex SdlApp::interpolateVertex(const Vertex &v0, const Vertex &v1, int y) const
-{
-    Vertex result;
-
-    // if (v0.position.y() - v1.position.y() < 0.01f)
-    // {
-    //     result = v0; // 如果y值相同，直接返回v0
-    //     return result;
-    // }
-
-    // if (v1.position.y() - v0.position.y() < 0.01f)
-    // {
-    //     result = v0; // 如果y值相同，直接返回v0
-    //     return result;
-    // }
-
-    // 计算插值比例t
-    float t = (y - v0.position.y()) / (v1.position.y() - v0.position.y());
-
-    if(t < 0 || t > 1)
-    {
-        result = v0; // 如果t不在[0,1]范围内，直接返回v0
-        return result;
-    }
-
-    // 插值世界坐标
-    result.worldPosition = (1 - t) * v0.worldPosition + t * v1.worldPosition;
-
-    // 插值视线方向
-    result.viewDir = (1 - t) * v0.viewDir + t * v1.viewDir;
-    result.viewDir.normalize(); // 确保视线方向归一化
-
-    // 插值位置
-    result.position.x() = v0.position.x() + t * (v1.position.x() - v0.position.x());
-    result.position.y() = y;  // 固定y
-    result.position.z() = v0.position.z() + t * (v1.position.z() - v0.position.z());
-    result.position.w() = 1.0f;  // 假设使用齐次坐标
-
-    // 插值颜色
-    result.color = (1 - t) * v0.color + t * v1.color;
-
-    // 插值纹理坐标
-    result.texCoord = (1 - t) * v0.texCoord + t * v1.texCoord;
-
-    // 插值法线
-    result.normal = (1 - t) * v0.normal + t * v1.normal;
-
-    return result;
 }
 
 

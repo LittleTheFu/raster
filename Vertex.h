@@ -7,6 +7,7 @@ class Vertex
 {
 public:
     Vertex &operator=(const Vertex &other);
+    Vertex interpolate(const Vertex &other, float t) const;
 
     void clampColor(); // 限制颜色范围在0-1之间
 

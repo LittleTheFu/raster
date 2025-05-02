@@ -10,9 +10,10 @@
 #include "zbuffer.h"
 #include "texture.h"
 
-class SdlApp {
+class SdlApp
+{
 public:
-    SdlApp(const std::string& title, int width, int height);
+    SdlApp(const std::string &title, int width, int height);
     ~SdlApp();
 
     bool isRunning() const { return running; }
@@ -21,25 +22,49 @@ public:
     void updateFPS();
 
     void setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-    void drawTriangle(const Vertex& v0, const Vertex& v1, const Vertex& v2);
 
-    Vertex interpolateVertex(const Vertex &v0, const Vertex &v1, int y) const;
 private:
     Scene scene;
     ZBuffer zBuffer;
-    Texture texture;
+
+    int width;
+    int height;
 
 private:
-    struct SDLWindowDeleter {
-        void operator()(SDL_Window* ptr) const { if (ptr) SDL_DestroyWindow(ptr); }
+    struct SDLWindowDeleter
+    {
+        void operator()(SDL_Window *ptr) const
+        {
+            if (ptr)
+                SDL_DestroyWindow(ptr);
+        }
     };
 
-    struct SDLRendererDeleter {
-        void operator()(SDL_Renderer* ptr) const { if (ptr) SDL_DestroyRenderer(ptr); }
+    struct SDLRendererDeleter
+    {
+        void operator()(SDL_Renderer *ptr) const
+        {
+            if (ptr)
+                SDL_DestroyRenderer(ptr);
+        }
+    };
+
+    struct SDLTextureDeleter
+    {
+        void operator()(SDL_Texture *ptr) const
+        {
+            if (ptr)
+            {
+                SDL_DestroyTexture(ptr);
+                SDL_Log("SDL Texture destroyed.");
+            }
+        }
     };
 
     std::unique_ptr<SDL_Window, SDLWindowDeleter> window;
     std::unique_ptr<SDL_Renderer, SDLRendererDeleter> renderer;
+    std::unique_ptr<SDL_Texture, SDLTextureDeleter> texture;
+    
 
     bool running = true;
     int frameCount = 0;
