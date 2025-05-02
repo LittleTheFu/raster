@@ -6,7 +6,7 @@ Scene::Scene(int width, int height)
              Eigen::Vector3f(0.0f, 0.0f, 1.0f),   // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
       mesh("teapot.obj"),
-      light(Eigen::Vector3f(0.0f, 0.0f, -40.0f)),
+      light(Eigen::Vector3f(50.0f, 50.0f, -40.0f)),
       frameBuffer(width, height),
       pipeline(width, height, frameBuffer, light)
 {
@@ -61,7 +61,7 @@ const FrameBuffer &Scene::getFrameBuffer() const
 
 void Scene::run()
 {
-    updateLightPosition(); // 更新光源位置
+    // updateLightPosition(); // 更新光源位置
 
     frameBuffer.clear();
 
