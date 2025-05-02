@@ -21,7 +21,7 @@ Scene::Scene(int width, int height)
     {
         vertex.worldPosition = vertex.position.head<3>();                            // 世界坐标
         vertex.viewDir = (camera.position - vertex.position.head<3>()).normalized(); // 计算视线方向
-        vertexBuffer.addVertex(vertex);
+        // vertexBuffer.addVertex(vertex);
     }
 
     Vertex v0{Eigen::Vector4f(-30, -30, 60, 1),
@@ -76,9 +76,11 @@ void Scene::run()
     pipeline.setViewMatrix(viewMatrix);
     pipeline.setProjectionMatrix(projectionMatrix);
 
-    for (auto it = vertexBuffer.getVertices().begin(); it != vertexBuffer.getVertices().end(); it += 3)
+    for (auto it = vertexBuffer.getVertices().begin();
+         it + 3 <= vertexBuffer.getVertices().end();
+         it += 3)
     {
-        if (it + 2 < vertexBuffer.getVertices().end())
+        if (true)
         {
             Vertex v0 = pipeline.getScreenVertex(*it);
             Vertex v1 = pipeline.getScreenVertex(*(it + 1));

@@ -23,9 +23,11 @@ void ShadowMapCamera::render(const VertexBuffer &vertexBuffer)
 {
     zBuffer.clear(); // 清空深度缓冲区
 
-    for (auto it = vertexBuffer.getVertices().begin(); it != vertexBuffer.getVertices().end(); it += 3)
+    for (auto it = vertexBuffer.getVertices().begin();
+         it + 3 <= vertexBuffer.getVertices().end();
+         it += 3)
     {
-        if (it + 2 < vertexBuffer.getVertices().end())
+        if (true)
         {
             Vertex v0 = getScreenVertex(*it);       // 应用顶点着色器
             Vertex v1 = getScreenVertex(*(it + 1)); // 应用顶点着色器
