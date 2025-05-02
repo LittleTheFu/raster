@@ -6,15 +6,15 @@ Scene::Scene(int width, int height)
              Eigen::Vector3f(0.0f, 0.0f, 1.0f),   // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
       mesh("teapot.obj"),
-      light(Eigen::Vector3f(50.0f, 100.0f, -40.0f)),
+      light(Eigen::Vector3f(10.0f, 20.0f, -40.0f)),
       frameBuffer(width, height),
-      shadowMapCamera(Eigen::Vector3f(50.0f, 100.0f, -40.0f), // position
+      shadowMapCamera(Eigen::Vector3f(10.0f, 20.0f, -40.0f), // position
                         Eigen::Vector3f(0.0f, 0.0f, 0.0f),   // target
                         Eigen::Vector3f(0.0f, 1.0f, 0.0f)),   // up
       pipeline(width, height, frameBuffer, light, shadowMapCamera)
 {
-    // texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
-    // pipeline.setTexture(texture); // 设置纹理
+    texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
+    pipeline.setTexture(texture); // 设置纹理
 
     const std::vector<Vertex> &vertices = mesh.getVertices();
     for (auto vertex : vertices)

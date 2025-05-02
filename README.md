@@ -3,3 +3,4 @@
 ---------------------------------------------------
 Temporary solution: Place lena.png and teapot.obj into the build/debug/ directory.
 
+![Description of the image](doc/img.png)

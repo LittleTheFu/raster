@@ -13,17 +13,25 @@ void FragmentShader::setTexture(const std::shared_ptr<Texture>& texture)
 
 void FragmentShader::apply(const Vertex &vertex, const ShadowMapCamera &shadowMapCamera)
 {
+    if(!frameBuffer_.getZBuffer().test(vertex.position.x(), vertex.position.y(), vertex.position.z()))
+    {
+        return; // 如果深度测试失败，则返回
+    }
+    
     // Eigen::Vector4f worldPos{vertex.worldPosition.x(), vertex.worldPosition.y(), vertex.worldPosition.z(), 1.0f};
     Vertex tmp_v{vertex};
     tmp_v.position.x() = vertex.worldPosition.x();
     tmp_v.position.y() = vertex.worldPosition.y();
     tmp_v.position.z() = vertex.worldPosition.z();
     tmp_v.position.w() = 1.0f; // 设置齐次坐标
-    
+
     //测试片段是否在阴影贴图中
     Eigen::Vector4f shadowMapPos = shadowMapCamera.getScreenVertex(tmp_v).position; // 获取阴影贴图坐标
-    if(!shadowMapCamera.testZBuffer(shadowMapPos.head<3>()))
+    Eigen::Vector3f shadowMapPos3 = {shadowMapPos.x(), shadowMapPos.y(), shadowMapPos.z() - 0.0001f};
+    if(!shadowMapCamera.testZBuffer(shadowMapPos3))
     {
+        frameBuffer_.testAndUpdate(vertex.position.x(), vertex.position.y(), vertex.position.z(),
+                                    0, 0, 0, 255); // 更新帧缓冲区
         return; // 如果片段在阴影贴图中，则返回
     }
 
