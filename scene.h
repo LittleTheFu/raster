@@ -31,7 +31,7 @@ private:
     Eigen::Matrix4f getProjectionMatrix() const;
 
 private:
-    Texture texture; // 纹理对象
+    std::shared_ptr<Texture> texture; // 纹理对象
     Light light; // 光源对象
     Camera camera;
     VertexBuffer vertexBuffer; // 顶点缓冲区

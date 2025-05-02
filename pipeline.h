@@ -9,7 +9,9 @@
 class Pipeline
 {
 public:
-    Pipeline(int screenWidth, int screenHeight, FrameBuffer& frameBuffer, const Light& light, const Texture& texture);
+    Pipeline(int screenWidth, int screenHeight, FrameBuffer& frameBuffer, const Light& light);
+
+    void setTexture(const std::shared_ptr<Texture>& texture);
 
     void setModelMatrix(const Eigen::Matrix4f& modelMatrix);
     void setViewMatrix(const Eigen::Matrix4f& viewMatrix);

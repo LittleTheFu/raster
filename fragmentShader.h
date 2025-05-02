@@ -9,12 +9,14 @@
 class FragmentShader
 {
 public:
-    FragmentShader(FrameBuffer& frameBuffer, const Light& light, const Texture& texture);
+    FragmentShader(FrameBuffer& frameBuffer, const Light& light);
     void apply(const Vertex& vertex);
+
+    void setTexture(const std::shared_ptr<Texture>& texture);
 
 private:
     const Light& light_; // 光源对象
-    const Texture& texture_; // 纹理对象
+    std::shared_ptr<Texture> texture_; // 纹理对象
 
     FrameBuffer& frameBuffer_; // 帧缓冲区对象
 };

@@ -8,9 +8,11 @@ Scene::Scene(int width, int height)
       mesh("teapot.obj"),
       light(Eigen::Vector3f(0.0f, 0.0f, -40.0f)),
       frameBuffer(width, height),
-      pipeline(width, height, frameBuffer, light, texture),
-      texture("lena.png")
+      pipeline(width, height, frameBuffer, light)
 {
+    texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
+    pipeline.setTexture(texture); // 设置纹理
+
     const std::vector<Vertex> &vertices = mesh.getVertices();
     for (auto vertex : vertices)
     {

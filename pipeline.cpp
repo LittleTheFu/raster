@@ -1,7 +1,7 @@
 #include "pipeline.h"
 
-Pipeline::Pipeline(int width, int height, FrameBuffer& frameBuffer, const Light& light, const Texture& texture)
-      : fragmentShader_(frameBuffer, light, texture) // 初始化片段着色器
+Pipeline::Pipeline(int width, int height, FrameBuffer &frameBuffer, const Light &light)
+    : fragmentShader_(frameBuffer, light) // 初始化片段着色器
 {
     screenWidth_ = width;
     screenHeight_ = height;
@@ -15,6 +15,11 @@ Pipeline::Pipeline(int width, int height, FrameBuffer& frameBuffer, const Light&
     calculateNDCMatrix(); // 计算NDC矩阵
 
     isDirty_ = true; // 初始时需要更新MVP矩阵
+}
+
+void Pipeline::setTexture(const std::shared_ptr<Texture>& texture)
+{
+    fragmentShader_.setTexture(texture); // 设置纹理
 }
 
 void Pipeline::setModelMatrix(const Eigen::Matrix4f& modelMatrix)
