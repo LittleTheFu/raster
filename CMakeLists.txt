@@ -28,6 +28,8 @@ add_executable(raster
     mesh.cpp
     light.cpp
     shadowMapCamera.cpp
+    shadowMapVS.cpp
+    shadowMapFS.cpp
     vertexShader.cpp
     colorBuffer.cpp
     fragmentShader.cpp

@@ -11,8 +11,22 @@ void FragmentShader::setTexture(const std::shared_ptr<Texture>& texture)
     texture_ = texture; // 设置纹理
 }
 
-void FragmentShader::apply(const Vertex &vertex)
+void FragmentShader::apply(const Vertex &vertex, const ShadowMapCamera &shadowMapCamera)
 {
+    // Eigen::Vector4f worldPos{vertex.worldPosition.x(), vertex.worldPosition.y(), vertex.worldPosition.z(), 1.0f};
+    Vertex tmp_v{vertex};
+    tmp_v.position.x() = vertex.worldPosition.x();
+    tmp_v.position.y() = vertex.worldPosition.y();
+    tmp_v.position.z() = vertex.worldPosition.z();
+    tmp_v.position.w() = 1.0f; // 设置齐次坐标
+    
+    //测试片段是否在阴影贴图中
+    Eigen::Vector4f shadowMapPos = shadowMapCamera.getScreenVertex(tmp_v).position; // 获取阴影贴图坐标
+    if(!shadowMapCamera.testZBuffer(shadowMapPos.head<3>()))
+    {
+        return; // 如果片段在阴影贴图中，则返回
+    }
+
     int x = static_cast<int>(vertex.position.x());
     int y = static_cast<int>(vertex.position.y());
 

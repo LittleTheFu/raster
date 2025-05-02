@@ -8,7 +8,10 @@ Scene::Scene(int width, int height)
       mesh("teapot.obj"),
       light(Eigen::Vector3f(50.0f, 50.0f, -40.0f)),
       frameBuffer(width, height),
-      pipeline(width, height, frameBuffer, light)
+      shadowMapCamera(Eigen::Vector3f(50.0f, 50.0f, -40.0f), // position
+                        Eigen::Vector3f(0.0f, 0.0f, 0.0f),   // target
+                        Eigen::Vector3f(0.0f, 1.0f, 0.0f)),   // up
+      pipeline(width, height, frameBuffer, light, shadowMapCamera)
 {
     // texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
     // pipeline.setTexture(texture); // 设置纹理
@@ -62,6 +65,7 @@ const FrameBuffer &Scene::getFrameBuffer() const
 void Scene::run()
 {
     // updateLightPosition(); // 更新光源位置
+    shadowMapCamera.render(vertexBuffer); // 渲染阴影贴图
 
     frameBuffer.clear();
 

@@ -9,7 +9,11 @@ public:
     ZBuffer(int width, int height);
 
     bool testAndUpdate(int x, int y, float depth);
+    bool test(int x, int y, float depth) const;
     float getDepth(int x, int y) const;
+
+    int width() const;
+    int height() const;
 
     void clear();
 

@@ -5,12 +5,13 @@
 #include "texture.h"
 #include "framebuffer.h"
 #include "vertex.h"
+#include "shadowMapCamera.h"
 
 class FragmentShader
 {
 public:
     FragmentShader(FrameBuffer& frameBuffer, const Light& light);
-    void apply(const Vertex& vertex);
+    void apply(const Vertex& vertex, const ShadowMapCamera& shadowMapCamera);
 
     void setTexture(const std::shared_ptr<Texture>& texture);
 

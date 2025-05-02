@@ -27,6 +27,31 @@ bool ZBuffer::testAndUpdate(int x, int y, float depth)
     return false; // 不更新
 }
 
+// 测试当前像素的深度值是否小于 Z-buffer 中存储的值
+bool ZBuffer::test(int x, int y, float depth) const
+{
+    // 计算 Z-buffer 中对应的索引
+    int index = y * width_ + x;
+
+    if (index < 0 || index >= buffer_.size())
+    {
+        return true;
+    }
+
+    // 如果当前深度值小于 Z-buffer 中存储的值，则返回 true
+    return depth < buffer_[index];
+}
+
+int ZBuffer::height() const
+{
+    return height_;
+}
+
+int ZBuffer::width() const
+{
+    return width_;
+}
+
 // 获取 Z-buffer 中的深度值
 float ZBuffer::getDepth(int x, int y) const
 {

@@ -5,11 +5,12 @@
 #include "vertexShader.h"
 #include "fragmentShader.h"
 #include "frameBuffer.h"
+#include "shadowMapCamera.h"
 
 class Pipeline
 {
 public:
-    Pipeline(int screenWidth, int screenHeight, FrameBuffer& frameBuffer, const Light& light);
+    Pipeline(int screenWidth, int screenHeight, FrameBuffer& frameBuffer, const Light& light, const ShadowMapCamera& shadowMapCamera);
 
     void setTexture(const std::shared_ptr<Texture>& texture);
 
@@ -40,6 +41,8 @@ private:
 private:
     VertexShader vertexShader_; // 顶点着色器对象
     FragmentShader fragmentShader_; // 片段着色器对象
+
+    const ShadowMapCamera& shadowMapCamera_;
 };
 
 #endif // _PIPELINE_H_

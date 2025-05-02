@@ -12,6 +12,7 @@
 #include "texture.h"
 #include <Eigen/Dense>
 #include <vector>
+#include "shadowMapCamera.h"
 
 class Scene
 {
@@ -37,7 +38,10 @@ private:
     VertexBuffer vertexBuffer; // 顶点缓冲区
     Mesh mesh; // 网格对象
     FrameBuffer frameBuffer; // 帧缓冲区对象
+    ShadowMapCamera shadowMapCamera; // 阴影贴图相机对象
+
     Pipeline pipeline;
+
 };
 
 #endif //_SCENE_H_
