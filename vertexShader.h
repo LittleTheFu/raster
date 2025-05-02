@@ -10,14 +10,14 @@ class VertexShader
 public:
     VertexShader();
 
-    Vertex apply(const Vertex& vertex) const;
+    Vertex apply(const Vertex& vertex);
 
     void setModelMatrix(const Eigen::Matrix4f& modelMatrix);
     void setViewMatrix(const Eigen::Matrix4f& viewMatrix);
     void setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix);
 
 private:
-    void calculateMvpMatrix();
+    const Eigen::Matrix4f& getMvpMatrix();
 
 private:
     Eigen::Matrix4f modelMatrix_;
@@ -25,6 +25,8 @@ private:
     Eigen::Matrix4f viewMatrix_;
 
     Eigen::Matrix4f mvpMatrix_;
+
+    bool isDirty_;
 };
 
 #endif

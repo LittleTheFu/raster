@@ -6,12 +6,14 @@ VertexShader::VertexShader()
     viewMatrix_ = Eigen::Matrix4f::Identity();
     projectionMatrix_ = Eigen::Matrix4f::Identity();
     mvpMatrix_ = Eigen::Matrix4f::Identity();
+
+    isDirty_ = false;
 }
 
-Vertex VertexShader::apply(const Vertex& vertex) const
+Vertex VertexShader::apply(const Vertex& vertex)
 {
     Vertex v = vertex;
-    v.position = mvpMatrix_ * vertex.position; // 应用MVP矩阵变换
+    v.position = getMvpMatrix() * vertex.position; // 应用MVP矩阵变换
 
     return v;
 }
@@ -19,22 +21,29 @@ Vertex VertexShader::apply(const Vertex& vertex) const
 void VertexShader::setModelMatrix(const Eigen::Matrix4f& modelMatrix)
 {
     modelMatrix_ = modelMatrix;
-    calculateMvpMatrix();
+    isDirty_ = true;
 }
 
 void VertexShader::setViewMatrix(const Eigen::Matrix4f& viewMatrix)
 {
     viewMatrix_ = viewMatrix;
-    calculateMvpMatrix();
+    isDirty_ = true;
 }
 
 void VertexShader::setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix)
 {
     projectionMatrix_ = projectionMatrix;
-    calculateMvpMatrix();
+    isDirty_ = true;
 }
 
-void VertexShader::calculateMvpMatrix()
+const Eigen::Matrix4f& VertexShader::getMvpMatrix()
 {
-    mvpMatrix_ = projectionMatrix_ * viewMatrix_ * modelMatrix_;
+    if (isDirty_)
+    {
+        mvpMatrix_ = projectionMatrix_ * viewMatrix_ * modelMatrix_;
+        isDirty_ = false;
+    }
+
+    return mvpMatrix_;
 }
+    
