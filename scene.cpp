@@ -20,42 +20,6 @@ Scene::Scene(int width, int height)
     }
 }
 
-std::vector<Vertex> Scene::applyVertexShader()
-{
-    // static int count = 0;
-    // count += 1;
-    // count %= 1000;
-
-    // Corrected line (note the added closing parenthesis and proper syntax):
-    // light.setPosition(Eigen::Vector3f(-100.0f + std::sin(count * 0.05f) * 200.0f,
-    //                                   -100.0f + std::sin(count * 0.05f) * 200.0f,
-    //                                   -40.0f));
-
-    // camera.setPosition(Eigen::Vector3f(0.0f, 0.0f, -10.0f - count * 0.01f)); // 相机位置随时间变化
-
-    // 使用整数除法确保 count / 10 取整数部分
-    // float scaleFactor = abs(sin(count * 0.0001f));
-    // float scale = 1 + scaleFactor;
-
-    std::vector<Vertex> screenCoords;
-
-    Eigen::Matrix4f viewMatrix = camera.getViewMatrix().inverse();
-    Eigen::Matrix4f projectionMatrix = camera.getProjectionMatrix();
-
-    pipeline.setModelMatrix(Eigen::Matrix4f::Identity()); // 模型矩阵为单位矩阵
-    pipeline.setViewMatrix(viewMatrix);
-    pipeline.setProjectionMatrix(projectionMatrix);
-
-    for (auto vertex : vertexBuffer.getVertices())
-    {
-        Vertex screenVertex = pipeline.getScreenVertex(vertex);
-
-        screenCoords.push_back(screenVertex);
-    }
-
-    return screenCoords;
-}
-
 const Light &Scene::getLight() const
 {
     return light;
@@ -68,6 +32,32 @@ const FrameBuffer &Scene::getFrameBuffer() const
 
 void Scene::run()
 {
+    updateLightPosition(); // 更新光源位置
+
+    frameBuffer.clear();
+
+    Eigen::Matrix4f viewMatrix = camera.getViewMatrix().inverse();
+    Eigen::Matrix4f projectionMatrix = camera.getProjectionMatrix();
+
+    pipeline.setModelMatrix(Eigen::Matrix4f::Identity()); // 模型矩阵为单位矩阵
+    pipeline.setViewMatrix(viewMatrix);
+    pipeline.setProjectionMatrix(projectionMatrix);
+
+    for (auto it = vertexBuffer.getVertices().begin(); it != vertexBuffer.getVertices().end(); it += 3)
+    {
+        if (it + 2 < vertexBuffer.getVertices().end())
+        {
+            Vertex v0 = pipeline.getScreenVertex(*it);
+            Vertex v1 = pipeline.getScreenVertex(*(it + 1));
+            Vertex v2 = pipeline.getScreenVertex(*(it + 2));
+
+            pipeline.drawScreenTriangle(v0, v1, v2);
+        }
+    }
+}
+
+void Scene::updateLightPosition()
+{
     static int count = 0;
     count += 1;
     count %= 1000;
@@ -75,18 +65,4 @@ void Scene::run()
     light.setPosition(Eigen::Vector3f(-100.0f + std::sin(count * 0.5f) * 200.0f,
                                       -100.0f + std::sin(count * 0.5f) * 200.0f,
                                       -40.0f));
-    
-    frameBuffer.clear();
-
-    // 运行场景的渲染循环
-    std::vector<Vertex> screenCoords = applyVertexShader();
-
-    for (auto it = screenCoords.begin(); it != screenCoords.end(); it += 3)
-    {
-        if (it + 2 < screenCoords.end())
-        {
-            pipeline.drawScreenTriangle(*it, *(it + 1), *(it + 2));
-        }
-    }
-
 }

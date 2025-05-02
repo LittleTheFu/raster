@@ -17,12 +17,18 @@ class Scene
 {
 public:
     Scene(int width, int height);
-    std::vector<Vertex> applyVertexShader();
+
     const Light& getLight() const;
     const FrameBuffer& getFrameBuffer() const;
 
     void run();
 
+private:
+    void updateLightPosition(); // 更新光源位置
+
+    // 计算视图矩阵和投影矩阵
+    Eigen::Matrix4f getViewMatrix() const;
+    Eigen::Matrix4f getProjectionMatrix() const;
 
 private:
     Texture texture; // 纹理对象
