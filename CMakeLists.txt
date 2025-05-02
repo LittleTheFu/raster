@@ -27,6 +27,7 @@ add_executable(raster
     vertexBuffer.cpp
     mesh.cpp
     light.cpp
+    shadowMapCamera.cpp
     vertexShader.cpp
     colorBuffer.cpp
     fragmentShader.cpp
