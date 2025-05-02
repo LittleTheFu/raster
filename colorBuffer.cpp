@@ -33,10 +33,10 @@ void ColorBuffer::getPixel(int x, int y, uint8_t& r, uint8_t& g, uint8_t& b, uin
 
     // 计算该像素在缓冲区中的索引
     int index = (y * width_ + x) * 4;
-    r = buffer_[index + 0]; // 红色
-    g = buffer_[index + 1]; // 绿色
-    b = buffer_[index + 2]; // 蓝色
-    a = buffer_[index + 3]; // 透明度
+    a = buffer_[index + 0]; // 透明度
+    b = buffer_[index + 1]; // 蓝色
+    g = buffer_[index + 2]; // 绿色
+    r = buffer_[index + 3]; // 红色
 }
 
 // 清空颜色缓冲区，填充为指定颜色
