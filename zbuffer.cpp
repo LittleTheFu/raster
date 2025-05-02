@@ -19,7 +19,8 @@ bool ZBuffer::testAndUpdate(int x, int y, float depth)
     }
 
     // 如果当前深度值小于 Z-buffer 中存储的值，则更新
-    if (depth < buffer_[index])
+    float z_in_buffer = buffer_[index];
+    if (depth < z_in_buffer)
     {
         buffer_[index] = depth;
         return true; // 更新成功
@@ -62,5 +63,5 @@ float ZBuffer::getDepth(int x, int y) const
 // 清空 Z-buffer，将所有像素的深度值设置为最大值
 void ZBuffer::clear()
 {
-    std::fill(buffer_.begin(), buffer_.end(), std::numeric_limits<float>::max());
+    std::fill(buffer_.begin(), buffer_.end(), 10.0f);
 }

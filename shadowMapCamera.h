@@ -28,8 +28,8 @@ private:
     void drawTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2);
 
 private:
-    const int width = 2048;
-    const int height = 2048;
+    const int width = 5120;
+    const int height = 5120;
 
     Camera camera;
     ZBuffer zBuffer;
