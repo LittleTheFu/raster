@@ -23,18 +23,18 @@ void ShadowMapCamera::render(const VertexBuffer &vertexBuffer)
 {
     zBuffer.clear(); // 清空深度缓冲区
 
-    for (auto it = vertexBuffer.getVertices().begin();
-         it + 3 <= vertexBuffer.getVertices().end();
-         it += 3)
-    {
-        if (true)
-        {
-            Vertex v0 = getScreenVertex(*it);       // 应用顶点着色器
-            Vertex v1 = getScreenVertex(*(it + 1)); // 应用顶点着色器
-            Vertex v2 = getScreenVertex(*(it + 2)); // 应用顶点着色器
+    auto it = vertexBuffer.getVertices().begin();
+    const auto end = vertexBuffer.getVertices().end();
 
-            drawTriangle(v0, v1, v2); // 绘制三角形
-        }
+    while (std::distance(it, end) >= 3)
+    {
+        Vertex v0 = getScreenVertex(*it);
+        Vertex v1 = getScreenVertex(*(it + 1));
+        Vertex v2 = getScreenVertex(*(it + 2));
+
+        drawTriangle(v0, v1, v2);
+
+        std::advance(it, 3);
     }
 }
 

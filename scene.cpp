@@ -16,13 +16,13 @@ Scene::Scene(int width, int height)
     // texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
     // pipeline.setTexture(texture); // 设置纹理
 
-    const std::vector<Vertex> &vertices = mesh.getVertices();
-    for (auto vertex : vertices)
-    {
-        vertex.worldPosition = vertex.position.head<3>();                            // 世界坐标
-        vertex.viewDir = (camera.position - vertex.position.head<3>()).normalized(); // 计算视线方向
-        // vertexBuffer.addVertex(vertex);
-    }
+    // const std::vector<Vertex> &vertices = mesh.getVertices();
+    // for (auto vertex : vertices)
+    // {
+    //     vertex.worldPosition = vertex.position.head<3>();                            // 世界坐标
+    //     vertex.viewDir = (camera.position - vertex.position.head<3>()).normalized(); // 计算视线方向
+    //     vertexBuffer.addVertex(vertex);
+    // }
 
     Vertex v0{Eigen::Vector4f(-30, -30, 60, 1),
               Eigen::Vector3f(1, 1, 1),
@@ -76,18 +76,18 @@ void Scene::run()
     pipeline.setViewMatrix(viewMatrix);
     pipeline.setProjectionMatrix(projectionMatrix);
 
-    for (auto it = vertexBuffer.getVertices().begin();
-         it + 3 <= vertexBuffer.getVertices().end();
-         it += 3)
-    {
-        if (true)
-        {
-            Vertex v0 = pipeline.getScreenVertex(*it);
-            Vertex v1 = pipeline.getScreenVertex(*(it + 1));
-            Vertex v2 = pipeline.getScreenVertex(*(it + 2));
+    auto it = vertexBuffer.getVertices().begin();
+    const auto end = vertexBuffer.getVertices().end();
 
-            pipeline.drawScreenTriangle(v0, v1, v2);
-        }
+    while (std::distance(it, end) >= 3)
+    {
+        Vertex v0 = pipeline.getScreenVertex(*it);
+        Vertex v1 = pipeline.getScreenVertex(*(it + 1));
+        Vertex v2 = pipeline.getScreenVertex(*(it + 2));
+
+        pipeline.drawScreenTriangle(v0, v1, v2); // 绘制屏幕三角形
+
+        std::advance(it, 3);
     }
 }
 
