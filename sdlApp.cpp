@@ -71,33 +71,10 @@ void SdlApp::handleEvents()
 void SdlApp::render()
 {
     SDL_RenderClear(renderer.get());
+
     scene.run(); // 运行场景
-
-    void* texturePixels;
-    int texturePitch;
-    if (SDL_LockTexture(texture.get(), nullptr, &texturePixels, &texturePitch) < 0) {
-        SDL_Log("SDL_LockTexture failed: %s", SDL_GetError());
-        return;
-    }
-
-    const uint8_t* colorBufferData = scene.getFrameBuffer().getColorBuffer().getBuffer().data();
-
-    int colorBufferWidth = width;
-    int colorBufferHeight = height;
-    int colorBufferRowBytes = colorBufferWidth * 4;
-    int textureRowBytes = texturePitch;
-    uint8_t* destRow = static_cast<uint8_t*>(texturePixels);
-    const uint8_t* srcRow = colorBufferData;
-
-    for (int y = 0; y < colorBufferHeight; ++y) {
-        std::memcpy(destRow, srcRow, colorBufferRowBytes);
-        destRow += textureRowBytes;
-        srcRow += colorBufferRowBytes;
-    }
-
-    SDL_UnlockTexture(texture.get());
-    SDL_RenderCopy(renderer.get(), texture.get(), nullptr, nullptr);
-
+    
+    copyFrameBufferToTexture(); // 将帧缓冲区复制到纹理
     SDL_RenderPresent(renderer.get());
 }
 
@@ -120,6 +97,31 @@ void SdlApp::setPixel(int x, int y, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
     SDL_RenderDrawPoint(renderer.get(), x, y);
 }
 
+void SdlApp::copyFrameBufferToTexture()
+{
+    void* texturePixels;
+    int texturePitch;
+    if (SDL_LockTexture(texture.get(), nullptr, &texturePixels, &texturePitch) < 0) {
+        SDL_Log("SDL_LockTexture failed: %s", SDL_GetError());
+        return;
+    }
+
+    const uint8_t* colorBufferData = scene.getFrameBuffer().getColorBuffer().getBuffer().data();
+
+    int colorBufferRowBytes = width * 4;
+    int textureRowBytes = texturePitch;
+    uint8_t* destRow = static_cast<uint8_t*>(texturePixels);
+    const uint8_t* srcRow = colorBufferData;
+
+    for (int y = 0; y < height; ++y) {
+        std::memcpy(destRow, srcRow, colorBufferRowBytes);
+        destRow += textureRowBytes;
+        srcRow += colorBufferRowBytes;
+    }
+
+    SDL_UnlockTexture(texture.get());
+    SDL_RenderCopy(renderer.get(), texture.get(), nullptr, nullptr);
+}
 
 void SdlApp::setWindowTitleWithFPS()
 {
