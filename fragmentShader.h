@@ -12,6 +12,7 @@ class FragmentShader
 public:
     FragmentShader(FrameBuffer& frameBuffer, const Light& light);
     void apply(const Vertex& vertex, const ShadowMapCamera& shadowMapCamera);
+    void apply(const Vertex& vertex);
 
     void setTexture(const std::shared_ptr<Texture>& texture);
 

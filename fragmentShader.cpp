@@ -11,6 +11,10 @@ void FragmentShader::setTexture(const std::shared_ptr<Texture>& texture)
     texture_ = texture; // 设置纹理
 }
 
+void FragmentShader::apply(const Vertex &vertex)
+{
+}
+
 void FragmentShader::apply(const Vertex &vertex, const ShadowMapCamera &shadowMapCamera)
 {
     if(!frameBuffer_.getZBuffer().test(vertex.position.x(), vertex.position.y(), vertex.position.z()))

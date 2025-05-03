@@ -12,9 +12,11 @@ public:
 
     Vertex apply(const Vertex& vertex);
 
-    void setModelMatrix(const Eigen::Matrix4f& modelMatrix);
-    void setViewMatrix(const Eigen::Matrix4f& viewMatrix);
-    void setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix);
+    // void setModelMatrix(const Eigen::Matrix4f& modelMatrix);
+    // void setViewMatrix(const Eigen::Matrix4f& viewMatrix);
+    // void setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix);
+
+    void setMvpMatrix(const Eigen::Matrix4f& mvpMatrix);
 
 private:
     const Eigen::Matrix4f& getMvpMatrix();

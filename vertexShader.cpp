@@ -18,23 +18,23 @@ Vertex VertexShader::apply(const Vertex& vertex)
     return v;
 }
 
-void VertexShader::setModelMatrix(const Eigen::Matrix4f& modelMatrix)
-{
-    modelMatrix_ = modelMatrix;
-    isDirty_ = true;
-}
+// void VertexShader::setModelMatrix(const Eigen::Matrix4f& modelMatrix)
+// {
+//     modelMatrix_ = modelMatrix;
+//     isDirty_ = true;
+// }
 
-void VertexShader::setViewMatrix(const Eigen::Matrix4f& viewMatrix)
-{
-    viewMatrix_ = viewMatrix;
-    isDirty_ = true;
-}
+// void VertexShader::setViewMatrix(const Eigen::Matrix4f& viewMatrix)
+// {
+//     viewMatrix_ = viewMatrix;
+//     isDirty_ = true;
+// }
 
-void VertexShader::setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix)
-{
-    projectionMatrix_ = projectionMatrix;
-    isDirty_ = true;
-}
+// void VertexShader::setProjectionMatrix(const Eigen::Matrix4f& projectionMatrix)
+// {
+//     projectionMatrix_ = projectionMatrix;
+//     isDirty_ = true;
+// }
 
 const Eigen::Matrix4f& VertexShader::getMvpMatrix()
 {
@@ -46,4 +46,9 @@ const Eigen::Matrix4f& VertexShader::getMvpMatrix()
 
     return mvpMatrix_;
 }
-    
+
+void VertexShader::setMvpMatrix(const Eigen::Matrix4f& mvpMatrix)
+{
+    mvpMatrix_ = mvpMatrix;
+    isDirty_ = false;
+}
