@@ -25,17 +25,17 @@ void Pipeline::setTexture(const std::shared_ptr<Texture> &texture)
 
 void Pipeline::setModelMatrix(const Eigen::Matrix4f &modelMatrix)
 {
-    vertexShader_.setModelMatrix(modelMatrix); // 设置模型矩阵
+    // vertexShader_.setModelMatrix(modelMatrix); // 设置模型矩阵
 }
 
 void Pipeline::setViewMatrix(const Eigen::Matrix4f &viewMatrix)
 {
-    vertexShader_.setViewMatrix(viewMatrix); // 设置视图矩阵
+    // vertexShader_.setViewMatrix(viewMatrix); // 设置视图矩阵
 }
 
 void Pipeline::setProjectionMatrix(const Eigen::Matrix4f &projectionMatrix)
 {
-    vertexShader_.setProjectionMatrix(projectionMatrix);
+    // vertexShader_.setProjectionMatrix(projectionMatrix);
 }
 
 Vertex Pipeline::getScreenVertex(const Vertex &vertex)
