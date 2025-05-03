@@ -25,6 +25,7 @@ public:
 
 private:
     std::vector<Eigen::Vector3f> buffer; // 存储向量数据
+    
     int width; // 宽度
     int height; // 高度
 };

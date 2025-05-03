@@ -20,7 +20,7 @@ void CommonFS::apply(const Vertex &vertex)
     gBufferData_->zBuffer.testAndUpdate(x, y, z); // 设置深度缓冲区
 }
 
-void CommonFS::setGBufferData(std::shared_ptr<GBufferData> gBufferData)
+void CommonFS::setGBufferData(const std::shared_ptr<GBufferData>& gBufferData)
 {
-    gBufferData_ = gBufferData;
+    gBufferData_ = gBufferData; // 设置GBuffer数据
 }

@@ -20,6 +20,7 @@ void VectorBuffer::setBuffer(int x, int y, const Eigen::Vector3f &value)
     }
 }
 
+
 // 获取缓冲区中的向量数据
 Eigen::Vector3f VectorBuffer::getBuffer(int x, int y) const
 {

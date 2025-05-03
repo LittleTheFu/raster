@@ -37,6 +37,7 @@ add_executable(raster
     baseVS.cpp
     baseFS.cpp
     GPass.cpp
+    vectorBuffer.cpp
     commonVS.cpp
     commonFS.cpp
     fragmentShader.cpp
