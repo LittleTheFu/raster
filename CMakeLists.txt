@@ -36,6 +36,7 @@ add_executable(raster
     colorBuffer.cpp
     baseVS.cpp
     baseFS.cpp
+    commonVS.cpp
     fragmentShader.cpp
     zbuffer.cpp
     texture.cpp)
