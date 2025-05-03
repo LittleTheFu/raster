@@ -1,5 +1,5 @@
-#ifndef _BASE_FS_H_
-#define _BASE_FS_H_
+#ifndef _BASE_VS_H_
+#define _BASE_VS_H_
 
 #include <Eigen/Dense>
 #include "Vertex.h"

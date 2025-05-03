@@ -7,7 +7,12 @@ void Pass::setProjectionMatrix(const Eigen::Matrix4f &projectionMatrix)
 
 Vertex Pass::getScreenVertex(const Vertex &vertex)
 {
-    Vertex vertexNdc = vertexShader_.apply(vertex); // 应用顶点着色器
+    if(!vertexShader_)
+    {
+        return vertex; // 如果没有设置顶点着色器，则直接返回原始顶点
+    }
+
+    Vertex vertexNdc = vertexShader_->apply(vertex); // 应用顶点着色器
     vertexNdc.position /= vertexNdc.position.w();
     vertexNdc.position = ndcMatrix_ * vertexNdc.position; // 转换到NDC坐标系
 
@@ -33,6 +38,11 @@ void Pass::run(const VertexBuffer &vertexBuffer)
 
 void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 {
+    if (!fragmentShader_)
+    {
+        return; // 如果没有设置片段着色器，则直接返回
+    }
+
     // 对顶点按 y 坐标排序
     std::array<Vertex, 3> vertices = {v0, v1, v2};
     std::sort(vertices.begin(), vertices.end(), [](const Vertex &a, const Vertex &b)
@@ -99,7 +109,7 @@ void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &
             interpolatedVertex.position.y() = static_cast<float>(y);
             interpolatedVertex.position.w() = 1.0f;
 
-            fragmentShader_.apply(interpolatedVertex); // 应用片段着色器
+            fragmentShader_->apply(interpolatedVertex); // 应用片段着色器
         }
     }
 }

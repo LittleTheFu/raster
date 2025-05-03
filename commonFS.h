@@ -8,7 +8,7 @@
 class CommonFS : public BaseFS
 {
 public:
-    void apply(const Vertex &vertex) override;
+    virtual void apply(const Vertex &vertex) override;
     void setGBufferData(std::shared_ptr<GBufferData> gBufferData);
 
 private:
