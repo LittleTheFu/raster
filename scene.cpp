@@ -59,7 +59,7 @@ Scene::Scene(int width, int height)
     Vertex s0;
     s0.position = Eigen::Vector4f(-1.0f, 1.0f, 0.0f, 1.0f);
     s0.texCoord = Eigen::Vector2f(0.0f, 0.0f);
-    s0.color = Eigen::Vector3f(1.0f, 1.0f, 1.0f); // 白色
+    s0.color = Eigen::Vector3f(0.0f, 1.0f, 1.0f); // 白色
 
     Vertex s1;
     s1.position = Eigen::Vector4f(1.0f, 1.0f, 0.0f, 1.0f);
@@ -69,12 +69,12 @@ Scene::Scene(int width, int height)
     Vertex s2;
     s2.position = Eigen::Vector4f(1.0f, -1.0f, 0.0f, 1.0f);
     s2.texCoord = Eigen::Vector2f(1.0f, 1.0f);
-    s2.color = Eigen::Vector3f(1.0f, 1.0f, 1.0f); // 白色
+    s2.color = Eigen::Vector3f(1.0f, 1.0f, 0.0f); // 白色
 
     Vertex s3;
     s3.position = Eigen::Vector4f(-1.0f, -1.0f, 0.0f, 1.0f);
     s3.texCoord = Eigen::Vector2f(0.0f, 1.0f);
-    s3.color = Eigen::Vector3f(1.0f, 1.0f, 1.0f); // 白色
+    s3.color = Eigen::Vector3f(1.0f, 0.0f, 1.0f); // 白色
 
     screenVertexBuffer.addVertex(s0);
     screenVertexBuffer.addVertex(s1);
