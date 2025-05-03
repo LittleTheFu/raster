@@ -106,32 +106,59 @@ void SdlApp::copyFrameBufferToTexture()
         return;
     }
 
-    const Eigen::Vector3f* normalBufferData = scene.getNormalBuffer().getBuffer().data();
+    const uint8_t* colorBufferData = scene.getColorBuffer()->getBuffer().data();
 
-    const int width = scene.getNormalBuffer().getWidth();
-    const int height = scene.getNormalBuffer().getHeight();
-
-    int normalBufferRowBytes = width * 4;
+    int colorBufferRowBytes = width * 4;
     int textureRowBytes = texturePitch;
     uint8_t* destRow = static_cast<uint8_t*>(texturePixels);
+    const uint8_t* srcRow = colorBufferData;
 
     for (int y = 0; y < height; ++y) {
-        const Eigen::Vector3f* srcRow = normalBufferData + y * width;
-        for (int x = 0; x < width; ++x) {
-            const Eigen::Vector3f& color = srcRow[x];
-            destRow[x * 4 + 3] = static_cast<uint8_t>((color.x() + 1.0f) * 0.5f * 255); // R
-            destRow[x * 4 + 2] = static_cast<uint8_t>((color.y() + 1.0f) * 0.5f * 255); // G
-            destRow[x * 4 + 1] = static_cast<uint8_t>((color.z() + 1.0f) * 0.5f * 255); // B
-            destRow[x * 4 + 0] = 255; // A
-        }
+        std::memcpy(destRow, srcRow, colorBufferRowBytes);
         destRow += textureRowBytes;
+        srcRow += colorBufferRowBytes;
     }
-
-
 
     SDL_UnlockTexture(texture.get());
     SDL_RenderCopy(renderer.get(), texture.get(), nullptr, nullptr);
 }
+
+
+// void SdlApp::copyFrameBufferToTexture()
+// {
+//     void* texturePixels;
+//     int texturePitch;
+//     if (SDL_LockTexture(texture.get(), nullptr, &texturePixels, &texturePitch) < 0) {
+//         SDL_Log("SDL_LockTexture failed: %s", SDL_GetError());
+//         return;
+//     }
+
+//     const Eigen::Vector3f* normalBufferData = scene.getNormalBuffer().getBuffer().data();
+
+//     const int width = scene.getNormalBuffer().getWidth();
+//     const int height = scene.getNormalBuffer().getHeight();
+
+//     int normalBufferRowBytes = width * 4;
+//     int textureRowBytes = texturePitch;
+//     uint8_t* destRow = static_cast<uint8_t*>(texturePixels);
+
+//     for (int y = 0; y < height; ++y) {
+//         const Eigen::Vector3f* srcRow = normalBufferData + y * width;
+//         for (int x = 0; x < width; ++x) {
+//             const Eigen::Vector3f& color = srcRow[x];
+//             destRow[x * 4 + 3] = static_cast<uint8_t>((color.x() + 1.0f) * 0.5f * 255); // R
+//             destRow[x * 4 + 2] = static_cast<uint8_t>((color.y() + 1.0f) * 0.5f * 255); // G
+//             destRow[x * 4 + 1] = static_cast<uint8_t>((color.z() + 1.0f) * 0.5f * 255); // B
+//             destRow[x * 4 + 0] = 255; // A
+//         }
+//         destRow += textureRowBytes;
+//     }
+
+
+
+//     SDL_UnlockTexture(texture.get());
+//     SDL_RenderCopy(renderer.get(), texture.get(), nullptr, nullptr);
+// }
 
 void SdlApp::setWindowTitleWithFPS()
 {

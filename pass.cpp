@@ -69,6 +69,14 @@ void Pass::run(const VertexBuffer &vertexBuffer)
     }
 }
 
+void Pass::setLight(const std::shared_ptr<Light> &light)
+{
+}
+
+void Pass::setGBufferData(const std::shared_ptr<GBufferData> &gBufferData)
+{
+}
+
 void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 {
     if (!fragmentShader_)

@@ -41,7 +41,10 @@ add_executable(raster
     vectorBuffer.cpp
     commonVS.cpp
     commonFS.cpp
+    screenVS.cpp
+    screenFS.cpp
     fragmentShader.cpp
+    screenPass.cpp
     zbuffer.cpp
     texture.cpp)
 

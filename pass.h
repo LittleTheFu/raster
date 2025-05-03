@@ -5,6 +5,8 @@
 #include "baseFS.h"
 #include "baseVS.h"
 #include "vertexBuffer.h"
+#include "light.h"
+#include "gBufferData.h"
 
 class Pass
 {     
@@ -14,6 +16,9 @@ public:
 
     virtual void preRun(); // 渲染前的准备工作
     void run(const VertexBuffer& vertexBuffer); // 执行渲染通道
+
+    virtual void setLight(const std::shared_ptr<Light>& light); // 设置光源
+    virtual void setGBufferData(const std::shared_ptr<GBufferData>& gBufferData); // 设置GBuffer数据
 
 private:
     void calculateNDCMatrix();
