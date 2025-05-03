@@ -31,6 +31,7 @@ add_executable(raster
     shadowMapVS.cpp
     shadowMapFS.cpp
     vertexShader.cpp
+    renderTarget.cpp
     colorBuffer.cpp
     fragmentShader.cpp
     zbuffer.cpp
