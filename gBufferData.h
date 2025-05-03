@@ -7,6 +7,12 @@
 class GBufferData
 {
 public:
+    GBufferData(int width, int height);
+
+    // 清空G缓冲区
+    void clear();
+
+public:
     VectorBuffer worldPositionBuffer; // 世界坐标缓冲区
     VectorBuffer normalBuffer; // 法线缓冲区
     ZBuffer zBuffer; // 深度缓冲区

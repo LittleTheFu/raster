@@ -9,8 +9,8 @@ class CommonFS : public BaseFS
 {
 public:
     virtual void apply(const Vertex &vertex) override;
-    void setGBufferData(const std::shared_ptr<GBufferData>& gBufferData); // 设置GBuffer数据
-    
+    virtual void setGBufferData(const std::shared_ptr<GBufferData>& gBufferData) override; // 设置GBuffer数据
+
 private:
     std::shared_ptr<GBufferData> gBufferData_; // GBuffer数据
 };

@@ -34,7 +34,7 @@ Eigen::Vector3f VectorBuffer::getBuffer(int x, int y) const
 // 清空缓冲区
 void VectorBuffer::clear()
 {
-    std::fill(buffer.begin(), buffer.end(), Eigen::Vector3f(0, 0, 0)); // 清空缓冲区
+    std::fill(buffer.begin(), buffer.end(), Eigen::Vector3f(-1.0f, -1.0f, -1.0f)); // 清空缓冲区
 }
 
 // 获取缓冲区的宽度和高度

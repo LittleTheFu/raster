@@ -14,6 +14,8 @@
 #include <vector>
 #include "shadowMapCamera.h"
 
+#include "GPass.h"
+
 class Scene
 {
 public:
@@ -21,6 +23,7 @@ public:
 
     const Light& getLight() const;
     const FrameBuffer& getFrameBuffer() const;
+    const VectorBuffer& getNormalBuffer() const;
 
     void run();
 
@@ -42,6 +45,8 @@ private:
 
     Pipeline pipeline;
 
+private:
+    GPass passG_; // GPass对象
 };
 
 #endif //_SCENE_H_

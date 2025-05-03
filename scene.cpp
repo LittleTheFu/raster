@@ -11,7 +11,8 @@ Scene::Scene(int width, int height)
       shadowMapCamera(Eigen::Vector3f(10.0f, 20.0f, -40.0f), // position
                         Eigen::Vector3f(0.0f, 0.0f, 0.0f),   // target
                         Eigen::Vector3f(0.0f, 1.0f, 0.0f)),   // up
-      pipeline(width, height, frameBuffer, light, shadowMapCamera)
+      pipeline(width, height, frameBuffer, light, shadowMapCamera),
+      passG_(width, height)
 {
     texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
     pipeline.setTexture(texture); // 设置纹理
@@ -62,33 +63,22 @@ const FrameBuffer &Scene::getFrameBuffer() const
     return frameBuffer;
 }
 
+const VectorBuffer &Scene::getNormalBuffer() const
+{
+    return passG_.getGBufferData()->normalBuffer;
+}
+
 void Scene::run()
 {
-    // updateLightPosition(); // 更新光源位置
-    shadowMapCamera.render(vertexBuffer); // 渲染阴影贴图
-
     frameBuffer.clear();
+
 
     Eigen::Matrix4f viewMatrix = camera.getViewMatrix().inverse();
     Eigen::Matrix4f projectionMatrix = camera.getProjectionMatrix();
+    Eigen::Matrix4f mvpMatrix = projectionMatrix * viewMatrix; // 计算MVP矩阵
 
-    pipeline.setModelMatrix(Eigen::Matrix4f::Identity()); // 模型矩阵为单位矩阵
-    pipeline.setViewMatrix(viewMatrix);
-    pipeline.setProjectionMatrix(projectionMatrix);
-
-    auto it = vertexBuffer.getVertices().begin();
-    const auto end = vertexBuffer.getVertices().end();
-
-    while (std::distance(it, end) >= 3)
-    {
-        Vertex v0 = pipeline.getScreenVertex(*it);
-        Vertex v1 = pipeline.getScreenVertex(*(it + 1));
-        Vertex v2 = pipeline.getScreenVertex(*(it + 2));
-
-        pipeline.drawScreenTriangle(v0, v1, v2); // 绘制屏幕三角形
-
-        std::advance(it, 3);
-    }
+    passG_.setProjectionMatrix(mvpMatrix); // 设置投影矩阵
+    passG_.run(vertexBuffer); // 执行GPass渲染通道
 }
 
 void Scene::updateLightPosition()

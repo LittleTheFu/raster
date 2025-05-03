@@ -12,6 +12,12 @@ void CommonFS::apply(const Vertex &vertex)
     int y = static_cast<int>(vertex.position.y());
 
     float z = vertex.position.z();
+
+    if (!gBufferData_->zBuffer.test(x, y, z))
+    {
+        return; // 深度测试失败，直接返回
+    }
+    
     Eigen::Vector3f worldPos = vertex.worldPosition.head<3>();
     Eigen::Vector3f normal = vertex.normal;
 

@@ -37,6 +37,7 @@ add_executable(raster
     baseVS.cpp
     baseFS.cpp
     GPass.cpp
+    GBufferData.cpp
     vectorBuffer.cpp
     commonVS.cpp
     commonFS.cpp

@@ -1,8 +1,35 @@
 #include "pass.h"
 
+Pass::Pass(int width, int height)
+    : width_(width), height_(height),
+      projectionMatrix_(Eigen::Matrix4f::Identity()),
+      ndcMatrix_(Eigen::Matrix4f::Identity())
+{
+    calculateNDCMatrix(); // 计算NDC矩阵
+}
+
 void Pass::setProjectionMatrix(const Eigen::Matrix4f &projectionMatrix)
 {
     projectionMatrix_ = projectionMatrix;
+
+    if(vertexShader_)
+    {
+        vertexShader_->setMvpMatrix(projectionMatrix_);
+    }
+}
+
+void Pass::calculateNDCMatrix()
+{
+    ndcMatrix_ = Eigen::Matrix4f::Identity();
+
+    // 设置齐次坐标的缩放和平移
+    ndcMatrix_(0, 0) = 0.5f * width_;  // x轴的缩放
+    ndcMatrix_(1, 1) = 0.5f * height_; // y轴的缩放
+    ndcMatrix_(0, 3) = 0.5f * width_;  // x轴的平移
+    ndcMatrix_(1, 3) = 0.5f * height_; // y轴的平移
+
+    // y轴翻转的处理
+    ndcMatrix_(1, 1) *= -1.0f;
 }
 
 Vertex Pass::getScreenVertex(const Vertex &vertex)
@@ -19,8 +46,14 @@ Vertex Pass::getScreenVertex(const Vertex &vertex)
     return vertexNdc; // 返回x, y, z坐标
 }
 
+void Pass::preRun()
+{
+}
+
 void Pass::run(const VertexBuffer &vertexBuffer)
 {
+    preRun(); // 渲染前的准备工作
+
     auto it = vertexBuffer.getVertices().begin();
     const auto end = vertexBuffer.getVertices().end();
 
