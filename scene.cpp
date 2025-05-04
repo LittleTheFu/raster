@@ -2,7 +2,7 @@
 #include "triangle.h"
 
 Scene::Scene(int width, int height, int shadowSize)
-    : camera(Eigen::Vector3f(0.0f, 0.0f, -30.0f), // position
+    : camera(Eigen::Vector3f(0.0f, 0.0f, -100.0f), // position
              Eigen::Vector3f(0.0f, 0.0f, 1.0f),   // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
       mesh("teapot.obj"),
@@ -12,7 +12,7 @@ Scene::Scene(int width, int height, int shadowSize)
     passS_ = std::make_unique<ScreenPass>(width, height);
     passShadow_ = std::make_unique<ShadowPass>(shadowSize, shadowSize);
 
-    light = std::make_shared<Light>(Eigen::Vector3f(-15.0f, 5.0f, -20.0f));
+    light = std::make_shared<Light>(Eigen::Vector3f(-8.0f, 15.0f, -30.0f));
 
     shadowCamera_ = std::make_shared<Camera>(
         light->getPosition(),
@@ -21,13 +21,13 @@ Scene::Scene(int width, int height, int shadowSize)
 
     texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
  
-    const std::vector<Vertex> &vertices = mesh.getVertices();
-    for (auto vertex : vertices)
-    {
-        vertex.worldPosition = vertex.position.head<3>();                            // 世界坐标
-        vertex.viewDir = (camera.position - vertex.position.head<3>()).normalized(); // 计算视线方向
-        vertexBuffer.addVertex(vertex);
-    }
+    // const std::vector<Vertex> &vertices = mesh.getVertices();
+    // for (auto vertex : vertices)
+    // {
+    //     vertex.worldPosition = vertex.position.head<3>();                            // 世界坐标
+    //     vertex.viewDir = (camera.position - vertex.position.head<3>()).normalized(); // 计算视线方向
+    //     vertexBuffer.addVertex(vertex);
+    // }
 
     Vertex v0{
         Eigen::Vector4f(-60, -60, 60, 1),
@@ -141,11 +141,13 @@ void Scene::run()
 
 void Scene::updateLightPosition()
 {
-    // static int count = 0;
-    // count += 1;
-    // count %= 400;
+    static int count = 0;
+    count += 1;
+    count %= 30;
 
-    // light->setPosition(Eigen::Vector3f(-100.0f + std::sin(count * 0.03f) * 200.0f,
-    //                                    -100.0f + std::sin(count * 0.03f) * 200.0f,
-    //                                    -40.0f));
+    light->setPosition(Eigen::Vector3f(-100.0f + std::sin(count * 0.03f) * 200.0f,
+                                       -100.0f + std::sin(count * 0.03f) * 200.0f,
+                                       -40.0f));
+
+    shadowCamera_->setPosition(light->getPosition());
 }

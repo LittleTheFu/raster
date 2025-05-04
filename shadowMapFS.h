@@ -10,7 +10,7 @@ class ShadowMapFS : public BaseFS
 {
 public:
     void apply(const Vertex& vertex);
-    void setZBuffer(std::shared_ptr<ZBuffer> zBuffer);
+    virtual void setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer) override;
 
 private:
     std::shared_ptr<ZBuffer> zBuffer_; // 深度缓冲区对象

@@ -10,6 +10,8 @@ ShadowPass::ShadowPass(int width, int height)
 
     vertexShader_ = std::make_unique<ShadowMapVS>();
     fragmentShader_ = std::make_unique<ShadowMapFS>();
+
+    fragmentShader_->setShadowZBuffer(zBuffer);
 }
 
 void ShadowPass::preRun()

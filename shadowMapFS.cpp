@@ -1,10 +1,5 @@
 #include "shadowMapFS.h"
 
-void ShadowMapFS::setZBuffer(std::shared_ptr<ZBuffer> zBuffer)
-{
-    zBuffer_ = zBuffer;
-}
-
 void ShadowMapFS::apply(const Vertex &vertex)
 {
     if (!zBuffer_)
@@ -24,4 +19,9 @@ void ShadowMapFS::apply(const Vertex &vertex)
     }
 
     zBuffer_->testAndUpdate(x, y, depth);
+}
+
+void ShadowMapFS::setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer)
+{
+    zBuffer_ = zBuffer;
 }
