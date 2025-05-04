@@ -143,7 +143,7 @@ void Scene::updateLightPosition()
 {
     static int count = 0;
     count += 1;
-    count %= 20;
+    count %= 40;
 
     light->setPosition(Eigen::Vector3f(10.0 - (count * 0.1),
                                        0.0f - (count * 0.1),
