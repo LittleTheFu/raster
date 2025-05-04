@@ -22,12 +22,12 @@ void ScreenFS::apply(const Vertex &vertex)
     Eigen::Vector4f _worldPos{worldPos.x(), worldPos.y(), worldPos.z(), 1};
     Eigen::Vector4f shadowPos = shadowMapMvpMatrix_ * _worldPos;
     shadowPos /= shadowPos.w();
-    if (shadowPos.x() < 0 || shadowPos.x() > 1 || shadowPos.y() < 0 || shadowPos.y() > 1)
+    if (shadowPos.x() < -1 || shadowPos.x() > 1 || shadowPos.y() < -1 || shadowPos.y() > 1)
     {
         isInside = false;
     }
 
-    // if (isInside)
+    if (isInside)
     {
         shadowPos = shadowMapNDCMatrix_ * shadowPos;
         if (!shadowZBuffer_->test(shadowPos.x(), shadowPos.y(), shadowPos.z() - 0.01f))
