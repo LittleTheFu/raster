@@ -27,10 +27,10 @@ void ScreenFS::apply(const Vertex &vertex)
         isInside = false;
     }
 
-    if (isInside)
+    // if (isInside)
     {
         shadowPos = shadowMapNDCMatrix_ * shadowPos;
-        if (!shadowZBuffer_->test(shadowPos.x(), shadowPos.y(), shadowPos.z() - 0.00000f))
+        if (!shadowZBuffer_->test(shadowPos.x(), shadowPos.y(), shadowPos.z() - 0.01f))
         {
             colorBuffer_->setPixel(x, y, 0, 0, 0, 255);
             return;
