@@ -33,3 +33,9 @@ void ScreenPass::setGBufferData(const std::shared_ptr<GBufferData> &gBufferData)
     if (fragmentShader_)
         fragmentShader_->setGBufferData(gBufferData);
 }
+
+void ScreenPass::setEyePosition(const Eigen::Vector3f &eyePosition)
+{
+    if (fragmentShader_)
+        fragmentShader_->setEyePosition(eyePosition);
+}

@@ -113,6 +113,7 @@ void Scene::run()
 
     passS_.setLight(light); // 设置光源
     passS_.setGBufferData(passG_.getGBufferData()); // 设置GBuffer数据
+    passS_.setEyePosition(camera.position); // 设置眼睛位置
     passS_.run(screenVertexBuffer); // 执行屏幕渲染通道
 }
 

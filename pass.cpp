@@ -77,6 +77,10 @@ void Pass::setGBufferData(const std::shared_ptr<GBufferData> &gBufferData)
 {
 }
 
+void Pass::setEyePosition(const Eigen::Vector3f &eyePosition)
+{
+}
+
 void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 {
     if (!fragmentShader_)

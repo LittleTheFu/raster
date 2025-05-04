@@ -21,9 +21,13 @@ void ScreenFS::apply(const Vertex &vertex)
 
     Eigen::Vector3f ambient = light_->ambient();
     Eigen::Vector3f diffuse = light_->diffuse(worldPos, normal); // 计算漫反射光照
-    // Eigen::Vector3f specular = light_.specular(vertex.viewDir, vertex.worldPosition, vertex.normal);
 
-    Eigen::Vector3f finalLight = ambient + diffuse; // 计算最终光照
+    // 计算镜面反射光照
+    Eigen::Vector3f viewDir = worldPos - eyePosition_; // 计算视线方向
+    viewDir.normalize(); // 归一化视线方向
+    Eigen::Vector3f specular = light_->specular(viewDir, vertex.worldPosition, vertex.normal);
+
+    Eigen::Vector3f finalLight = ambient + diffuse + specular; // 计算最终光照
 
     color = color.cwiseProduct(finalLight); // 计算最终颜色
     color *= 255; // 将颜色值转换为0-255范围
@@ -45,4 +49,9 @@ void ScreenFS::setLight(const std::shared_ptr<Light> &light)
 void ScreenFS::setColorBuffer(std::shared_ptr<ColorBuffer> &colorBuffer)
 {
     colorBuffer_ = colorBuffer; // 设置颜色缓冲区数据
+}
+
+void ScreenFS::setEyePosition(const Eigen::Vector3f& eyePosition)
+{
+    eyePosition_ = eyePosition; // 设置眼睛位置
 }

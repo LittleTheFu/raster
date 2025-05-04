@@ -13,8 +13,10 @@ public:
     ScreenPass(int width, int height); // 构造函数，初始化ScreenPass对象
 
     virtual void preRun() override; // 渲染前的准备工作
+
     virtual void setLight(const std::shared_ptr<Light>& light) override; // 设置光源
     virtual void setGBufferData(const std::shared_ptr<GBufferData>& gBufferData) override; // 设置GBuffer数据
+    virtual void setEyePosition(const Eigen::Vector3f& eyePosition) override; // 设置眼睛位置
 
     const std::shared_ptr<ColorBuffer>& getColorBuffer() const; // 获取颜色缓冲区
 
