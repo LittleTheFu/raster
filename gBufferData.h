@@ -16,6 +16,7 @@ public:
 public:
     VectorBuffer worldPositionBuffer; // 世界坐标缓冲区
     VectorBuffer normalBuffer; // 法线缓冲区
+    VectorBuffer colorBuffer;
     ZBuffer zBuffer; // 深度缓冲区
     UVBuffer uvBuffer; // UV坐标缓冲区
 };

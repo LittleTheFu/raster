@@ -10,8 +10,13 @@ void ScreenFS::apply(const Vertex &vertex)
         return; // 超出范围，返回
     }
 
+    if(x == 385 && y == 299)
+    {
+        int kkk = 3;
+    }
+
     Eigen::Vector2f texCoord = gBufferData_->uvBuffer.getBuffer(x, y);
-    Eigen::Vector3f color = vertex.color; // 获取顶点颜色
+    Eigen::Vector3f color  = gBufferData_->colorBuffer.getBuffer(x, y);
 
     if(texture_)
     {
@@ -35,11 +40,14 @@ void ScreenFS::apply(const Vertex &vertex)
     Eigen::Vector3f diffuse = light_->diffuse(worldPos, normal); // 计算漫反射光照
 
     // 计算镜面反射光照
-    Eigen::Vector3f viewDir = worldPos - eyePosition_; // 计算视线方向
+    // Eigen::Vector3f viewDir = worldPos - eyePosition_; // 计算视线方向
+    Eigen::Vector3f viewDir = -(worldPos - eyePosition_); // 计算视线方向
     viewDir.normalize(); // 归一化视线方向
-    Eigen::Vector3f specular = light_->specular(viewDir, vertex.worldPosition, vertex.normal);
+    Eigen::Vector3f specular = light_->specular(viewDir, worldPos, normal);
 
     Eigen::Vector3f finalLight = ambient + diffuse + specular; // 计算最终光照
+
+    // Eigen::Vector3f finalLight = specular; // 计算最终光照
 
     color = color.cwiseProduct(finalLight); // 计算最终颜色
     color = color.cwiseMin(Eigen::Vector3f(255, 255, 255)); // 限制颜色范围在0-255之间

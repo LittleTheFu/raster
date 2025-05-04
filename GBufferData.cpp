@@ -3,6 +3,7 @@
 GBufferData::GBufferData(int width, int height)
     : worldPositionBuffer(width, height),
       normalBuffer(width, height),
+      colorBuffer(width, height),
       zBuffer(width, height),
       uvBuffer(width, height)
 {
@@ -13,6 +14,7 @@ void GBufferData::clear()
 {
     worldPositionBuffer.clear();
     normalBuffer.clear();
+    colorBuffer.clear();
     zBuffer.clear();
     uvBuffer.clear();
 }

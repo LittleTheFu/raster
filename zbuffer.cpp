@@ -63,5 +63,5 @@ float ZBuffer::getDepth(int x, int y) const
 // 清空 Z-buffer，将所有像素的深度值设置为最大值
 void ZBuffer::clear()
 {
-    std::fill(buffer_.begin(), buffer_.end(), 10.0f);
+    std::fill(buffer_.begin(), buffer_.end(), std::numeric_limits<float>::max());
 }
