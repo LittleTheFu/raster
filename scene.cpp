@@ -115,7 +115,7 @@ void Scene::run()
     passG_.setProjectionMatrix(mvpMatrix); // 设置投影矩阵
     passG_.run(vertexBuffer);              // 执行GPass渲染通道
 
-    passS_.setTexture(texture);                     // 设置纹理
+    // passS_.setTexture(texture);                     // 设置纹理
     passS_.setLight(light);                         // 设置光源
     passS_.setGBufferData(passG_.getGBufferData()); // 设置GBuffer数据
     passS_.setEyePosition(camera.position);         // 设置眼睛位置
