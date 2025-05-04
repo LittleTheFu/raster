@@ -20,6 +20,7 @@ public:
     virtual void setLight(const std::shared_ptr<Light>& light); // 设置光源
     virtual void setGBufferData(const std::shared_ptr<GBufferData>& gBufferData); // 设置GBuffer数据
     virtual void setEyePosition(const Eigen::Vector3f& eyePosition); // 设置眼睛位置
+    virtual void setTexture(const std::shared_ptr<Texture>& texture); // 设置纹理
 
 private:
     void calculateNDCMatrix();

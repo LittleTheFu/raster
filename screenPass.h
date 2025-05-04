@@ -17,6 +17,7 @@ public:
     virtual void setLight(const std::shared_ptr<Light>& light) override; // 设置光源
     virtual void setGBufferData(const std::shared_ptr<GBufferData>& gBufferData) override; // 设置GBuffer数据
     virtual void setEyePosition(const Eigen::Vector3f& eyePosition) override; // 设置眼睛位置
+    virtual void setTexture(const std::shared_ptr<Texture>& texture) override; // 设置纹理
 
     const std::shared_ptr<ColorBuffer>& getColorBuffer() const; // 获取颜色缓冲区
 

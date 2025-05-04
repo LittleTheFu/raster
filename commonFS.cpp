@@ -20,10 +20,12 @@ void CommonFS::apply(const Vertex &vertex)
     
     Eigen::Vector3f worldPos = vertex.worldPosition.head<3>();
     Eigen::Vector3f normal = vertex.normal;
+    Eigen::Vector2f uv = vertex.texCoord;
 
     gBufferData_->worldPositionBuffer.setBuffer(x, y, worldPos);
     gBufferData_->normalBuffer.setBuffer(x, y, normal);
     gBufferData_->zBuffer.testAndUpdate(x, y, z); // 设置深度缓冲区
+    gBufferData_->uvBuffer.setBuffer(x, y, uv);
 }
 
 void CommonFS::setGBufferData(const std::shared_ptr<GBufferData>& gBufferData)

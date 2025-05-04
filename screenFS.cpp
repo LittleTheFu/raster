@@ -10,10 +10,22 @@ void ScreenFS::apply(const Vertex &vertex)
         return; // 超出范围，返回
     }
 
-    float u = vertex.texCoord.x();
-    float v = vertex.texCoord.y();
-
+    Eigen::Vector2f texCoord = gBufferData_->uvBuffer.getBuffer(x, y);
     Eigen::Vector3f color = vertex.color; // 获取顶点颜色
+
+    if(texture_)
+    {
+        uint8_t r, g, b;
+        texture_->getColor(texCoord.x(), texCoord.y(), r, g, b); // 获取纹理颜色
+        Eigen::Vector3f texColor(r, g, b); // 创建纹理颜色向量
+        color = color.cwiseProduct(texColor); // 计算最终颜色
+    }
+    else
+    {
+        color *= 255.0f; // 如果没有纹理，则将颜色值乘以255
+    }
+
+
     Eigen::Vector3f worldPos = gBufferData_->worldPositionBuffer.getBuffer(x, y); // 获取世界坐标数据
     
     Eigen::Vector3f normal = gBufferData_->normalBuffer.getBuffer(x, y); // 获取法线数据
@@ -30,7 +42,6 @@ void ScreenFS::apply(const Vertex &vertex)
     Eigen::Vector3f finalLight = ambient + diffuse + specular; // 计算最终光照
 
     color = color.cwiseProduct(finalLight); // 计算最终颜色
-    color *= 255; // 将颜色值转换为0-255范围
     color = color.cwiseMin(Eigen::Vector3f(255, 255, 255)); // 限制颜色范围在0-255之间
 
     colorBuffer_->setPixel(x, y, static_cast<uint8_t>(color(0)), static_cast<uint8_t>(color(1)), static_cast<uint8_t>(color(2)), 255);
@@ -54,4 +65,9 @@ void ScreenFS::setColorBuffer(std::shared_ptr<ColorBuffer> &colorBuffer)
 void ScreenFS::setEyePosition(const Eigen::Vector3f& eyePosition)
 {
     eyePosition_ = eyePosition; // 设置眼睛位置
+}
+
+void ScreenFS::setTexture(const std::shared_ptr<Texture>& texture)
+{
+    texture_ = texture; // 设置纹理数据
 }

@@ -81,6 +81,10 @@ void Pass::setEyePosition(const Eigen::Vector3f &eyePosition)
 {
 }
 
+void Pass::setTexture(const std::shared_ptr<Texture> &texture)
+{
+}
+
 void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 {
     if (!fragmentShader_)

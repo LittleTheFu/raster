@@ -46,6 +46,7 @@ add_executable(raster
     fragmentShader.cpp
     screenPass.cpp
     zbuffer.cpp
+    uvbuffer.cpp
     texture.cpp)
 
 target_include_directories(raster PRIVATE

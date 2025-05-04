@@ -19,3 +19,7 @@ void BaseFS::setViewDir(const Eigen::Vector3f &viewDir)
 void BaseFS::setEyePosition(const Eigen::Vector3f &eyePosition)
 {
 }
+
+void BaseFS::setTexture(const std::shared_ptr<Texture> &texture)
+{
+}

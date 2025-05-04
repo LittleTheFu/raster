@@ -39,3 +39,9 @@ void ScreenPass::setEyePosition(const Eigen::Vector3f &eyePosition)
     if (fragmentShader_)
         fragmentShader_->setEyePosition(eyePosition);
 }
+
+void ScreenPass::setTexture(const std::shared_ptr<Texture> &texture)
+{
+    if (fragmentShader_)
+        fragmentShader_->setTexture(texture);
+}

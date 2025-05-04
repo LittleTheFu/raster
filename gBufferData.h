@@ -3,6 +3,7 @@
 
 #include "zbuffer.h"
 #include "vectorBuffer.h"
+#include "uvBuffer.h"
 
 class GBufferData
 {
@@ -16,6 +17,7 @@ public:
     VectorBuffer worldPositionBuffer; // 世界坐标缓冲区
     VectorBuffer normalBuffer; // 法线缓冲区
     ZBuffer zBuffer; // 深度缓冲区
+    UVBuffer uvBuffer; // UV坐标缓冲区
 };
 
 #endif
