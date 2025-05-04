@@ -16,11 +16,12 @@
 
 #include "GPass.h"
 #include "screenPass.h"
+#include "shadowPass.h"
 
 class Scene
 {
 public:
-    Scene(int width, int height);
+    Scene(int width, int height, int shadowMapSize);
 
     const FrameBuffer& getFrameBuffer() const;
     const VectorBuffer& getNormalBuffer() const;
@@ -43,11 +44,13 @@ private:
     VertexBuffer screenVertexBuffer; // 屏幕顶点缓冲区
     Mesh mesh; // 网格对象
     FrameBuffer frameBuffer; // 帧缓冲区对象
-    ShadowMapCamera shadowMapCamera; // 阴影贴图相机对象
+
+    std::shared_ptr<Camera> shadowCamera_;
 
 private:
-    GPass passG_; // GPass对象
-    ScreenPass passS_; // 屏幕渲染通道对象
+    std::unique_ptr<ShadowPass> passShadow_; // 阴影通道对象
+    std::unique_ptr<GPass> passG_; // GPass对象
+    std::unique_ptr<ScreenPass> passS_; // 屏幕渲染通道对象
 };
 
 #endif //_SCENE_H_

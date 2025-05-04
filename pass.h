@@ -7,12 +7,16 @@
 #include "vertexBuffer.h"
 #include "light.h"
 #include "gBufferData.h"
+#include "zbuffer.h"
 
 class Pass
 {     
 public:
     Pass(int width, int height); // 构造函数，初始化Pass对象
-    void setProjectionMatrix(const Eigen::Matrix4f &projectionMatrix);
+
+    void setMvpMatrix(const Eigen::Matrix4f &projectionMatrix);
+    const Eigen::Matrix4f& getNDCMatrix() const;
+    const Eigen::Matrix4f& getMvpMatrix() const;
 
     virtual void preRun(); // 渲染前的准备工作
     void run(const VertexBuffer& vertexBuffer); // 执行渲染通道
@@ -22,6 +26,10 @@ public:
     virtual void setEyePosition(const Eigen::Vector3f& eyePosition); // 设置眼睛位置
     virtual void setTexture(const std::shared_ptr<Texture>& texture); // 设置纹理
 
+    virtual void setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer);
+    virtual void setShadowMapMvpMatrix(const Eigen::Matrix4f& shadowMapMvpMatrix);
+    virtual void setShadowMapNDCMatrix(const Eigen::Matrix4f& shadowMapNDCMatrix);
+    
 private:
     void calculateNDCMatrix();
     Vertex getScreenVertex(const Vertex& vertex); // 获取屏幕坐标的顶点

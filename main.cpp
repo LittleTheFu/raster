@@ -4,7 +4,7 @@
 #include "SdlApp.h"
 
 int main(int argc, char* argv[]) {
-    SdlApp app("My Rasterizer", SCREEN_WIDTH, SCREEN_HEIGHT);
+    SdlApp app("My Rasterizer", SCREEN_WIDTH, SCREEN_HEIGHT, SHADOW_MAP_SIZE);
 
     while (app.isRunning()) {
         app.handleEvents();

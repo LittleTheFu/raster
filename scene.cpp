@@ -1,22 +1,26 @@
 #include "scene.h"
 #include "triangle.h"
 
-Scene::Scene(int width, int height)
+Scene::Scene(int width, int height, int shadowSize)
     : camera(Eigen::Vector3f(0.0f, 0.0f, -30.0f), // position
              Eigen::Vector3f(0.0f, 0.0f, 1.0f),   // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
       mesh("teapot.obj"),
-      frameBuffer(width, height),
-      shadowMapCamera(Eigen::Vector3f(3.0f, 3.0f, -20.0f), // position
-                      Eigen::Vector3f(0.0f, 0.0f, 0.0f),   // target
-                      Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
-      passG_(width, height),
-      passS_(width, height)
+      frameBuffer(width, height)
 {
-    light = std::make_shared<Light>(Eigen::Vector3f(-1.0f, -1.0f, -10.0f));
+    passG_ = std::make_unique<GPass>(width, height);
+    passS_ = std::make_unique<ScreenPass>(width, height);
+    passShadow_ = std::make_unique<ShadowPass>(shadowSize, shadowSize);
+
+    light = std::make_shared<Light>(Eigen::Vector3f(-15.0f, 5.0f, -20.0f));
+
+    shadowCamera_ = std::make_shared<Camera>(
+        light->getPosition(),
+        Eigen::Vector3f(0, 0, 0),
+        Eigen::Vector3f(0, 1, 0));
 
     texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
-
+ 
     const std::vector<Vertex> &vertices = mesh.getVertices();
     for (auto vertex : vertices)
     {
@@ -94,12 +98,12 @@ const FrameBuffer &Scene::getFrameBuffer() const
 
 const VectorBuffer &Scene::getNormalBuffer() const
 {
-    return passG_.getGBufferData()->normalBuffer;
+    return passG_->getGBufferData()->normalBuffer;
 }
 
 const std::shared_ptr<ColorBuffer> &Scene::getColorBuffer() const
 {
-    return passS_.getColorBuffer(); // 获取颜色缓冲区
+    return passS_->getColorBuffer(); // 获取颜色缓冲区
 }
 
 void Scene::run()
@@ -108,27 +112,40 @@ void Scene::run()
 
     frameBuffer.clear();
 
+
+    Eigen::Matrix4f shadowViewMatrix = shadowCamera_->getViewMatrix().inverse();
+    Eigen::Matrix4f shadowProjectionMatrix = shadowCamera_->getProjectionMatrix();
+    Eigen::Matrix4f shadowMvpMatrix = shadowProjectionMatrix * shadowViewMatrix;
+    passShadow_->setMvpMatrix(shadowMvpMatrix);
+    passShadow_->run(vertexBuffer);
+
     Eigen::Matrix4f viewMatrix = camera.getViewMatrix().inverse();
     Eigen::Matrix4f projectionMatrix = camera.getProjectionMatrix();
     Eigen::Matrix4f mvpMatrix = projectionMatrix * viewMatrix; // 计算MVP矩阵
+    passG_->setMvpMatrix(mvpMatrix); // 设置投影矩阵
+    passG_->run(vertexBuffer);              // 执行GPass渲染通道
 
-    passG_.setProjectionMatrix(mvpMatrix); // 设置投影矩阵
-    passG_.run(vertexBuffer);              // 执行GPass渲染通道
+    //----------------------------------------------------------------------------
+    Eigen::Matrix4f shadowNDCMatrix = passShadow_->getNDCMatrix();
+    passS_->setShadowMapMvpMatrix(shadowMvpMatrix);
+    passS_->setShadowMapNDCMatrix(shadowNDCMatrix);
+    passS_->setShadowZBuffer(passShadow_->getZBuffer());
 
     // passS_.setTexture(texture);                     // 设置纹理
-    passS_.setLight(light);                         // 设置光源
-    passS_.setGBufferData(passG_.getGBufferData()); // 设置GBuffer数据
-    passS_.setEyePosition(camera.position);         // 设置眼睛位置
-    passS_.run(screenVertexBuffer);                 // 执行屏幕渲染通道
+    passS_->setLight(light);                         // 设置光源
+    passS_->setGBufferData(passG_->getGBufferData()); // 设置GBuffer数据
+    passS_->setEyePosition(camera.position);         // 设置眼睛位置
+    passS_->run(screenVertexBuffer);                 // 执行屏幕渲染通道
+    //----------------------------------------------------------------------------
 }
 
 void Scene::updateLightPosition()
 {
-    static int count = 0;
-    count += 1;
-    count %= 400;
+    // static int count = 0;
+    // count += 1;
+    // count %= 400;
 
-    light->setPosition(Eigen::Vector3f(-100.0f + std::sin(count * 0.03f) * 200.0f,
-                                       -100.0f + std::sin(count * 0.03f) * 200.0f,
-                                       -40.0f));
+    // light->setPosition(Eigen::Vector3f(-100.0f + std::sin(count * 0.03f) * 200.0f,
+    //                                    -100.0f + std::sin(count * 0.03f) * 200.0f,
+    //                                    -40.0f));
 }

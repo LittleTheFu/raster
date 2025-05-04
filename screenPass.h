@@ -19,6 +19,10 @@ public:
     virtual void setEyePosition(const Eigen::Vector3f& eyePosition) override; // 设置眼睛位置
     virtual void setTexture(const std::shared_ptr<Texture>& texture) override; // 设置纹理
 
+    virtual void setShadowMapMvpMatrix(const Eigen::Matrix4f& shadowMapMvpMatrix) override;
+    virtual void setShadowMapNDCMatrix(const Eigen::Matrix4f& shadowMapNDCMatrix) override;
+    virtual void setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer) override;
+
     const std::shared_ptr<ColorBuffer>& getColorBuffer() const; // 获取颜色缓冲区
 
 private:

@@ -23,3 +23,15 @@ void BaseFS::setEyePosition(const Eigen::Vector3f &eyePosition)
 void BaseFS::setTexture(const std::shared_ptr<Texture> &texture)
 {
 }
+
+void BaseFS::setShadowMapMvpMatrix(const Eigen::Matrix4f &shadowMapMvpMatrix)
+{ 
+}
+
+void BaseFS::setShadowMapNDCMatrix(const Eigen::Matrix4f &shadowMapNDCMatrix)
+{ 
+}
+
+void BaseFS::setShadowZBuffer(const std::shared_ptr<ZBuffer> &zBuffer)
+{ 
+}

@@ -21,6 +21,9 @@ public:
     virtual void setViewDir(const Eigen::Vector3f& viewDir); // 设置视线方向
     virtual void setEyePosition(const Eigen::Vector3f& eyePosition); // 设置眼睛位置
     virtual void setTexture(const std::shared_ptr<Texture>& texture); // 设置纹理
+    virtual void setShadowMapMvpMatrix(const Eigen::Matrix4f& shadowMapMatrix);
+    virtual void setShadowMapNDCMatrix(const Eigen::Matrix4f& shadowMapNDCMatrix);
+    virtual void setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer);
 };
 
 #endif

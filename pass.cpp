@@ -8,7 +8,7 @@ Pass::Pass(int width, int height)
     calculateNDCMatrix(); // 计算NDC矩阵
 }
 
-void Pass::setProjectionMatrix(const Eigen::Matrix4f &projectionMatrix)
+void Pass::setMvpMatrix(const Eigen::Matrix4f &projectionMatrix)
 {
     projectionMatrix_ = projectionMatrix;
 
@@ -83,6 +83,28 @@ void Pass::setEyePosition(const Eigen::Vector3f &eyePosition)
 
 void Pass::setTexture(const std::shared_ptr<Texture> &texture)
 {
+}
+
+void Pass::setShadowZBuffer(const std::shared_ptr<ZBuffer> &zBuffer)
+{
+}
+
+void Pass::setShadowMapMvpMatrix(const Eigen::Matrix4f &shadowMapMvpMatrix)
+{
+}
+
+void Pass::setShadowMapNDCMatrix(const Eigen::Matrix4f &shadowMapNDCMatrix)
+{
+}
+
+const Eigen::Matrix4f& Pass::getNDCMatrix() const
+{
+    return ndcMatrix_;
+}
+
+const Eigen::Matrix4f& Pass::getMvpMatrix() const
+{
+    return projectionMatrix_;
 }
 
 void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)

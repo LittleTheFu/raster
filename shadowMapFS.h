@@ -4,12 +4,11 @@
 #include <Eigen/Dense>
 #include "zbuffer.h"
 #include "vertex.h"
+#include "baseFS.h"
 
-class ShadowMapFS
+class ShadowMapFS : public BaseFS
 {
 public:
-    ShadowMapFS(ZBuffer& zBuffer);
-
     void apply(const Vertex& vertex);
     void setZBuffer(std::shared_ptr<ZBuffer> zBuffer);
 

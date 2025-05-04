@@ -10,10 +10,23 @@ void ScreenFS::apply(const Vertex &vertex)
         return; // 超出范围，返回
     }
 
-    if(x == 385 && y == 299)
+    Eigen::Vector3f worldPos = gBufferData_->worldPositionBuffer.getBuffer(x, y); // 获取世界坐标数据
+
+    if(worldPos.x() != 0)
     {
-        int kkk = 3;
+        int x = 3;
     }
+
+    //shadow map test begin
+    Eigen::Vector4f _worldPos{worldPos.x(), worldPos.y(), worldPos.z(), 1};
+    Eigen::Vector4f shadowPos = shadowMapMvpMatrix_ * _worldPos;
+    shadowPos /= shadowPos.w();
+    shadowPos = shadowMapNDCMatrix_ * shadowPos;
+    if(!shadowZBuffer_->test(shadowPos.x(), shadowPos.y(), shadowPos.z() - 0.0000f))
+    {
+        return;
+    }
+    //shadow map test end
 
     Eigen::Vector2f texCoord = gBufferData_->uvBuffer.getBuffer(x, y);
     Eigen::Vector3f color  = gBufferData_->colorBuffer.getBuffer(x, y);
@@ -29,10 +42,7 @@ void ScreenFS::apply(const Vertex &vertex)
     {
         color *= 255.0f; // 如果没有纹理，则将颜色值乘以255
     }
-
-
-    Eigen::Vector3f worldPos = gBufferData_->worldPositionBuffer.getBuffer(x, y); // 获取世界坐标数据
-    
+        
     Eigen::Vector3f normal = gBufferData_->normalBuffer.getBuffer(x, y); // 获取法线数据
     float depth = gBufferData_->zBuffer.getDepth(x, y); // 获取深度数据
 
@@ -78,4 +88,19 @@ void ScreenFS::setEyePosition(const Eigen::Vector3f& eyePosition)
 void ScreenFS::setTexture(const std::shared_ptr<Texture>& texture)
 {
     texture_ = texture; // 设置纹理数据
+}
+
+void ScreenFS::setShadowMapMvpMatrix(const Eigen::Matrix4f& shadowMapMvpMatrix)
+{
+    shadowMapMvpMatrix_ = shadowMapMvpMatrix;
+}
+
+void ScreenFS::setShadowMapNDCMatrix(const Eigen::Matrix4f& shadowMapNDCMatrix)
+{
+    shadowMapNDCMatrix_ = shadowMapNDCMatrix;
+}
+
+void ScreenFS::setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer)
+{
+    shadowZBuffer_ = zBuffer; // 设置阴影Z缓冲区数据
 }

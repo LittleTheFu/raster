@@ -13,6 +13,7 @@ public:
 
     // 设置光源位置
     void setPosition(const Eigen::Vector3f &position);
+    Eigen::Vector3f getPosition() const;
 
     Eigen::Vector3f ambient() const;
     Eigen::Vector3f diffuse(Eigen::Vector3f vertexPosition, Eigen::Vector3f normal) const;

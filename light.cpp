@@ -25,6 +25,11 @@ void Light::setPosition(const Eigen::Vector3f &position)
     position_ = position; // 设置光源位置
 }
 
+Eigen::Vector3f Light::getPosition() const
+{
+    return position_; // 获取光源位置
+}
+
 Eigen::Vector3f Light::ambient() const
 {
     // 环境光分量 = 光源强度 * 颜色

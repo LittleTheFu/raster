@@ -22,15 +22,12 @@ add_executable(raster
     camera.cpp 
     triangle.cpp
     scene.cpp 
-    pipeline.cpp
     vertex.cpp
     vertexBuffer.cpp
     mesh.cpp
     light.cpp
-    shadowMapCamera.cpp
     shadowMapVS.cpp
     shadowMapFS.cpp
-    vertexShader.cpp
     renderTarget.cpp
     pass.cpp
     colorBuffer.cpp
@@ -42,8 +39,8 @@ add_executable(raster
     commonVS.cpp
     commonFS.cpp
     screenVS.cpp
+    shadowPass.cpp
     screenFS.cpp
-    fragmentShader.cpp
     screenPass.cpp
     zbuffer.cpp
     uvbuffer.cpp

@@ -13,7 +13,7 @@
 class SdlApp
 {
 public:
-    SdlApp(const std::string &title, int width, int height);
+    SdlApp(const std::string &title, int width, int height, int shadowMapSize);
     ~SdlApp();
 
     bool isRunning() const { return running; }

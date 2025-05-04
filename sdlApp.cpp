@@ -1,7 +1,7 @@
 #include "SdlApp.h"
 
-SdlApp::SdlApp(const std::string &title, int width, int height)
-    : scene(width, height),
+SdlApp::SdlApp(const std::string &title, int width, int height, int shadowMapSize)
+    : scene(width, height, shadowMapSize),
       width(width),
       height(height),
       zBuffer(width, height)

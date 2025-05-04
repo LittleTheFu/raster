@@ -2,22 +2,17 @@
 #define _SHADOW_MAP_VS_H_
 
 #include <Eigen/Dense>
+
+#include "BaseVS.h"
 #include "Vertex.h"
 
-class ShadowMapVS
+class ShadowMapVS : public BaseVS
 {
 public:
     ShadowMapVS();
 
     // 应用顶点着色器
     Vertex apply(const Vertex& vertex) const;
-
-    void setViewProjectionMatrix(const Eigen::Matrix4f& viewProjectionMatrix);
-
-private:
-    Eigen::Matrix4f viewProjectionMatrix_;
-    Eigen::Matrix4f ndcMatrix_; // NDC矩阵
-
 };
 
 #endif

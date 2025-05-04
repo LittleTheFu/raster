@@ -45,3 +45,21 @@ void ScreenPass::setTexture(const std::shared_ptr<Texture> &texture)
     if (fragmentShader_)
         fragmentShader_->setTexture(texture);
 }
+
+void ScreenPass::setShadowMapMvpMatrix(const Eigen::Matrix4f &shadowMapMvpMatrix)
+{
+    if (fragmentShader_)
+        fragmentShader_->setShadowMapMvpMatrix(shadowMapMvpMatrix);
+}
+
+void ScreenPass::setShadowMapNDCMatrix(const Eigen::Matrix4f &shadowMapNDCMatrix)
+{
+    if (fragmentShader_)
+        fragmentShader_->setShadowMapNDCMatrix(shadowMapNDCMatrix);
+}
+
+void ScreenPass::setShadowZBuffer(const std::shared_ptr<ZBuffer> &zBuffer)
+{
+    if (fragmentShader_)
+        fragmentShader_->setShadowZBuffer(zBuffer);
+}

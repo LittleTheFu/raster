@@ -1,9 +1,5 @@
 #include "shadowMapFS.h"
 
-ShadowMapFS::ShadowMapFS(ZBuffer &zBuffer)
-{
-}
-
 void ShadowMapFS::setZBuffer(std::shared_ptr<ZBuffer> zBuffer)
 {
     zBuffer_ = zBuffer;
