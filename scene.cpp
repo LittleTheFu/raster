@@ -17,8 +17,7 @@ Scene::Scene(int width, int height, int shadowSize)
     shadowCamera_ = std::make_shared<Camera>(
         light->getPosition(),
         Eigen::Vector3f(0, 0, 0),
-        Eigen::Vector3f(0, 1, 0),
-        90.0f);
+        Eigen::Vector3f(0, 1, 0));
 
     texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
  
