@@ -2,7 +2,7 @@
 #include "triangle.h"
 
 Scene::Scene(int width, int height, int shadowSize)
-    : camera(Eigen::Vector3f(0.0f, 0.0f, -60.0f), // position
+    : camera(Eigen::Vector3f(0.0f, 0.0f, -30.0f), // position
              Eigen::Vector3f(0.0f, 0.0f, 1.0f),   // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),  // up
       mesh("teapot.obj"),
@@ -31,7 +31,7 @@ Scene::Scene(int width, int height, int shadowSize)
     }
 
     Vertex v0{
-        Eigen::Vector4f(-30, -30, 10, 1),
+        Eigen::Vector4f(-20, -20, 10, 1),
         Eigen::Vector3f(1, 1, 1),
         Eigen::Vector2f(0, 0),
         Eigen::Vector3f(0, 0, -1),
@@ -41,7 +41,7 @@ Scene::Scene(int width, int height, int shadowSize)
                                                                          // 添加顶点到缓冲区
 
     Vertex v1{
-        Eigen::Vector4f(-30, 30, 10, 1),
+        Eigen::Vector4f(-10, 10, 10, 1),
         Eigen::Vector3f(1, 1, 1),
         Eigen::Vector2f(1, 0),
         Eigen::Vector3f(0, 0, -1),
@@ -50,7 +50,7 @@ Scene::Scene(int width, int height, int shadowSize)
     v1.viewDir = (camera.position - v1.position.head<3>()).normalized(); // 计算视线方向
 
     Vertex v2{
-        Eigen::Vector4f(30, -30, 10, 1),
+        Eigen::Vector4f(10, -10, 10, 1),
         Eigen::Vector3f(1, 1, 1),
         Eigen::Vector2f(0, 1),
         Eigen::Vector3f(0, 0, -1),
