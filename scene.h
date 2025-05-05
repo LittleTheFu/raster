@@ -43,8 +43,8 @@ private:
     Camera camera;
     VertexBuffer vertexBuffer; // 顶点缓冲区
     VertexBuffer screenVertexBuffer; // 屏幕顶点缓冲区
-    Mesh mesh; // 网格对象
-    Mesh meshTeapot;
+    Mesh meshBigTeapot; // 网格对象
+    Mesh meshSmallTeapot;
     FrameBuffer frameBuffer; // 帧缓冲区对象
 
     std::shared_ptr<Camera> shadowCamera_;

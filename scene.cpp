@@ -3,11 +3,11 @@
 #include "box.h"
 
 Scene::Scene(int width, int height, int shadowSize)
-    : camera(Eigen::Vector3f(0.0f, -5.0f, -16.0f), // position
+    : camera(Eigen::Vector3f(0.0f, -5.0f, -18.0f), // position
              Eigen::Vector3f(0.0f, -9.0f, 0.0f),       // target
              Eigen::Vector3f(0.0f, 1.0f, 0.0f)),      // up
-      mesh("teapot.obj", 10, true),
-      meshTeapot("teapot.obj", 1, false),
+      meshBigTeapot("teapot.obj", 10, true),
+      meshSmallTeapot("teapot.obj", 1, false),
       frameBuffer(width, height)
 {
     passG_ = std::make_unique<GPass>(width, height);
@@ -34,7 +34,7 @@ Scene::Scene(int width, int height, int shadowSize)
     // }
 
     // teapot  模型
-    const std::vector<Vertex> &teapot_vertices = mesh.getVertices();
+    const std::vector<Vertex> &teapot_vertices = meshBigTeapot.getVertices();
     for (auto vertex : teapot_vertices)
     {
         vertex.worldPosition = vertex.position.head<3>();                            // 世界坐标
@@ -42,7 +42,7 @@ Scene::Scene(int width, int height, int shadowSize)
         vertexBuffer.addVertex(vertex);
     }
 
-    const std::vector<Vertex> &teapot_vertices_origin = meshTeapot.getVertices();
+    const std::vector<Vertex> &teapot_vertices_origin = meshSmallTeapot.getVertices();
     for (auto vertex : teapot_vertices_origin)
     {
         vertex.worldPosition = vertex.position.head<3>();                            // 世界坐标
@@ -79,9 +79,9 @@ Scene::Scene(int width, int height, int shadowSize)
     v2.worldPosition = v2.position.head<3>();                            // 世界坐标
     v2.viewDir = (camera.position - v2.position.head<3>()).normalized(); // 计算视线方向
 
-    // vertexBuffer.addVertex(v0);
-    // vertexBuffer.addVertex(v1);
-    // vertexBuffer.addVertex(v2);
+    vertexBuffer.addVertex(v0);
+    vertexBuffer.addVertex(v1);
+    vertexBuffer.addVertex(v2);
 
     //-----------------------------------
     Vertex s0;
@@ -130,7 +130,7 @@ const std::shared_ptr<ColorBuffer> &Scene::getColorBuffer() const
 
 void Scene::run()
 {
-    // updateLightPosition();
+    updateLightPosition();
     // updateCamera();
 
     frameBuffer.clear();
@@ -165,13 +165,14 @@ void Scene::updateLightPosition()
 {
     static int count = 0;
     count += 1;
-    count %= 40;
+    count %= 100;
 
-    light->setPosition(Eigen::Vector3f(10.0 - (count * 0.1),
-                                       0.0f - (count * 0.1),
-                                       -40.0f));
+    light->setPosition(Eigen::Vector3f((count - 50) * 0.1,
+                                       3.0f,
+                                       0.0f));
 
     shadowCamera_->setPosition(light->getPosition());
+    shadowCamera_->setTarget(Eigen::Vector3f(0.0f, 0.0f, 0.0f));
 }
 
 void Scene::updateCamera()

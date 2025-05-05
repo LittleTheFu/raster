@@ -69,8 +69,8 @@ void Pass::run(const VertexBuffer &vertexBuffer)
         Vertex v1 = getScreenVertex(*(it + 1), isIn1);
         Vertex v2 = getScreenVertex(*(it + 2), isin2);
 
-        if(!isCompletelyOutsideScreen(v0, v1, v2))
-        // if(isIn0 || isIn1 || isin2)
+        // if(!isCompletelyOutsideScreen(v0, v1, v2))
+        if(isIn0 || isIn1 || isin2)
         {
             drawScreenTriangle(v0, v1, v2); // 绘制屏幕三角形
         }

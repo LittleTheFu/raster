@@ -18,6 +18,12 @@ void ShadowMapFS::apply(const Vertex &vertex)
         return; // 超出范围，返回
     }
 
+    //可能是在摄像机背后
+    // if(depth < -1.0f)
+    // {
+    //     return; // 深度小于-1，返回
+    // }
+
     zBuffer_->testAndUpdate(x, y, depth);
 }
 
