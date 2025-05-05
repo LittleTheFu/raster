@@ -36,6 +36,10 @@ void BaseFS::setShadowZBuffer(const std::shared_ptr<ZBuffer> &zBuffer)
 { 
 }
 
+void BaseFS::setShadowMapCamera(const std::shared_ptr<ShadowMapCamera> &camera)
+{ 
+}
+
 void BaseFS::setWidth(int width)
 { 
 }
