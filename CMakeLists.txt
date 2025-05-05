@@ -29,6 +29,7 @@ add_executable(raster
     light.cpp
     shadowMapVS.cpp
     shadowMapFS.cpp
+    shadowMapCamera.cpp
     renderTarget.cpp
     pass.cpp
     colorBuffer.cpp

@@ -20,6 +20,8 @@ public:
     float farClip;  // 远裁剪面
     float aspect;   // 宽高比
 
+    Camera();
+
     // 构造函数
     Camera(const Eigen::Vector3f& pos, const Eigen::Vector3f& target, const Eigen::Vector3f& up,
            float fov = 45.0f, float aspect = 8.0f/6.0f, float nearClip = 0.1f, float farClip = 100.0f);
@@ -35,6 +37,8 @@ public:
 
     // 设置目标位置
     void setTarget(const Eigen::Vector3f& target);
+
+    void setUpDirection(const Eigen::Vector3f& upDirection);
 
     // 设置视野角度
     void setFOV(float newFov);
