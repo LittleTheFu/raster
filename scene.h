@@ -31,7 +31,7 @@ public:
 
 private:
     void updateLightPosition(); // 更新光源位置
-    void updateCameraPosition();
+    void updateCamera();
 
     // 计算视图矩阵和投影矩阵
     Eigen::Matrix4f getViewMatrix() const;
@@ -44,6 +44,7 @@ private:
     VertexBuffer vertexBuffer; // 顶点缓冲区
     VertexBuffer screenVertexBuffer; // 屏幕顶点缓冲区
     Mesh mesh; // 网格对象
+    Mesh meshTeapot;
     FrameBuffer frameBuffer; // 帧缓冲区对象
 
     std::shared_ptr<Camera> shadowCamera_;

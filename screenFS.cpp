@@ -18,24 +18,24 @@ void ScreenFS::apply(const Vertex &vertex)
     }
 
     // shadow map test begin
-    // bool isInside = true;
-    // Eigen::Vector4f _worldPos{worldPos.x(), worldPos.y(), worldPos.z(), 1};
-    // Eigen::Vector4f shadowPos = shadowMapMvpMatrix_ * _worldPos;
-    // shadowPos /= shadowPos.w();
-    // if (shadowPos.x() < -1 || shadowPos.x() > 1 || shadowPos.y() < -1 || shadowPos.y() > 1)
-    // {
-    //     isInside = false;
-    // }
+    bool isInside = true;
+    Eigen::Vector4f _worldPos{worldPos.x(), worldPos.y(), worldPos.z(), 1};
+    Eigen::Vector4f shadowPos = shadowMapMvpMatrix_ * _worldPos;
+    shadowPos /= shadowPos.w();
+    if (shadowPos.x() < -1 || shadowPos.x() > 1 || shadowPos.y() < -1 || shadowPos.y() > 1)
+    {
+        isInside = false;
+    }
 
-    // if (isInside)
-    // {
-    //     shadowPos = shadowMapNDCMatrix_ * shadowPos;
-    //     if (!shadowZBuffer_->test(shadowPos.x(), shadowPos.y(), shadowPos.z() - 0.01f))
-    //     {
-    //         colorBuffer_->setPixel(x, y, 0, 0, 0, 255);
-    //         return;
-    //     }
-    // }
+    if (isInside)
+    {
+        shadowPos = shadowMapNDCMatrix_ * shadowPos;
+        if (!shadowZBuffer_->test(shadowPos.x(), shadowPos.y(), shadowPos.z() - 0.01f))
+        {
+            colorBuffer_->setPixel(x, y, 0, 0, 0, 255);
+            return;
+        }
+    }
     // shadow map test end
 
     Eigen::Vector2f texCoord = gBufferData_->uvBuffer.getBuffer(x, y);

@@ -9,7 +9,7 @@
 
 class Mesh {
 public:
-    Mesh(const std::string fileName);
+    Mesh(const std::string fileName, float scale = 1.0f, bool flipNormals = false);
 
     const std::vector<Vertex>& getVertices() const;
     // std::vector<Vertex>& getVertices();
@@ -19,6 +19,8 @@ private:
 
 private:
     std::vector<Vertex> vertices;
+    float scale_;
+    bool flipNormals_;
 };
 
 #endif // _MESH_H_

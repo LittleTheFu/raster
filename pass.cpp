@@ -69,8 +69,8 @@ void Pass::run(const VertexBuffer &vertexBuffer)
         Vertex v1 = getScreenVertex(*(it + 1), isIn1);
         Vertex v2 = getScreenVertex(*(it + 2), isin2);
 
-        // if(!isCompletelyOutsideScreen(v0, v1, v2))
-        if(isIn0 || isIn1 || isin2)
+        if(!isCompletelyOutsideScreen(v0, v1, v2))
+        // if(isIn0 || isIn1 || isin2)
         {
             drawScreenTriangle(v0, v1, v2); // 绘制屏幕三角形
         }
@@ -169,6 +169,9 @@ void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &
 
     for (int y = static_cast<int>(top.position.y()); y <= static_cast<int>(bottom.position.y()); ++y)
     {
+        if( y < 0 || y >= height_)
+            continue;
+
         Vertex leftVertex, rightVertex;
         float t_segment; // 插值比例
 
@@ -212,6 +215,9 @@ void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &
 
         for (int x = static_cast<int>(leftVertex.position.x()); x <= static_cast<int>(rightVertex.position.x()); ++x)
         {
+            if(x < 0 || x >= width_)
+                continue;
+
             float alpha = (x - leftVertex.position.x()) / (rightVertex.position.x() - leftVertex.position.x());
 
             if (alpha < 0.0f || alpha > 1.0f || std::isnan(alpha))

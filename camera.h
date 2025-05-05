@@ -12,6 +12,8 @@ public:
     Eigen::Vector3f viewDirection;
     Eigen::Vector3f upDirection;
 
+    Eigen::Vector3f target;
+
     // 投影相关
     float fov;      // 视野 (Field of View)，单位：度
     float nearClip; // 近裁剪面

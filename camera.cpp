@@ -1,9 +1,15 @@
 #include "Camera.h"
 
-Camera::Camera(const Eigen::Vector3f& pos, const Eigen::Vector3f& target, const Eigen::Vector3f& up,
+Camera::Camera(const Eigen::Vector3f &pos, const Eigen::Vector3f &target, const Eigen::Vector3f &up,
                float fov, float aspect, float nearClip, float farClip)
-    : position(pos), viewDirection((target - pos).normalized()), upDirection(up.normalized()),
-      fov(fov), aspect(aspect), nearClip(nearClip), farClip(farClip) {}
+    : position(pos),
+      viewDirection((target - pos).normalized()),
+      upDirection(up.normalized()),
+      target(target),
+      fov(fov),
+      aspect(aspect),
+      nearClip(nearClip),
+      farClip(farClip) {}
 
 Eigen::Matrix4f Camera::getViewMatrix() const {
     // 创建坐标系
@@ -53,6 +59,7 @@ void Camera::setPosition(const Eigen::Vector3f& newPos) {
 
 void Camera::setTarget(const Eigen::Vector3f& target) {
     viewDirection = (target - position).normalized();
+    this->target = target;
 }
 
 void Camera::setFOV(float newFov) {

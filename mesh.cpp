@@ -5,18 +5,21 @@
 #include <assimp/postprocess.h> // Post processing flags
 #include <iostream>
 
-Mesh::Mesh(const std::string fileName)
+Mesh::Mesh(const std::string fileName, float scale, bool flipNormals)
+    : scale_(scale),
+      flipNormals_(flipNormals)
 {
     Assimp::Importer importer;
 
     const aiScene *scene = importer.ReadFile(fileName.c_str(), aiProcess_Triangulate);
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    {
         std::cerr << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
         return;
     }
     int faceNUM = scene->mMeshes[0]->mNumFaces;
     std::cout << "face num : " << faceNUM << std::endl;
-    for(int i = 0; i < faceNUM; i++)
+    for (int i = 0; i < faceNUM; i++)
     {
         aiFace face = scene->mMeshes[0]->mFaces[i];
         assert(face.mNumIndices == 3);
@@ -31,7 +34,7 @@ Mesh::Mesh(const std::string fileName)
     }
 }
 
-const std::vector<Vertex>& Mesh::getVertices() const
+const std::vector<Vertex> &Mesh::getVertices() const
 {
     return vertices;
 }
@@ -43,21 +46,25 @@ const std::vector<Vertex>& Mesh::getVertices() const
 
 Vertex Mesh::createTriVertex(const aiMesh *mesh, unsigned int index) const
 {
-    float x = mesh->mVertices[index].x;
-    float y = mesh->mVertices[index].y;
-    float z = mesh->mVertices[index].z;
-
-    float nx = mesh->mNormals[index].x;
-    float ny = mesh->mNormals[index].y;
-    float nz = mesh->mNormals[index].z;
+    float x = mesh->mVertices[index].x * scale_;
+    float y = mesh->mVertices[index].y * scale_;
+    float z = mesh->mVertices[index].z * scale_;
 
     float u = mesh->mTextureCoords[0][index].x;
     float v = mesh->mTextureCoords[0][index].y;
 
+    //------------------------------------------------------
+    float flipFactor = (flipNormals_ ? 1.0f : -1.0f);
+
+    float nx = mesh->mNormals[index].x * flipFactor;
+    float ny = mesh->mNormals[index].y * flipFactor;
+    float nz = mesh->mNormals[index].z * flipFactor;
+    //------------------------------------------------------
+
     Vertex vertex{Eigen::Vector4f(x, y, z, 1.0f),
                   Eigen::Vector3f(1.0f, 1.0f, 1.0f),
                   Eigen::Vector2f(u, v),
-                  Eigen::Vector3f(nx, ny, nz)};
+                  Eigen::Vector3f(-nx, -ny, -nz)};
 
     return vertex;
 }
