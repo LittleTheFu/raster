@@ -47,10 +47,10 @@ private:
     Mesh meshSmallTeapot;
     FrameBuffer frameBuffer; // 帧缓冲区对象
 
-    std::shared_ptr<Camera> shadowCamera_;
+    std::shared_ptr<ShadowMapCamera> shadowCamera_;
 
 private:
-    std::unique_ptr<ShadowPass> passShadow_; // 阴影通道对象
+    std::array<std::shared_ptr<ShadowPass>,ShadowMapCamera::NUM> passShadows_; // 阴影通道对象
     std::unique_ptr<GPass> passG_; // GPass对象
     std::unique_ptr<ScreenPass> passS_; // 屏幕渲染通道对象
 };

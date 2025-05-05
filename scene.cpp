@@ -12,14 +12,15 @@ Scene::Scene(int width, int height, int shadowSize)
 {
     passG_ = std::make_unique<GPass>(width, height);
     passS_ = std::make_unique<ScreenPass>(width, height);
-    passShadow_ = std::make_unique<ShadowPass>(shadowSize, shadowSize);
+
+    for(auto& passShadow : passShadows_)
+    {
+        passShadow = std::make_shared<ShadowPass>(width, height);
+    }
 
     light = std::make_shared<Light>(Eigen::Vector3f(2.0f, 2.0f, -0.9f));
 
-    shadowCamera_ = std::make_shared<Camera>(
-        light->getPosition(),
-        Eigen::Vector3f(0, 0, 0),
-        Eigen::Vector3f(0, 1, 0));
+    shadowCamera_ = std::make_shared<ShadowMapCamera>();
 
     texture = std::make_shared<Texture>("lena.png"); // 创建纹理对象
 
@@ -135,11 +136,14 @@ void Scene::run()
 
     frameBuffer.clear();
 
-    Eigen::Matrix4f shadowViewMatrix = shadowCamera_->getViewMatrix().inverse();
-    Eigen::Matrix4f shadowProjectionMatrix = shadowCamera_->getProjectionMatrix();
-    Eigen::Matrix4f shadowMvpMatrix = shadowProjectionMatrix * shadowViewMatrix;
-    passShadow_->setMvpMatrix(shadowMvpMatrix);
-    passShadow_->run(vertexBuffer);
+    for(int i = 0; i < ShadowMapCamera::NUM; i++)
+    {
+        Eigen::Matrix4f shadowViewMatrix = shadowCamera_->getCamera(ShadowMapCamera::CameraType(i)).getViewMatrix().inverse();
+        Eigen::Matrix4f shadowProjectionMatrix = shadowCamera_->getCamera(ShadowMapCamera::CameraType(i)).getProjectionMatrix();
+        Eigen::Matrix4f shadowMvpMatrix = shadowProjectionMatrix * shadowViewMatrix;
+        passShadows_[i]->setShadowMapMvpMatrix(shadowMvpMatrix);
+        passShadows_[i]->run(vertexBuffer);
+    }
 
     Eigen::Matrix4f viewMatrix = camera.getViewMatrix().inverse();
     Eigen::Matrix4f projectionMatrix = camera.getProjectionMatrix();
@@ -148,10 +152,11 @@ void Scene::run()
     passG_->run(vertexBuffer);                                 // 执行GPass渲染通道
 
     //----------------------------------------------------------------------------
-    Eigen::Matrix4f shadowNDCMatrix = passShadow_->getNDCMatrix();
-    passS_->setShadowMapMvpMatrix(shadowMvpMatrix);
-    passS_->setShadowMapNDCMatrix(shadowNDCMatrix);
-    passS_->setShadowZBuffer(passShadow_->getZBuffer());
+    // Eigen::Matrix4f shadowNDCMatrix = passShadow_->getNDCMatrix();
+    // passS_->setShadowMapMvpMatrix(shadowMvpMatrix);
+    // passS_->setShadowMapNDCMatrix(shadowNDCMatrix);
+    // passS_->setShadowZBuffer(passShadow_->getZBuffer());
+    passS_->setShadowMapCamera(shadowCamera_);
 
     passS_->setTexture(texture);                      // 设置纹理
     passS_->setLight(light);                          // 设置光源
@@ -172,7 +177,6 @@ void Scene::updateLightPosition()
                                        0.0f));
 
     shadowCamera_->setPosition(light->getPosition());
-    shadowCamera_->setTarget(Eigen::Vector3f(0.0f, 0.0f, 0.0f));
 }
 
 void Scene::updateCamera()

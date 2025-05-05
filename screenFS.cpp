@@ -114,3 +114,8 @@ void ScreenFS::setShadowZBuffer(const std::shared_ptr<ZBuffer> &zBuffer)
 {
     shadowZBuffer_ = zBuffer; // 设置阴影Z缓冲区数据
 }
+
+void ScreenFS::setShadowMapCamera(const std::shared_ptr<ShadowMapCamera>& camera)
+{
+    shadowMapCamera_ = camera; // 设置阴影相机
+}

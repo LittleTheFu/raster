@@ -151,6 +151,17 @@ bool Pass::isCompletelyOutsideScreen(const Vertex &v0, const Vertex &v1, const V
     // return isOutside_0 && isOutside_1 && isOutside_2;
 }
 
+void Pass::setShadowMapCamera(const std::shared_ptr<ShadowMapCamera> camera)
+{
+
+}
+
+void Pass::setShadowMapZBuffers(std::array<std::shared_ptr<ZBuffer>, ShadowMapCamera::NUM> zBuffers)
+{
+
+}
+
+
 void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)
 {
     if (!fragmentShader_)

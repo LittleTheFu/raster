@@ -63,3 +63,16 @@ void ScreenPass::setShadowZBuffer(const std::shared_ptr<ZBuffer> &zBuffer)
     if (fragmentShader_)
         fragmentShader_->setShadowZBuffer(zBuffer);
 }
+
+void ScreenPass::setShadowMapCamera(const std::shared_ptr<ShadowMapCamera> camera)
+{
+    shadowMapCamera = camera;
+
+    if(fragmentShader_)
+        fragmentShader_->setShadowMapCamera(camera);
+}
+
+void ScreenPass::setShadowMapZBuffers(std::array<std::shared_ptr<ZBuffer>, ShadowMapCamera::NUM> zBuffers)
+{
+    shadowMapZBuffers = zBuffers;
+}

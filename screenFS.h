@@ -5,6 +5,7 @@
 #include "light.h"
 #include "colorBuffer.h"
 #include "texture.h"
+#include "shadowMapCamera.h"
 
 class ScreenFS : public BaseFS
 {
@@ -20,6 +21,7 @@ public:
     virtual void setShadowMapMvpMatrix(const Eigen::Matrix4f& shadowMapMvpMatrix) override;
     virtual void setShadowMapNDCMatrix(const Eigen::Matrix4f& shadowMapNDCMatrix) override;
     virtual void setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer) override;
+    virtual void setShadowMapCamera(const std::shared_ptr<ShadowMapCamera>& camera);
 
 private:
     std::shared_ptr<GBufferData> gBufferData_; // GBuffer数据
@@ -33,6 +35,7 @@ private:
     Eigen::Matrix4f shadowMapMvpMatrix_;
     Eigen::Matrix4f shadowMapNDCMatrix_;
     std::shared_ptr<ZBuffer> shadowZBuffer_;
+    std::shared_ptr<ShadowMapCamera> shadowMapCamera_;
 };
 
 #endif

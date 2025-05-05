@@ -6,6 +6,7 @@
 #include "screenFS.h" // 屏幕片段着色器头文件
 #include "vertexBuffer.h" // 顶点缓冲区头文件
 #include "colorBuffer.h" // 颜色缓冲区头文件
+#include "shadowMapCamera.h"
 
 class ScreenPass : public Pass 
 { 
@@ -23,11 +24,18 @@ public:
     virtual void setShadowMapNDCMatrix(const Eigen::Matrix4f& shadowMapNDCMatrix) override;
     virtual void setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer) override;
 
+    virtual void setShadowMapCamera(const std::shared_ptr<ShadowMapCamera> camera) override;
+    virtual void setShadowMapZBuffers(std::array<std::shared_ptr<ZBuffer>, ShadowMapCamera::NUM> zBuffers) override;
+
+
     const std::shared_ptr<ColorBuffer>& getColorBuffer() const; // 获取颜色缓冲区
 
 private:
     VertexBuffer screenVertexBuffer;
     std::shared_ptr<ColorBuffer> colorBuffer; // 颜色缓冲区对象
+
+    std::shared_ptr<ShadowMapCamera> shadowMapCamera;
+    std::array<std::shared_ptr<ZBuffer>, ShadowMapCamera::NUM> shadowMapZBuffers;
 };
 
 #endif// _SCREEN_PASS_H_

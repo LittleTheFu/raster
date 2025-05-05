@@ -7,6 +7,11 @@ ShadowMapCamera::ShadowMapCamera()
 {
 }
 
+const Camera& ShadowMapCamera::getCamera(CameraType type) const
+{
+    return cameras[type];
+}
+
 void ShadowMapCamera::setPosition(const Eigen::Vector3f &position)
 {
     Eigen::Vector3f targets[CAMERA_NUM] = {
@@ -35,10 +40,10 @@ void ShadowMapCamera::setPosition(const Eigen::Vector3f &position)
     }
 }
 
-void ShadowMapCamera::clearZBuffers()
-{
-    for(auto& zBuffer : zBuffers)
-    {
-        zBuffer.clear();
-    }
-}
+// void ShadowMapCamera::clearZBuffers()
+// {
+//     for(auto& zBuffer : zBuffers)
+//     {
+//         zBuffer.clear();
+//     }
+// }

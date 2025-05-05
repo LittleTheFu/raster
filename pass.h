@@ -8,6 +8,9 @@
 #include "light.h"
 #include "gBufferData.h"
 #include "zbuffer.h"
+#include <array>
+#include "shadowMapCamera.h"
+
 
 class Pass
 {     
@@ -29,6 +32,9 @@ public:
     virtual void setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer);
     virtual void setShadowMapMvpMatrix(const Eigen::Matrix4f& shadowMapMvpMatrix);
     virtual void setShadowMapNDCMatrix(const Eigen::Matrix4f& shadowMapNDCMatrix);
+
+    virtual void setShadowMapCamera(const std::shared_ptr<ShadowMapCamera> camera);
+    virtual void setShadowMapZBuffers(std::array<std::shared_ptr<ZBuffer>, ShadowMapCamera::NUM> zBuffers);
     
 private:
     void calculateNDCMatrix();

@@ -9,7 +9,7 @@
 class ShadowMapCamera
 {
 public:
-    static const int CAMERA_NUM = 6;
+    static const int NUM = 6;
 
     enum CameraType
     {
@@ -18,18 +18,22 @@ public:
         TOP,
         BOTTOM,
         FRONT,
-        BACK
+        BACK,
+
+        CAMERA_NUM,
     };
 
 public:
     ShadowMapCamera();
     void setPosition(const Eigen::Vector3f& position);
 
-    void clearZBuffers();
+    const Camera& getCamera(CameraType type) const;
+
+    // void clearZBuffers();
 
 private:
-    std::array<Camera, CAMERA_NUM> cameras;
-    std::array<ZBuffer, CAMERA_NUM> zBuffers;
+    std::array<Camera, NUM> cameras;
+    // std::array<ZBuffer, CAMERA_NUM> zBuffers;
 };
 
 #endif
