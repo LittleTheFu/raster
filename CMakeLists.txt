@@ -17,6 +17,7 @@ add_executable(raster
     main.cpp 
     sdlApp.cpp
     config.cpp 
+    box.cpp
     frame.cpp
     frameBuffer.cpp
     camera.cpp 

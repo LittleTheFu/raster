@@ -10,6 +10,8 @@ GPass::GPass(int width, int height) : Pass(width, height)
     vertexShader_ = std::make_unique<CommonVS>();
     fragmentShader_ = std::make_unique<CommonFS>();
 
+    fragmentShader_->setWidth(width);
+    fragmentShader_->setHeight(height);
     fragmentShader_->setGBufferData(gBufferData_); // Set GBuffer data to fragment shader
 }
 

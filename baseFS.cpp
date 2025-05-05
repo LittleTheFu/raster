@@ -35,3 +35,11 @@ void BaseFS::setShadowMapNDCMatrix(const Eigen::Matrix4f &shadowMapNDCMatrix)
 void BaseFS::setShadowZBuffer(const std::shared_ptr<ZBuffer> &zBuffer)
 { 
 }
+
+void BaseFS::setWidth(int width)
+{ 
+}
+
+void BaseFS::setHeight(int height)
+{ 
+}

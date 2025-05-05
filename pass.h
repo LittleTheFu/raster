@@ -32,8 +32,11 @@ public:
     
 private:
     void calculateNDCMatrix();
-    Vertex getScreenVertex(const Vertex& vertex); // 获取屏幕坐标的顶点
-    void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2);
+    Vertex getScreenVertex(const Vertex& vertex, bool &isIn); // 获取屏幕坐标的顶点
+    void drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2);
+
+    bool isInNdcCube(const Vertex &vertex) const;
+    bool isCompletelyOutsideScreen(const Vertex &v0, const Vertex &v1, const Vertex &v2);
 
 protected:
     Eigen::Matrix4f projectionMatrix_;

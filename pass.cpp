@@ -32,7 +32,7 @@ void Pass::calculateNDCMatrix()
     ndcMatrix_(1, 1) *= -1.0f;
 }
 
-Vertex Pass::getScreenVertex(const Vertex &vertex)
+Vertex Pass::getScreenVertex(const Vertex &vertex, bool &isIn)
 {
     if(!vertexShader_)
     {
@@ -41,6 +41,8 @@ Vertex Pass::getScreenVertex(const Vertex &vertex)
 
     Vertex vertexNdc = vertexShader_->apply(vertex); // 应用顶点着色器
     vertexNdc.position /= vertexNdc.position.w();
+
+    isIn = isInNdcCube(vertexNdc);
     vertexNdc.position = ndcMatrix_ * vertexNdc.position; // 转换到NDC坐标系
 
     return vertexNdc; // 返回x, y, z坐标
@@ -59,11 +61,19 @@ void Pass::run(const VertexBuffer &vertexBuffer)
 
     while (std::distance(it, end) >= 3)
     {
-        Vertex v0 = getScreenVertex(*it);
-        Vertex v1 = getScreenVertex(*(it + 1));
-        Vertex v2 = getScreenVertex(*(it + 2));
+        bool isIn0 = true;
+        bool isIn1 = true;
+        bool isin2 = true;
 
-        drawScreenTriangle(v0, v1, v2); // 绘制屏幕三角形
+        Vertex v0 = getScreenVertex(*it, isIn0);
+        Vertex v1 = getScreenVertex(*(it + 1), isIn1);
+        Vertex v2 = getScreenVertex(*(it + 2), isin2);
+
+        // if(!isCompletelyOutsideScreen(v0, v1, v2))
+        if(isIn0 || isIn1 || isin2)
+        {
+            drawScreenTriangle(v0, v1, v2); // 绘制屏幕三角形
+        }
 
         std::advance(it, 3);
     }
@@ -105,6 +115,40 @@ const Eigen::Matrix4f& Pass::getNDCMatrix() const
 const Eigen::Matrix4f& Pass::getMvpMatrix() const
 {
     return projectionMatrix_;
+}
+
+bool Pass::isInNdcCube(const Vertex &vertex) const
+{
+    bool isInX = (vertex.position.x() >= -1.0f && vertex.position.x() <= 1.0f);
+    bool isInY = (vertex.position.y() >= -1.0f && vertex.position.y() <= 1.0f);
+    bool isInZ = (vertex.position.z() >= -1.0f && vertex.position.z() <= 1.0f);
+
+    return isInX && isInY && isInZ;
+}
+
+bool Pass::isCompletelyOutsideScreen(const Vertex &v0, const Vertex &v1, const Vertex &v2)
+{
+    float x_min = std::min(v0.position.x(), std::min(v1.position.x(), v2.position.x()));
+    float x_max = std::max(v0.position.x(), std::max(v1.position.x(), v2.position.x()));
+
+    if (x_min >= width_ || x_max < 0) {
+        return true;
+    }
+
+    float y_min = std::min(v0.position.y(), std::min(v1.position.y(), v2.position.y()));
+    float y_max = std::max(v0.position.y(), std::max(v1.position.y(), v2.position.y()));
+
+    if (y_min >= height_ || y_max < 0) {
+        return true;
+    }
+
+    return false;
+    
+    // bool isOutside_0 = (v0.position.x() < 0 || v0.position.x() >= width_ || v0.position.y() < 0 || v0.position.y() >= height_);
+    // bool isOutside_1 = (v1.position.x() < 0 || v1.position.x() >= width_ || v1.position.y() < 0 || v1.position.y() >= height_);
+    // bool isOutside_2 = (v2.position.x() < 0 || v2.position.x() >= width_ || v2.position.y() < 0 || v2.position.y() >= height_);
+
+    // return isOutside_0 && isOutside_1 && isOutside_2;
 }
 
 void Pass::drawScreenTriangle(const Vertex &v0, const Vertex &v1, const Vertex &v2)

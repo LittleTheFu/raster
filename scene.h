@@ -31,6 +31,7 @@ public:
 
 private:
     void updateLightPosition(); // 更新光源位置
+    void updateCameraPosition();
 
     // 计算视图矩阵和投影矩阵
     Eigen::Matrix4f getViewMatrix() const;

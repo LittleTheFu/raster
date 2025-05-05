@@ -7,6 +7,8 @@ GBufferData::GBufferData(int width, int height)
       zBuffer(width, height),
       uvBuffer(width, height)
 {
+    width_ = width;
+    height_ = height;
 }
 
 // 清空G缓冲区

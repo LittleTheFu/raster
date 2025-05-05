@@ -11,6 +11,12 @@ void CommonFS::apply(const Vertex &vertex)
     int x = static_cast<int>(vertex.position.x());
     int y = static_cast<int>(vertex.position.y());
 
+    if(x < 0 || x >= gBufferData_->width_ || y < 0 || y >= gBufferData_->height_)
+    {
+        return; // 顶点位置超出GBuffer范围，直接返回
+    }
+
+
     float z = vertex.position.z();
 
     if (!gBufferData_->zBuffer.test(x, y, z))
@@ -33,4 +39,14 @@ void CommonFS::apply(const Vertex &vertex)
 void CommonFS::setGBufferData(const std::shared_ptr<GBufferData>& gBufferData)
 {
     gBufferData_ = gBufferData; // 设置GBuffer数据
+}
+
+void CommonFS::setWidth(int width)
+{
+    width_ = width;
+}
+
+void CommonFS::setHeight(int height)
+{
+    height_ = height;
 }

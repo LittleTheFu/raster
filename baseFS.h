@@ -24,6 +24,8 @@ public:
     virtual void setShadowMapMvpMatrix(const Eigen::Matrix4f& shadowMapMatrix);
     virtual void setShadowMapNDCMatrix(const Eigen::Matrix4f& shadowMapNDCMatrix);
     virtual void setShadowZBuffer(const std::shared_ptr<ZBuffer>& zBuffer);
+    virtual void setWidth(int width);
+    virtual void setHeight(int height);
 };
 
 #endif

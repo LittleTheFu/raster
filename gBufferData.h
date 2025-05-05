@@ -19,6 +19,9 @@ public:
     VectorBuffer colorBuffer;
     ZBuffer zBuffer; // 深度缓冲区
     UVBuffer uvBuffer; // UV坐标缓冲区
+
+    int width_;
+    int height_;
 };
 
 #endif
